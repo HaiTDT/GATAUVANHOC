@@ -1,0 +1,31 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { Footer } from "./store/Footer";
+import { Header } from "./store/Header";
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isCatalogPage = pathname === "/products";
+  const isAdminPage = pathname?.startsWith("/admin");
+
+  if (isAdminPage) {
+    return <div className="min-h-screen bg-background font-body text-on-surface antialiased">{children}</div>;
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+      <Header />
+      <main
+        className={
+          isCatalogPage
+            ? "flex-1 pt-32"
+            : "mx-auto w-full max-w-7xl flex-1 px-4 py-8 pt-32 sm:px-6 lg:px-8"
+        }
+      >
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
+}

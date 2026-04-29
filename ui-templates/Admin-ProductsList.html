@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="light" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin - Sản phẩm | Botanical Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#00502f", "surface-container-lowest": "#ffffff", "surface-container-low": "#f3f3f3" }, fontFamily: { headline: ["Be Vietnam Pro"], body: ["Inter"] } } } }
+</script>
+<style> .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; } </style>
+</head>
+<body class="bg-gray-50 font-body text-gray-900 antialiased">
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#106A42] flex flex-col py-6 z-50 shadow-lg">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center"><span class="material-symbols-outlined text-white text-2xl">eco</span></div>
+<div><h1 class="text-xl font-bold text-white leading-none">Atelier Admin</h1><p class="text-white/60 text-[10px] uppercase mt-1">Hệ thống quản trị</p></div>
+</div>
+<nav class="flex-1 space-y-1 px-2">
+<a class="flex items-center gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-lg mx-2 my-1" href="/admin"><span class="material-symbols-outlined">dashboard</span><span>Tổng quan</span></a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white font-semibold rounded-lg mx-2 my-1" href="/admin/products"><span class="material-symbols-outlined">inventory_2</span><span>Sản phẩm</span></a>
+</nav>
+</aside>
+<main class="ml-64 min-h-screen">
+<header class="sticky top-0 w-full z-40 bg-white/85 backdrop-blur-md flex items-center justify-between px-8 h-16 shadow-sm">
+ <h2 class="font-bold text-lg">Quản lý Sản phẩm</h2>
+ <div class="flex items-center gap-4">
+    <a href="/admin/products/new" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-opacity-90 transition">
+        <span class="material-symbols-outlined text-sm">add</span> Thêm mới
+    </a>
+ </div>
+</header>
+<div class="p-8">
+<section class="bg-white rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-widest font-bold">
+<th class="px-6 py-4 border-b">ID</th>
+<th class="px-6 py-4 border-b">Ảnh</th>
+<th class="px-6 py-4 border-b">Tên sản phẩm</th>
+<th class="px-6 py-4 border-b">Giá (đ)</th>
+<th class="px-6 py-4 border-b text-center">Hành động</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 text-sm">
+<!-- Dữ liệu từ Thymeleaf -->
+<tr th:each="p : ${products}" class="hover:bg-gray-50 transition-colors">
+<td class="px-6 py-4 font-mono font-bold text-gray-600" th:text="${p.id}">1</td>
+<td class="px-6 py-4">
+  <img th:src="${p.imageUrl != null ? p.imageUrl : 'https://via.placeholder.com/50'}" class="w-12 h-12 object-cover rounded-md border" />
+</td>
+<td class="px-6 py-4 font-bold" th:text="${p.name}">Sản phẩm A</td>
+<td class="px-6 py-4 font-semibold text-orange-600" th:text="${p.price}">100000</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<a th:href="@{/chi-tiet-san-pham/{id}(id=${p.id})}" title="Xem thử" target="_blank" class="p-2 hover:bg-gray-100 text-gray-500 rounded"><span class="material-symbols-outlined text-lg">visibility</span></a>
+<a th:href="@{/admin/products/edit/{id}(id=${p.id})}" title="Sửa" class="p-2 hover:bg-blue-50 text-blue-600 rounded"><span class="material-symbols-outlined text-lg">edit</span></a>
+<a th:href="@{/admin/products/delete/{id}(id=${p.id})}" title="Xóa" onclick="return confirm('Bạn có chắc muốn xóa?');" class="p-2 hover:bg-red-50 text-red-600 rounded"><span class="material-symbols-outlined text-lg">delete</span></a>
+</div>
+</td>
+</tr>
+<tr th:if="${#lists.isEmpty(products)}">
+    <td colspan="5" class="text-center py-8 text-gray-400">Chưa có sản phẩm nào. Hãy bấm "Thêm mới".</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

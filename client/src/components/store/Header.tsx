@@ -1,0 +1,74 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../AuthProvider";
+
+export function Header() {
+  const router = useRouter();
+  const { user, logout } = useAuth();
+
+  return (
+    <header className="fixed top-0 w-full z-50 bg-white dark:bg-stone-900 backdrop-blur-md shadow-sm">
+      <div className="flex flex-col w-full max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between gap-8 mb-4">
+          <Link href="/products" className="text-2xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 font-headline">
+            Botanical Atelier
+          </Link>
+          <div className="flex-1 max-w-xl relative">
+            <input
+              className="w-full bg-surface-variant border-none rounded-sm px-4 py-2 text-sm focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all"
+              placeholder="Tìm kiếm sản phẩm chăm sóc da..." type="text" />
+            <span className="material-symbols-outlined absolute right-3 top-2 text-primary">search</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <span className="hidden lg:block text-emerald-900 dark:text-emerald-400 font-medium text-sm">Hotline: 1900 1234</span>
+            <div className="flex items-center gap-4">
+              <button onClick={() => router.push("/cart")} className="p-2 text-emerald-900 hover:bg-stone-50 transition-all rounded-full relative">
+                <span className="material-symbols-outlined">shopping_cart</span>
+                <span className="absolute top-0 right-0 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">3</span>
+              </button>
+              {user?.role === "ADMIN" && (
+                <Link
+                  className="hidden md:flex items-center gap-1 text-xs font-bold text-white bg-primary px-3 py-1.5 rounded-full hover:bg-primary/90 transition-colors"
+                  href="/admin"
+                >
+                  <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                  Quản trị Admin
+                </Link>
+              )}
+              {user ? (
+                <button
+                  className="p-2 text-emerald-900 hover:bg-stone-50 transition-all rounded-full"
+                  onClick={() => {
+                    logout();
+                    router.push("/login");
+                  }}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined">logout</span>
+                </button>
+              ) : (
+                <button
+                  className="p-2 text-emerald-900 hover:bg-stone-50 transition-all rounded-full"
+                  onClick={() => router.push("/login")}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined">person</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        <nav className="flex items-center justify-center gap-8">
+          <Link className="text-emerald-700 dark:text-emerald-300 border-b-2 border-orange-500 font-semibold py-1 text-sm font-headline" href="/products">Chăm sóc da</Link>
+          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Trang điểm</Link>
+          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Chăm sóc cơ thể</Link>
+          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Clinic</Link>
+          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Khuyến mãi</Link>
+          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Thương hiệu</Link>
+        </nav>
+      </div>
+    </header>
+  );
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html class="light" lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thêm/Sửa Sản phẩm | Botanical Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#00502f", secondary: "#9d4300" }, fontFamily: { headline: ["Be Vietnam Pro"], body: ["Inter"] } } } }
+</script>
+<style> .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; } </style>
+</head>
+<body class="bg-gray-50 font-body text-gray-900 antialiased">
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#106A42] flex flex-col py-6 z-50 shadow-lg">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center"><span class="material-symbols-outlined text-white text-2xl">eco</span></div>
+<div><h1 class="text-xl font-bold text-white leading-none">Atelier Admin</h1><p class="text-white/60 text-[10px] uppercase mt-1">Hệ thống quản trị</p></div>
+</div>
+<nav class="flex-1 space-y-1 px-2">
+<a class="flex items-center gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-lg mx-2 my-1" href="/admin"><span class="material-symbols-outlined">dashboard</span><span>Tổng quan</span></a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white/10 text-white font-semibold rounded-lg mx-2 my-1" href="/admin/products"><span class="material-symbols-outlined">inventory_2</span><span>Sản phẩm</span></a>
+</nav>
+</aside>
+<main class="ml-64 min-h-screen">
+<header class="sticky top-0 w-full z-40 bg-white/85 backdrop-blur-md flex items-center justify-between px-8 h-16 shadow-sm">
+ <div class="flex items-center gap-3">
+    <a href="/admin/products" class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined mt-1">arrow_back</span></a>
+    <h2 class="font-bold text-lg" th:text="${product.id == null ? 'Thêm mới Sản phẩm' : 'Chỉnh sửa Sản phẩm'}">Thêm mới Sản phẩm</h2>
+ </div>
+</header>
+<div class="p-8 max-w-4xl">
+<section class="bg-white rounded-xl shadow-sm overflow-hidden p-8">
+<form th:action="@{/admin/products/save}" th:object="${product}" method="post" class="space-y-6">
+    <input type="hidden" th:field="*{id}" />
+    
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Tên sản phẩm</label>
+        <input type="text" th:field="*{name}" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary px-4 py-3 text-sm"/>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Giá (đ)</label>
+            <input type="number" step="0.01" th:field="*{price}" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary px-4 py-3 text-sm"/>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Đường dẫn hình ảnh (URL)</label>
+            <input type="url" th:field="*{imageUrl}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary px-4 py-3 text-sm" placeholder="https://..."/>
+        </div>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Mô tả sản phẩm</label>
+        <textarea th:field="*{description}" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary px-4 py-3 text-sm"></textarea>
+    </div>
+    
+    <div class="pt-6 border-t border-gray-100 flex justify-end gap-3">
+        <a href="/admin/products" class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 transition">Hủy</a>
+        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-opacity-90 shadow-lg shadow-primary/30 transition">Lưu thay đổi</button>
+    </div>
+</form>
+</section>
+</div>
+</main>
+</body></html>

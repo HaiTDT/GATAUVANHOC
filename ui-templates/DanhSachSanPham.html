@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#ffc8c8",
+                    "primary-container": "#106a42",
+                    "tertiary-fixed": "#ffdad9",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface": "#f9f9f9",
+                    "on-secondary-fixed-variant": "#783200",
+                    "on-background": "#1a1c1c",
+                    "on-secondary-container": "#5c2400",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffdbca",
+                    "on-surface-variant": "#3f4942",
+                    "surface-container-high": "#e8e8e8",
+                    "secondary-fixed-dim": "#ffb690",
+                    "primary-fixed-dim": "#86d7a6",
+                    "primary": "#00502f",
+                    "on-tertiary-fixed": "#3e030c",
+                    "surface-variant": "#e2e2e2",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-primary-fixed-variant": "#005230",
+                    "secondary-container": "#fd761a",
+                    "tertiary": "#752d32",
+                    "secondary": "#9d4300",
+                    "tertiary-container": "#934448",
+                    "background": "#f9f9f9",
+                    "outline-variant": "#bec9bf",
+                    "on-secondary-fixed": "#341100",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-fixed": "#002111",
+                    "inverse-on-surface": "#f1f1f1",
+                    "on-tertiary-fixed-variant": "#782f34",
+                    "tertiary-fixed-dim": "#ffb3b4",
+                    "inverse-primary": "#86d7a6",
+                    "surface-bright": "#f9f9f9",
+                    "primary-fixed": "#a2f4c1",
+                    "surface-container": "#eeeeee",
+                    "on-secondary": "#ffffff",
+                    "outline": "#6f7a71",
+                    "on-primary-container": "#95e7b5",
+                    "surface-dim": "#dadada",
+                    "surface-container-low": "#f3f3f3",
+                    "surface-tint": "#136c44"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Be Vietnam Pro"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .orange-gradient-btn {
+            background: linear-gradient(135deg, #9d4300 0%, #fd761a 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md">
+    <div class="flex flex-col w-full max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="text-2xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 font-headline">
+                Botanical Atelier
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-emerald-700 dark:text-emerald-300 border-b-2 border-orange-500 font-semibold font-headline text-sm tracking-wide" href="#">Chăm sóc da</a>
+                <a class="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors font-headline text-sm tracking-wide" href="#">Trang điểm</a>
+                <a class="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors font-headline text-sm tracking-wide" href="#">Chăm sóc cơ thể</a>
+                <a class="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors font-headline text-sm tracking-wide" href="#">Clinic</a>
+                <a class="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors font-headline text-sm tracking-wide" href="#">Khuyến mãi</a>
+            </nav>
+            <div class="flex items-center gap-6">
+                <span class="hidden lg:block text-emerald-900 dark:text-emerald-400 font-medium text-sm">Hotline: 1900 1234</span>
+                <div class="flex items-center gap-4">
+                    <button class="material-symbols-outlined text-primary hover:bg-stone-50 p-2 rounded-full transition-all duration-300">shopping_cart</button>
+                    <button onclick="window.location.href='/dang-nhap'" class="material-symbols-outlined text-primary hover:bg-stone-50 p-2 rounded-full transition-all duration-300">person</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="pt-24 min-h-screen">
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="relative overflow-hidden rounded-xl bg-surface-container-low p-12 md:p-20 flex flex-col items-center text-center">
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <img class="w-full h-full object-cover" data-alt="soft focus close-up of organic green leaves and botanical water droplets with elegant clean studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf-fB8hvàCMS90sd5Oz9TMmpTlr9K7SfmlTLJbXJhtkK2vàOufoRHPAT1PRV23XwnkK1IRAjJRkPS3JqcLjZvàoiK4QEQdwSEXffhdJ7mU_-Bl7uYrX85pybCwhtljM30Z1JafG-WV8Ii26Gnai4U2GSSbhFfHp2j_EUw1oUD4w4h_wvàk9niCoqet6SMJvà7tES8mvàc6TcochkDXU8NGIAD-1WcBaYrZ6EUIPS6FdushGno9HDL8iQ-U1ci5I1r3_LofvàEe3PlKMryQ1Rn"/>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-primary font-headline mb-4 tracking-tight">Sản phẩm chăm sóc da</h1>
+            <p class="max-w-2xl text-on-surface-variant leading-relaxed">Khám phá các sản phẩm chiết xuất từ thiên nhiên, nuôi dưỡng làn da của bạn bằng sự thuần khiết từ vườn thảo mộc của Botanical Atelier.</p>
+        </div>
+    </section>
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-12 pb-24">
+        <aside class="w-full md:w-64 flex flex-col gap-6 sticky top-24 h-fit">
+            <div class="bg-stone-50 dark:bg-stone-900 p-6 rounded-xl flex flex-col gap-6">
+                <div>
+                    <h2 class="text-xl font-bold text-emerald-900 dark:text-emerald-50 font-headline mb-1">Bộ lọc tìm kiếm</h2>
+                    <p class="text-xs text-stone-500 font-body">Tối ưu hóa lựa chọn của bạn</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="group">
+                        <div class="flex items-center gap-3 text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-3 transition-all duration-150 translate-x-1">
+                            <span class="material-symbols-outlined text-lg">sell</span>
+                            <span class="text-sm font-headline">Thương hiệu</span>
+                        </div>
+                        <div class="mt-3 pl-4 space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer text-sm text-stone-600 hover:text-emerald-800"><input class="rounded text-primary focus:ring-primary w-4 h-4" type="checkbox"/> La Roche-Posay</label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm text-stone-600 hover:text-emerald-800"><input class="rounded text-primary focus:ring-primary w-4 h-4" type="checkbox"/> Vichy</label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm text-stone-600 hover:text-emerald-800"><input class="rounded text-primary focus:ring-primary w-4 h-4" type="checkbox"/> Atelier Organic</label>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-emerald-800 p-3 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg">
+                            <span class="material-symbols-outlined text-lg">face_6</span>
+                            <span class="text-sm font-headline">Loại da</span>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-emerald-800 p-3 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg">
+                            <span class="material-symbols-outlined text-lg">payments</span>
+                            <span class="text-sm font-headline">Khoảng giá</span>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-emerald-800 p-3 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg">
+                            <span class="material-symbols-outlined text-lg">star</span>
+                            <span class="text-sm font-headline">Đánh giá</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <section class="flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="clean product photography of a green tea serum bottle on a textured white surface with soft sunlight and botanical shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtCqe-và076eQ2KiBeeWoIjE3NI7BW7HuZ-f1Xl6FHJieJ6fXX6mx-z-lA23z7X5WbZOsLvàl7IaEvàJQaq2Wl4YvàEzJgd9KnIM_FRD_AfEaEn9xcYJoTh7AyNGHw4jE6x2SnW93Uz3LhtYgKd6xHCvàaqIOL0IvàwP5MfSi2YQbULljOSnSE6ZT1a-IGoS0iiikK5YyYLR6Ay2eieyYXóa0KK4sEi9yxZUz-a1TJhj8Vh5fAhbRWIJBatBx-K-wK48gvàOjKHeyp4xzbHwLF"/>
+                        <div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-lg text-xs font-bold">-20%</div>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Serum trà xanh cô đặc</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">450.000<span class="text-sm ml-1">đ</span></span>
+                            <span class="text-on-surface-variant/60 line-through text-sm">560.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="luxury rose hydrating cream jar surrounded by delicate pink rose petals on a minimal white marble background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTH0zteOFZ2lvàcECWn7qODTOqBeBHti7HF5rHFegmdHeqAEBmrZ1vàkaLJ1Sf6WFP6KD8ioYVjEEKWzIPRRWZFb7Qhexg1z80uwgw5tPPW9OE0EueQJyWKBpCWubI2htYxCqOLjbFlYqjc7ONOrvàWquMO0kGzqpDYCAquVQl1c-bJB8iZim4mxa9yH9nxs0ypam6PIH5-dlZpDvàThijjpSK_UezVYMCWQ_YuMjcjIHlcSAOgxtuVtjXZvàevàeKk68EUYHMRkXr6gJb6A"/>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Kem dưỡng ẩm hoa hồng</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">320.000<span class="text-sm ml-1">đ</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="natural toner spray bottle with organic herbs and lavender sprigs on a sunlit wooden tabletop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7xu_pCFq4YJiVgQrMj2q-iaUH6nZTOJG8znAkN8cTB8kDGp8KKBM-s4cnyzp0UIYzs9EOZlom-SIim0s8SZ8mobYOu_QvàdPpXsFnaX1QAczs6UuzwpsWN4McDHou2Sk2và3x7LgspIjwZjYS3Z0KCN8Y4MWDS1CcTJK2S8yYO6mDlksTOWCBP6sh9fufnLuUUQpIxeBz2lvà3UIZDFPvàdKMRvàiFbzibJK7IbF0gnD9eN_7ZOcRDzW1rH6f5K6--6msiukvà5RsxvàYuIQ"/>
+                        <div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-lg text-xs font-bold">-15%</div>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Toner oải hương dịu nhẹ</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">285.000<span class="text-sm ml-1">đ</span></span>
+                            <span class="text-on-surface-variant/60 line-through text-sm">335.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="gentle foaming cleanser bottle with soap bubbles and fresh cucumber slices on a cool blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsxYe377XUYb2SKTvàqj8vàzi_UBdWkTI3hOP6R6SDpLF6ejdXW0Q6RBa-i5s8q7MT0E14e8B8ouHLABNMQFZ_TgQOvà3vàazifvàKmSAP8pf2MlevàJ0g5oxTyXJjYD5wNdNtlO3ujvàGLf0y-8zBqqvàI_nwK6mZ-LDwFPiB9grY4KNfJEugMpjLYi2ZA8SO38XIB5FbUZc4YuwH4UtdL4ipaiO0hypP9chenb6kjemjh-OgDAeTH_oX785TVZZaTwhZUgYbVd3Gvà-K-zJVp"/>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Sữa rửa mặt thảo mộc</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">210.000<span class="text-sm ml-1">đ</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="rejuvenating night mask with organic honey and gold flakes on a dark elegant background with golden light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBITsaq-teRz-YT2XS5J72L6zM_6M3n4w326MP6N0u-yh8omVfa6MmowQNj7C_OtzIXYZA3sFkVznBrPIyo8IY6Q3aw2xóa_YnDk2O2OtVPMLQodSF46N_TdNHxX7s9iDWDiDPASHupWnO7TBlyV57KnupWlLEEM5AMWCOVklr7y_pcS1BRas9bE-lAYK-JSMR3Ub8KFu8m2mo_CRpocJrDBu2kBNTMybdyIqP5CoiqEG-d6lZwTCuPl2aOdXefAB7U8GdNeuA9_W5Hg"/>
+                        <div class="absolute top-4 left-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-lg text-xs font-bold">-30%</div>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Mặt nạ ngủ phục hồi</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">590.000<span class="text-sm ml-1">đ</span></span>
+                            <span class="text-on-surface-variant/60 line-through text-sm">845.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-300">
+                    <div class="aspect-square w-full relative overflow-hidden bg-stone-50">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="mineral sunscreen bottle on a sandy beach with natural morning sunlight and sea water bokeh in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeZKnuFSXJjPAct6Rof2jf1Lp99Z1eIo61djN8pyMymUZF8u596hEBCbnXKZpOeQD0pCwwy6sDCm-9gjG7Ei0ULTKfD6USg1z9F-B8eslXOFQvà-gKEXXWIR2kA88crIPnAR2hsqcfH_78c5kjWmzf5A6crbCCixNcMwaxX6u2gLB22Y_QTOcEwijKHQuFu3rZ7k1Q7h3pQzV49hn1-FEUt9Iabk4VO_b-MqQAnmQJj9UZCpj1_vàqFui6AEY1driAc7GU_g1msSbPIx"/>
+                        <button class="absolute bottom-4 right-4 orange-gradient-btn text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                    <div class="pt-6 px-2 flex flex-col gap-2">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <h3 class="text-on-surface font-headline font-bold text-lg leading-tight">Kem chống nắng vật lý</h3>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-secondary font-headline text-xl font-bold">425.000<span class="text-sm ml-1">đ</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 flex justify-center items-center gap-2">
+                <button class="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-stone-200 text-primary transition-all">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-primary text-white font-bold">1</button>
+                <button class="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-stone-200 text-stone-600">2</button>
+                <button class="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-stone-200 text-stone-600">3</button>
+                <button class="w-10 h-10 rounded-lg flex items-center justify-center hover:bg-stone-200 text-primary transition-all">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </section>
+    </div>
+</main>
+<footer class="w-full pt-16 pb-8 bg-stone-200 dark:bg-stone-950">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto px-8">
+        <div class="flex flex-col gap-4">
+            <div class="text-xl font-bold text-emerald-900 dark:text-emerald-50 font-headline">Botanical Atelier</div>
+            <p class="text-stone-500 dark:text-stone-400 text-sm leading-relaxed">Vẻ đẹp thuần khiết từ thiên nhiên. Chúng tôi tận tâm mang đến những giải pháp chăm sóc da hữu cơ và bền vững.</p>
+        </div>
+        <div class="flex flex-col gap-4">
+            <h4 class="font-bold text-emerald-900 dark:text-emerald-50">Liên kết nhanh</h4>
+            <nav class="flex flex-col gap-2">
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Về chúng tôi</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Chính sách bảo mật</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Điều khoản dịch vụ</a>
+            </nav>
+        </div>
+        <div class="flex flex-col gap-4">
+            <h4 class="font-bold text-emerald-900 dark:text-emerald-50">Hỗ trợ</h4>
+            <nav class="flex flex-col gap-2">
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Hệ thống cửa hàng</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Liên hệ</a>
+                <a class="text-stone-500 dark:text-stone-400 hover:text-emerald-700 hover:translate-x-1 transition-all text-sm" href="#">Giao hàng & Đổi trả</a>
+            </nav>
+        </div>
+        <div class="flex flex-col gap-4">
+            <h4 class="font-bold text-emerald-900 dark:text-emerald-50">Bản tin</h4>
+            <div class="flex gap-2">
+                <input class="bg-surface-variant/50 border-none rounded-lg text-sm flex-1 focus:ring-primary" placeholder="Email của bạn" type="email"/>
+                <button class="bg-primary text-white p-2 rounded-lg material-symbols-outlined">send</button>
+            </div>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-8 mt-16 pt-8 border-t border-stone-300/30 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-stone-500 dark:text-stone-400 text-sm">© 2024 Botanical Atelier. Tất cả quyền được bảo lưu.</p>
+        <div class="flex gap-6">
+            <span class="material-symbols-outlined text-stone-500 cursor-pointer hover:text-primary">public</span>
+            <span class="material-symbols-outlined text-stone-500 cursor-pointer hover:text-primary">brand_awareness</span>
+            <span class="material-symbols-outlined text-stone-500 cursor-pointer hover:text-primary">share</span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
