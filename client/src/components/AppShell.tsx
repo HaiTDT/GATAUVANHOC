@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { Footer } from "./store/Footer";
 import { Header } from "./store/Header";
@@ -15,7 +16,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
-      <Header />
+      <Suspense fallback={<div className="h-[88px] bg-white shadow-sm" />}>
+        <Header />
+      </Suspense>
       <main
         className={
           isCatalogPage

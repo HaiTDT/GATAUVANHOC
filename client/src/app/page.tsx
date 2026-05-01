@@ -93,8 +93,7 @@ export default function Home() {
                     </div>
                   </Link>
                   <div className="p-6 flex flex-col flex-1">
-                    <Link href={`/products/${p.id}`} className="font-bold text-primary text-lg mb-2 hover:underline line-clamp-1">{p.name}</Link>
-                    <span className="text-on-surface-variant text-sm block mb-6 line-clamp-2">{p.description || "Sản phẩm chăm sóc da cao cấp Botanical Atelier."}</span>
+                    <Link href={`/products/${p.id}`} className="font-bold text-primary text-lg mb-4 hover:underline line-clamp-2 leading-snug">{p.name}</Link>
                     <div className="flex items-center justify-between mt-auto">
                       <div>
                         <span className="text-secondary font-bold text-2xl">{Number(p.price).toLocaleString()}đ</span>

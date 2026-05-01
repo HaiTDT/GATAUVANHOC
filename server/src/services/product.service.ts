@@ -18,6 +18,7 @@ type ProductInput = {
 type ProductQuery = {
   search?: unknown;
   categoryId?: unknown;
+  categoryIds?: unknown; // comma-separated IDs
   brand?: unknown;
   minPrice?: unknown;
   maxPrice?: unknown;
@@ -234,6 +235,11 @@ const getProductWhere = (query: ProductQuery): Prisma.ProductWhereInput => {
 
   if (categoryId) {
     where.categoryId = categoryId;
+  } else if (query.categoryIds && typeof query.categoryIds === 'string' && query.categoryIds.trim()) {
+    const ids = query.categoryIds.split(',').map((id: string) => id.trim()).filter(Boolean);
+    if (ids.length > 0) {
+      where.categoryId = { in: ids };
+    }
   }
 
   if (brand) {

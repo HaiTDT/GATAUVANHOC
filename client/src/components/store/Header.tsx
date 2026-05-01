@@ -1,18 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../AuthProvider";
+import { CATEGORY_GROUPS } from "../../lib/constants";
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { user, logout } = useAuth();
+
+  const activeGroup = searchParams.get("group");
+  const isHome = pathname === "/" && !activeGroup;
 
   return (
     <header className="fixed top-0 w-full z-50 bg-white dark:bg-stone-900 backdrop-blur-md shadow-sm">
       <div className="flex flex-col w-full max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-8 mb-4">
-          <Link href="/products" className="text-2xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 font-headline">
+          <Link href="/" className="text-2xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 font-headline">
             Botanical Atelier
           </Link>
           <div className="flex-1 max-w-xl relative">
@@ -61,14 +67,30 @@ export function Header() {
           </div>
         </div>
         <nav className="flex items-center justify-center gap-8">
-          <Link className="text-emerald-700 dark:text-emerald-300 border-b-2 border-orange-500 font-semibold py-1 text-sm font-headline" href="/products">Chăm sóc da</Link>
-          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Trang điểm</Link>
-          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Chăm sóc cơ thể</Link>
-          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Clinic</Link>
-          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Khuyến mãi</Link>
-          <Link className="text-stone-600 dark:text-stone-400 hover:text-emerald-800 transition-colors py-1 text-sm font-headline" href="/products">Thương hiệu</Link>
+          <Link
+            className={`py-1 text-sm font-headline transition-colors ${isHome ? "text-emerald-700 border-b-2 border-orange-500 font-semibold" : "text-stone-600 dark:text-stone-400 hover:text-emerald-800"}`}
+            href="/"
+          >
+            Trang chủ
+          </Link>
+          {CATEGORY_GROUPS.map((group) => (
+            <Link
+              key={group.key}
+              className={`py-1 text-sm font-headline transition-colors ${activeGroup === group.key ? "text-emerald-700 border-b-2 border-orange-500 font-semibold" : "text-stone-600 dark:text-stone-400 hover:text-emerald-800"}`}
+              href={`/products?group=${group.key}`}
+            >
+              {group.label}
+            </Link>
+          ))}
+          <Link
+            className={`py-1 text-sm font-headline flex items-center gap-1 font-bold transition-colors ${searchParams.get("flashSale") === "true" ? "text-orange-700 border-b-2 border-orange-500" : "text-orange-600 hover:text-orange-800"}`}
+            href="/products?flashSale=true"
+          >
+            Khuyến mãi <span className="material-symbols-outlined text-[16px]">bolt</span>
+          </Link>
         </nav>
       </div>
     </header>
   );
 }
+
