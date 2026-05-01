@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { Protected } from "../../../components/Protected";
-import { EmptyState, ErrorMessage, Field, PageHeader, inputClass } from "../../../components/ui";
+import { EmptyState, ErrorMessage } from "../../../components/ui";
 import { api, type Category } from "../../../lib/api";
 
 const emptyForm = { name: "", slug: "", description: "" };
@@ -18,7 +18,7 @@ function AdminCategoriesContent() {
   };
 
   useEffect(() => {
-    load().catch((err) => setError(err instanceof Error ? err.message : "Cannot load categories"));
+    load().catch((err) => setError(err instanceof Error ? err.message : "Không thể tải danh mục"));
   }, []);
 
   const submit = async (event: FormEvent) => {
@@ -35,7 +35,7 @@ function AdminCategoriesContent() {
       setEditingId(null);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cannot save category");
+      setError(err instanceof Error ? err.message : "Không thể lưu danh mục");
     }
   };
 
@@ -49,7 +49,7 @@ function AdminCategoriesContent() {
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm("Delete this category?")) {
+    if (!window.confirm("Bạn có chắc muốn xóa danh mục này?")) {
       return;
     }
 
@@ -57,70 +57,97 @@ function AdminCategoriesContent() {
       await api.deleteCategory(id);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cannot delete category");
+      setError(err instanceof Error ? err.message : "Không thể xóa danh mục");
     }
   };
 
   return (
-    <div>
-      <PageHeader title="Admin categories" description="Create and maintain product categories." />
+    <>
+      <header className="mb-8 flex items-center justify-between">
+        <h2 className="font-bold font-headline text-2xl text-primary">Quản lý Danh mục</h2>
+      </header>
+      
       <ErrorMessage message={error} />
-      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-        <form className="space-y-4 rounded-lg border border-slate-200 bg-white p-5" onSubmit={submit}>
-          <h2 className="font-semibold">{editingId ? "Edit category" : "New category"}</h2>
-          <Field label="Name">
-            <input className={inputClass} onChange={(event) => setForm({ ...form, name: event.target.value })} required value={form.name} />
-          </Field>
-          <Field label="Slug">
-            <input className={inputClass} onChange={(event) => setForm({ ...form, slug: event.target.value })} value={form.slug} />
-          </Field>
-          <Field label="Description">
-            <textarea className={inputClass} onChange={(event) => setForm({ ...form, description: event.target.value })} rows={3} value={form.description} />
-          </Field>
-          <div className="flex gap-2">
-            <button className="rounded-md bg-rosewood px-4 py-2 text-white" type="submit">
-              Save
+      
+      <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
+        <form className="space-y-4 rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-6 organic-shadow h-fit" onSubmit={submit}>
+          <h2 className="font-bold text-lg text-on-surface mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">{editingId ? 'edit_square' : 'add_box'}</span>
+            {editingId ? "Sửa danh mục" : "Thêm danh mục mới"}
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-on-surface mb-1">Tên danh mục</label>
+              <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(event) => setForm({ ...form, name: event.target.value })} required value={form.name} placeholder="Nhập tên danh mục..." />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-on-surface mb-1">Đường dẫn (Slug)</label>
+              <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(event) => setForm({ ...form, slug: event.target.value })} value={form.slug} placeholder="ten-danh-muc" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-on-surface mb-1">Mô tả</label>
+              <textarea className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(event) => setForm({ ...form, description: event.target.value })} rows={4} value={form.description} placeholder="Mô tả danh mục..." />
+            </div>
+          </div>
+          <div className="flex gap-3 pt-4 border-t border-outline-variant/20 mt-6">
+            <button className="flex-1 bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition organic-shadow" type="submit">
+              {editingId ? "Lưu thay đổi" : "Thêm mới"}
             </button>
             {editingId && (
               <button
-                className="rounded-md border border-slate-300 px-4 py-2"
+                className="flex-1 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-surface-container-highest transition border border-outline-variant/50"
                 onClick={() => {
                   setEditingId(null);
                   setForm(emptyForm);
                 }}
                 type="button"
               >
-                Cancel
+                Hủy
               </button>
             )}
           </div>
         </form>
-        <section>
+        
+        <section className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden organic-shadow border border-outline-variant/30 h-fit">
           {categories.length === 0 ? (
-            <EmptyState message="No categories." />
-          ) : (
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-              {categories.map((category) => (
-                <div className="flex flex-col gap-3 border-b border-slate-100 p-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between" key={category.id}>
-                  <div>
-                    <p className="font-medium">{category.name}</p>
-                    <p className="text-sm text-slate-500">{category.slug}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="rounded-md border border-slate-300 px-3 py-2 text-sm" onClick={() => edit(category)} type="button">
-                      Edit
-                    </button>
-                    <button className="rounded-md border border-red-200 px-3 py-2 text-sm text-red-700" onClick={() => remove(category.id)} type="button">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="p-8">
+              <EmptyState message="Chưa có danh mục nào." />
             </div>
+          ) : (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-surface-container-low text-on-surface-variant text-[11px] uppercase tracking-widest font-bold">
+                  <th className="px-6 py-4 border-b border-surface-container">Tên danh mục</th>
+                  <th className="px-6 py-4 border-b border-surface-container">Đường dẫn</th>
+                  <th className="px-6 py-4 border-b border-surface-container text-center w-32">Hành động</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-surface-container text-sm">
+                {categories.map((category) => (
+                  <tr className="hover:bg-surface-container-low/50 transition-colors" key={category.id}>
+                    <td className="px-6 py-4 font-bold text-on-surface">
+                      {category.name}
+                      {category.description && <p className="text-xs text-slate-500 font-normal mt-1 line-clamp-1">{category.description}</p>}
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 font-mono text-xs">{category.slug}</td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button onClick={() => edit(category)} title="Sửa" className="p-2 hover:bg-primary/10 text-primary rounded transition-colors">
+                          <span className="material-symbols-outlined text-lg">edit</span>
+                        </button>
+                        <button onClick={() => remove(category.id)} title="Xóa" className="p-2 hover:bg-error-container text-error rounded transition-colors">
+                          <span className="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </section>
       </div>
-    </div>
+    </>
   );
 }
 

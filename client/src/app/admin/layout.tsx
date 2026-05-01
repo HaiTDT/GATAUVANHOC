@@ -35,11 +35,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span>Tổng quan</span>
             </Link>
             <Link 
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/products') || isActive('/admin/categories') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/products') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
               href="/admin/products"
             >
               <span className="material-symbols-outlined">inventory_2</span>
               <span>Quản lý Sản phẩm</span>
+            </Link>
+            <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/categories') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/categories"
+            >
+              <span className="material-symbols-outlined">category</span>
+              <span>Quản lý Danh mục</span>
             </Link>
             <Link 
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/blogs') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
