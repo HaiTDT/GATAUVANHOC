@@ -36,8 +36,9 @@ Một nền tảng thương mại điện tử chuyên cung cấp mỹ phẩm đ
 - **Database ORM**: [Prisma](https://www.prisma.io/)
 
 ### Database & DevOps
-- **Cơ sở dữ liệu**: PostgreSQL 16
-- **Containerization**: Docker & Docker Compose
+- **Cơ sở dữ liệu**: PostgreSQL 16 — hosted trên [Neon](https://neon.tech/) (cloud, serverless)
+- **ORM**: Prisma (schema migration & type-safe queries)
+- **Containerization** *(tuỳ chọn)*: Docker & Docker Compose (chạy DB local)
 - **Workspace Manager**: npm workspaces (Monorepo)
 
 ## 📂 Cấu trúc thư mục
@@ -79,75 +80,131 @@ Dự án sử dụng PostgreSQL với các Model chính:
 
 ## ⚙️ Hướng dẫn cài đặt và chạy local
 
+> **Database**: Dự án hiện sử dụng **[Neon](https://neon.tech/)** — PostgreSQL serverless trên cloud. Không cần cài đặt hay chạy Docker để dùng database. Mọi thay đổi dữ liệu (thêm sản phẩm, danh mục...) đều được lưu trực tiếp lên Neon.
+
 ### Yêu cầu hệ thống
-- [Node.js](https://nodejs.org/) (phiên bản 18+ trở lên)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (để chạy database)
-- Git
 
-### 1. Cài đặt Dependencies
+- [Node.js](https://nodejs.org/) phiên bản **18+**
+- [Git](https://git-scm.com/)
+- *(Tuỳ chọn)* [Docker Desktop](https://www.docker.com/products/docker-desktop/) — chỉ cần nếu muốn chạy database local
 
-Tại thư mục gốc của dự án, chạy lệnh:
+---
+
+### Bước 1 — Clone & Cài đặt Dependencies
 
 ```bash
+git clone <repo-url>
+cd MIS_HASAKI
 npm install
 ```
 
-### 2. Thiết lập biến môi trường (.env)
+---
 
-Bạn cần copy các file môi trường mẫu thành các file `.env` thực tế để sử dụng:
+### Bước 2 — Cấu hình biến môi trường
+
+Tạo file `server/.env` với nội dung sau:
+
+```env
+PORT=4000
+CLIENT_URL=http://localhost:3000
+DATABASE_URL=postgresql://neondb_owner:<password>@<host>.neon.tech/neondb?sslmode=require
+JWT_SECRET=your_jwt_secret_key_here
+```
+
+> 💡 **Lấy `DATABASE_URL`**: Đăng nhập [Neon Console](https://console.neon.tech/) → chọn project → **Connection Details** → copy chuỗi kết nối `postgresql://...`
+
+Hoặc copy từ file mẫu rồi điền vào:
 
 ```bash
 # Windows (PowerShell)
-Copy-Item .env.example .env
 Copy-Item server/.env.example server/.env
-Copy-Item client/.env.example client/.env.local
 
-# Linux/macOS
-cp .env.example .env
+# Linux / macOS
 cp server/.env.example server/.env
-cp client/.env.example client/.env.local
 ```
 
-### 3. Khởi động Cơ sở dữ liệu (PostgreSQL)
+Tạo file `client/.env.local`:
 
-Mở Docker Desktop, sau đó chạy lệnh sau để khởi tạo container PostgreSQL:
-
-```bash
-npm run db:up
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
-*Lưu ý: Nếu muốn dừng database, sử dụng lệnh `npm run db:down`.*
+---
 
-### 4. Thiết lập Prisma (Database Migration)
+### Bước 3 — Đồng bộ Schema Database
 
-Đảm bảo server có đầy đủ database structure:
+Chạy lệnh này **một lần duy nhất** để Prisma tạo đầy đủ bảng trên Neon:
 
 ```bash
-npm run prisma:generate
-npm run prisma:migrate
+cd server
+npx prisma db push
 ```
 
-### 5. Khởi động toàn bộ dự án
+Kết quả thành công:
 
-Chạy lệnh sau tại thư mục gốc để khởi động cả **Client** và **Server** đồng thời:
+```
+The database is already in sync with the Prisma schema.
+```
+
+---
+
+### Bước 4 — Khởi động dự án
+
+Quay về thư mục gốc và chạy:
 
 ```bash
+cd ..
 npm run dev
 ```
 
-- 🌐 **Client (Next.js)**: [http://localhost:3000](http://localhost:3000)
-- 🔌 **Server (Express API)**: [http://localhost:4000](http://localhost:4000)
-- 🏥 **API Health Check**: [http://localhost:4000/health](http://localhost:4000/health)
+| Dịch vụ | URL |
+|---------|-----|
+| 🌐 **Client** (Next.js) | http://localhost:3000 |
+| 🔌 **API Server** (Express) | http://localhost:4000 |
+| 🏥 **Health Check** | http://localhost:4000/health |
 
-## 📜 Các lệnh Script hữu ích (NPM Scripts)
+---
 
-Chạy các lệnh này tại thư mục gốc (root directory):
+### Tài khoản mặc định
 
-- `npm run dev`: Khởi động cả Client và Server ở chế độ development.
-- `npm run dev:client`: Chỉ khởi động frontend Next.js.
-- `npm run dev:server`: Chỉ khởi động backend Express.
-- `npm run build`: Build cả frontend và backend để chuẩn bị deploy.
-- `npm run db:up`: Khởi động container database (Postgres).
-- `npm run db:down`: Dừng và xóa container database.
-- `npm run prisma:migrate`: Chạy Prisma migration cập nhật DB.
-- `npm run prisma:studio`: Mở giao diện quản lý database trực quan (Prisma Studio) ở cổng `5555`.
+| Email | Mật khẩu | Vai trò |
+|-------|----------|---------|
+| `huy@gmail.com` | `123456` | ADMIN |
+| `binh@gmail.com` | `123456` | ADMIN |
+
+> ⚠️ Đổi mật khẩu sau khi chạy lần đầu nếu dùng cho môi trường thực tế.
+
+---
+
+### *(Tuỳ chọn)* Chạy Database local với Docker
+
+Nếu muốn dùng PostgreSQL local thay vì Neon:
+
+```bash
+# 1. Khởi động container
+npm run db:up
+
+# 2. Đổi DATABASE_URL trong server/.env thành:
+# DATABASE_URL=postgresql://cosmetics:cosmetics_password@localhost:5432/cosmetics_ecommerce?schema=public
+
+# 3. Chạy migration
+npm run prisma:migrate
+```
+
+---
+
+## 📜 NPM Scripts
+
+Chạy tại thư mục **gốc** của dự án:
+
+| Lệnh | Mô tả |
+|------|-------|
+| `npm run dev` | Khởi động **cả** Client + Server (development) |
+| `npm run dev:client` | Chỉ khởi động frontend Next.js |
+| `npm run dev:server` | Chỉ khởi động backend Express |
+| `npm run build` | Build production cho cả Client và Server |
+| `npm run db:up` | Khởi động PostgreSQL container (Docker) |
+| `npm run db:down` | Dừng và xóa container |
+| `npm run prisma:generate` | Tạo Prisma Client từ schema |
+| `npm run prisma:migrate` | Chạy migration cập nhật cấu trúc DB |
+| `npm run prisma:studio` | Mở Prisma Studio (quản lý DB trực quan) tại cổng `5555` |
