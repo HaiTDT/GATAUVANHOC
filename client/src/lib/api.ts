@@ -185,7 +185,7 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}) {
   return data as T;
 }
 
-const toQueryString = (params: Record<string, string | number | undefined>) => {
+const toQueryString = (params: Record<string, string | number | boolean | undefined>) => {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
@@ -237,7 +237,7 @@ export const api = {
     return apiRequest<void>(`/api/categories/${id}`, { method: "DELETE" });
   },
 
-  getProducts(params: Record<string, string | number | undefined> = {}) {
+  getProducts(params: Record<string, string | number | boolean | undefined> = {}) {
     return apiRequest<Paginated<Product>>(`/api/products${toQueryString(params)}`);
   },
 
@@ -330,7 +330,7 @@ export const api = {
     });
   },
 
-  getBlogs(params: Record<string, string | number | undefined> = {}) {
+  getBlogs(params: Record<string, string | number | boolean | undefined> = {}) {
     return apiRequest<Paginated<Blog>>(`/api/blogs${toQueryString(params)}`);
   },
 

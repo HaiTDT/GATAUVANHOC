@@ -55,7 +55,7 @@ function ProductsContent() {
   // Danh mục con hiển thị trong sidebar: chỉ các danh mục thuộc nhóm đang chọn
   const visibleCategories = useMemo(() => {
     if (!activeGroup) return allCategories;
-    const slugSet = new Set(activeGroup.categorySlugs);
+    const slugSet = new Set<string>(activeGroup.categorySlugs);
     return allCategories.filter(c => slugSet.has(c.slug));
   }, [allCategories, activeGroup]);
 
@@ -65,7 +65,7 @@ function ProductsContent() {
   // categoryIds để gọi API khi chưa chọn danh mục nhỏ cụ thể
   const groupCategoryIds = useMemo(() => {
     if (!activeGroup || filters.categoryId) return "";
-    const slugSet = new Set(activeGroup.categorySlugs);
+    const slugSet = new Set<string>(activeGroup.categorySlugs);
     const ids = allCategories.filter(c => slugSet.has(c.slug)).map(c => c.id);
     return ids.join(",");
   }, [activeGroup, allCategories, filters.categoryId]);
@@ -75,7 +75,7 @@ function ProductsContent() {
       ...filters,
       categoryIds: groupCategoryIds || undefined,
       limit: 9
-    }),
+    } as Record<string, string | number | boolean | undefined>),
     [filters, groupCategoryIds]
   );
 

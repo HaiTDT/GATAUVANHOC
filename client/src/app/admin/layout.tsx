@@ -69,6 +69,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="material-symbols-outlined">group</span>
               <span>Quản trị Khách hàng CRM</span>
             </Link>
+            <div className="mx-2 my-3 h-px bg-white/10" />
+            <Link
+              className="flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 text-white/70 hover:text-white hover:bg-white/5"
+              href="/"
+            >
+              <span className="material-symbols-outlined">storefront</span>
+              <span>Về trang chủ</span>
+            </Link>
           </nav>
           <div className="mt-auto px-6 pt-6 border-t border-white/5">
             <div className="flex items-center gap-3">

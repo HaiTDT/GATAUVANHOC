@@ -30,7 +30,7 @@ export default function AdminProductsPage() {
       if (selectedGroupKey && !selectedCategoryId) {
         const group = CATEGORY_GROUPS.find(g => g.key === selectedGroupKey);
         if (group) {
-          const slugSet = new Set(group.categorySlugs);
+          const slugSet = new Set<string>(group.categorySlugs);
           const ids = categories.filter(c => slugSet.has(c.slug)).map(c => c.id);
           categoryIds = ids.join(",");
         }
@@ -81,7 +81,7 @@ export default function AdminProductsPage() {
     ? (() => {
         const group = CATEGORY_GROUPS.find(g => g.key === selectedGroupKey);
         if (!group) return categories;
-        const slugSet = new Set(group.categorySlugs);
+        const slugSet = new Set<string>(group.categorySlugs);
         return categories.filter(c => slugSet.has(c.slug));
       })()
     : categories;
