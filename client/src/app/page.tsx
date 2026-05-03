@@ -66,8 +66,8 @@ export default function Home() {
               SƯU TẬP MỚI</span>
             <h1 className="font-headline text-5xl lg:text-6xl font-extrabold text-primary leading-tight mb-6">Đánh thức vẻ đẹp
               <br /><span className="italic font-light">nguyên bản</span></h1>
-            <p className="text-on-surface-variant text-lg mb-8 max-w-md leading-relaxed">Khám phá dòng sản phẩm Botanical
-              Clinic với chiết xuất từ thảo mộc quý hiếm, giúp phục hồi và trẻ hóa làn da từ sâu bên trong.</p>
+            <p className="text-on-surface-variant text-lg mb-8 max-w-md leading-relaxed">Khám phá dòng sản phẩm nước hoa cao cấp
+              với chiết xuất từ thảo mộc quý hiếm, giúp phục hồi và trẻ hóa làn da từ sâu bên trong.</p>
             <div className="flex gap-4">
               <Link href="/products"
                 className="cta-gradient text-white px-8 py-4 rounded-md font-bold text-sm shadow-lg hover:scale-105 transition-transform inline-block">KHÁM

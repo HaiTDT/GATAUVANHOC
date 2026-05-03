@@ -1,6 +1,7 @@
 import type { Role } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload, type Secret } from "jsonwebtoken";
+import { prisma } from "../lib/prisma";
 
 type AuthJwtPayload = JwtPayload & {
   sub: string;
@@ -24,7 +25,7 @@ const getBearerToken = (authorization?: string): string | null => {
   return token;
 };
 
-export const authenticateJwt = (
+export const authenticateJwt = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -44,6 +45,18 @@ export const authenticateJwt = (
     if (!decoded.sub || !decoded.email || !decoded.role) {
       return res.status(401).json({
         message: "Unauthorized"
+      });
+    }
+    
+    // Verify user actually exists in DB (prevents 500 errors on DB reset)
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.sub },
+      select: { id: true }
+    });
+    
+    if (!user) {
+      return res.status(401).json({
+        message: "User no longer exists"
       });
     }
 

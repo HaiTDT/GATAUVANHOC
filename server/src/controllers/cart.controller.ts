@@ -3,6 +3,7 @@ import { HttpError } from "../lib/http-error";
 import { cartService } from "../services/cart.service";
 
 const handleError = (error: unknown, res: Response) => {
+  console.error("Cart Error:", error);
   if (error instanceof HttpError) {
     return res.status(error.statusCode).json({
       message: error.message
