@@ -2,25 +2,52 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { api, type Blog, type Product } from "../lib/api";
+import { api, formatPrice, type Blog, type FlashSaleCampaign } from "@/lib/api";
 
 export default function Home() {
-  const [flashSaleProducts, setFlashSaleProducts] = useState<Product[]>([]);
+  const [featuredCampaign, setFeaturedCampaign] = useState<FlashSaleCampaign | null>(null);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     Promise.all([
-      api.getProducts({ isFlashSale: true, limit: 3 }),
+      api.getFeaturedFlashSale(),
       api.getBlogs({ isActive: true, limit: 3 })
     ])
-      .then(([productsRes, blogsRes]) => {
-        setFlashSaleProducts(productsRes.data);
+      .then(([flashRes, blogsRes]) => {
+        setFeaturedCampaign(flashRes);
         setBlogs(blogsRes.data);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!featuredCampaign) return;
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const end = new Date(featuredCampaign.endTime).getTime();
+      const diff = end - now;
+
+      if (diff <= 0) {
+        clearInterval(timer);
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft({ hours, minutes, seconds });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [featuredCampaign]);
+
+  const formatNum = (n: number) => n.toString().padStart(2, "0");
 
   return (
     <>
@@ -54,62 +81,75 @@ export default function Home() {
       </section>
 
       {/* PHẦN 2: FLASH SALE */}
-      <section className="mb-24">
-        <div className="bg-secondary-fixed rounded-xl p-8 lg:p-12 relative overflow-hidden organic-shadow border border-secondary-fixed/50">
-          <div className="flex flex-col lg:flex-row justify-between items-center mb-10 gap-6">
-            <div className="flex items-center gap-4">
-              <span className="material-symbols-outlined text-secondary text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-              <h2 className="font-headline text-3xl font-extrabold text-on-secondary-fixed">ĐANG DIỄN RA FLASH SALE</h2>
-              <div className="flex gap-2 ml-4">
-                <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold">02</div>
-                <div className="text-on-secondary-fixed font-bold py-2">:</div>
-                <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold">45</div>
-                <div className="text-on-secondary-fixed font-bold py-2">:</div>
-                <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold">12</div>
-              </div>
-            </div>
-            <Link className="text-on-secondary-fixed-variant font-bold border-b-2 border-on-secondary-fixed-variant pb-1 hover:opacity-70 transition-opacity"
-              href="/products">Xem tất cả deal hời</Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {loading ? (
-              Array.from({ length: 3 }).map((_, index) => (
-                <div key={index} className="h-[400px] rounded-xl bg-surface-container-lowest/50 animate-pulse" />
-              ))
-            ) : flashSaleProducts.length === 0 ? (
-              <div className="col-span-3 text-center py-12 text-on-secondary-fixed-variant font-medium">
-                Chưa có sản phẩm Flash Sale nào được thiết lập. (Đăng nhập Admin để thiết lập)
-              </div>
-            ) : (
-              flashSaleProducts.map((p) => (
-                <div key={p.id} className="group bg-surface-container-lowest rounded-xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                  <Link href={`/products/${p.id}`} className="block aspect-square overflow-hidden bg-surface-container-low relative">
-                    <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      alt={p.name} src={p.imageUrl || 'https://via.placeholder.com/400'} />
-                    <div className="absolute top-4 left-4 bg-secondary text-white text-xs font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">local_fire_department</span>
-                      HOT DEAL
-                    </div>
-                  </Link>
-                  <div className="p-6 flex flex-col flex-1">
-                    <Link href={`/products/${p.id}`} className="font-bold text-primary text-lg mb-4 hover:underline line-clamp-2 leading-snug">{p.name}</Link>
-                    <div className="flex items-center justify-between mt-auto">
-                      <div>
-                        <span className="text-secondary font-bold text-2xl">{Number(p.price).toLocaleString()}đ</span>
-                        <span className="text-slate-400 line-through text-sm ml-2">{(Number(p.price) * 1.2).toLocaleString()}đ</span>
-                      </div>
-                      <button className="bg-primary text-white w-10 h-10 rounded-full hover:bg-primary-container hover:text-primary transition-colors flex items-center justify-center shadow-md">
-                        <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
-                      </button>
-                    </div>
-                  </div>
+      {featuredCampaign && (
+        <section className="mb-24">
+          <div className="bg-secondary-fixed rounded-xl p-8 lg:p-12 relative overflow-hidden organic-shadow border border-secondary-fixed/50">
+            <div className="flex flex-col lg:flex-row justify-between items-center mb-10 gap-6">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-secondary text-4xl animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                <div>
+                  <h2 className="font-headline text-3xl font-extrabold text-on-secondary-fixed uppercase tracking-tight">{featuredCampaign.name}</h2>
+                  <p className="text-on-secondary-fixed-variant text-xs font-bold uppercase tracking-widest mt-1 opacity-70">Ưu đãi giới hạn - Đừng bỏ lỡ!</p>
                 </div>
-              ))
-            )}
+                <div className="flex gap-2 ml-4">
+                  <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold shadow-lg">{formatNum(timeLeft.hours)}</div>
+                  <div className="text-on-secondary-fixed font-bold py-2">:</div>
+                  <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold shadow-lg">{formatNum(timeLeft.minutes)}</div>
+                  <div className="text-on-secondary-fixed font-bold py-2">:</div>
+                  <div className="bg-on-secondary-fixed text-white px-3 py-2 rounded font-mono font-bold shadow-lg animate-pulse">{formatNum(timeLeft.seconds)}</div>
+                </div>
+              </div>
+              <Link className="text-on-secondary-fixed-variant font-bold border-b-2 border-on-secondary-fixed-variant pb-1 hover:opacity-70 transition-opacity"
+                href="/products">Xem tất cả deal hời</Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {loading ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="h-[400px] rounded-xl bg-surface-container-lowest/50 animate-pulse" />
+                ))
+              ) : !featuredCampaign.items || featuredCampaign.items.length === 0 ? (
+                <div className="col-span-3 text-center py-12 text-on-secondary-fixed-variant font-medium">
+                  Chưa có sản phẩm Flash Sale nào được thiết lập.
+                </div>
+              ) : (
+                featuredCampaign.items
+                  .sort((a, b) => b.discountPercentage - a.discountPercentage)
+                  .slice(0, 6)
+                  .map((item) => {
+                    const p = item.product;
+                    const salePrice = Number(p.price) * (1 - item.discountPercentage / 100);
+                    
+                    return (
+                      <Link key={p.id} href={`/products/${p.id}`} className="group bg-surface-container-lowest rounded-xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300 cursor-pointer">
+                        <div className="block aspect-square overflow-hidden bg-surface-container-low relative">
+                          <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            alt={p.name} src={p.imageUrl || 'https://via.placeholder.com/400'} />
+                          <div className="absolute top-4 left-4 bg-secondary text-white text-xs font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">local_fire_department</span>
+                            -{item.discountPercentage}%
+                          </div>
+                        </div>
+                        <div className="p-6 flex flex-col flex-1">
+                          <h3 className="font-bold text-primary text-lg mb-4 group-hover:underline line-clamp-2 leading-snug">{p.name}</h3>
+                          <div className="flex items-center justify-between mt-auto">
+                            <div>
+                              <span className="text-secondary font-bold text-2xl">{formatPrice(salePrice)}</span>
+                              <span className="text-slate-400 line-through text-xs ml-2">{formatPrice(p.price)}</span>
+                            </div>
+                            <button className="bg-primary text-white w-10 h-10 rounded-full hover:bg-primary-container hover:text-primary transition-colors flex items-center justify-center shadow-md">
+                              <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                            </button>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* PHẦN 3: BLOG / TIN TỨC LÀM ĐẸP */}
       <section className="mb-24">

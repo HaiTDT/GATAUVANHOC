@@ -98,8 +98,8 @@ export function Header() {
             </Link>
           ))}
           <Link
-            className={`py-1 text-sm font-headline flex items-center gap-1 font-bold transition-colors ${searchParams.get("flashSale") === "true" ? "text-orange-700 border-b-2 border-orange-500" : "text-orange-600 hover:text-orange-800"}`}
-            href="/products?flashSale=true"
+            className={`py-1 text-sm font-headline flex items-center gap-1 font-bold transition-colors ${pathname === "/flash-sale" ? "text-orange-700 border-b-2 border-orange-500" : "text-orange-600 hover:text-orange-800"}`}
+            href="/flash-sale"
           >
             Khuyến mãi <span className="material-symbols-outlined text-[16px]">bolt</span>
           </Link>

@@ -136,9 +136,47 @@ export default function ProductDetailPage() {
         <div className="lg:col-span-3">
           <div className="bg-surface-container-lowest rounded-xl p-6 space-y-6 organic-shadow">
             <span className="text-sm text-on-surface-variant font-medium">Giá sản phẩm</span>
-            <div className="text-3xl font-headline font-bold text-primary">
-              {Number(product.price).toLocaleString()}đ
-            </div>
+            {product.flashSaleItems?.[0] ? (() => {
+              const item = product.flashSaleItems[0];
+              const now = new Date();
+              const end = new Date(item.campaign.endTime);
+              const isEnded = now > end;
+
+              if (isEnded) return (
+                <div className="text-3xl font-headline font-bold text-primary">
+                  {Number(product.price).toLocaleString()}đ
+                </div>
+              );
+
+              return (
+                <div className="space-y-3 p-4 rounded-xl border bg-orange-50 border-orange-100 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-widest text-orange-600">
+                    <span className="material-symbols-outlined text-[18px] animate-pulse">bolt</span>
+                    Đang diễn ra Flash Sale
+                  </div>
+                  <div className="flex items-end gap-3">
+                    <div className="text-4xl font-headline font-bold text-orange-600">
+                      {Number(Number(product.price) * (1 - item.discountPercentage / 100)).toLocaleString()}đ
+                    </div>
+                    <div className="flex flex-col mb-1">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold mb-1 w-fit text-white bg-orange-500">
+                        -{item.discountPercentage}%
+                      </span>
+                      <span className="text-sm text-slate-400 line-through font-medium">
+                        {Number(product.price).toLocaleString()}đ
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-orange-500 font-medium italic mt-1">
+                    Kết thúc lúc: {new Date(item.campaign.endTime).toLocaleString('vi-VN')}
+                  </p>
+                </div>
+              );
+            })() : (
+              <div className="text-3xl font-headline font-bold text-primary">
+                {Number(product.price).toLocaleString()}đ
+              </div>
+            )}
             
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-on-surface-variant">Số lượng</label>

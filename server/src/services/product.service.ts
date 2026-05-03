@@ -307,7 +307,19 @@ export const productService = {
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
-        include: { category: true },
+        include: { 
+          category: true,
+          flashSaleItems: {
+            where: {
+              campaign: {
+                isActive: true
+              }
+            },
+            include: {
+              campaign: true
+            }
+          }
+        },
         orderBy,
         skip,
         take: limit
@@ -329,7 +341,19 @@ export const productService = {
   async getDetail(id: string) {
     const product = await prisma.product.findUnique({
       where: { id },
-      include: { category: true }
+      include: { 
+        category: true,
+        flashSaleItems: {
+          where: {
+            campaign: {
+              isActive: true
+            }
+          },
+          include: {
+            campaign: true
+          }
+        }
+      }
     });
 
     if (!product) {

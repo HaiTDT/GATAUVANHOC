@@ -63,6 +63,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span>Quản lý Đơn hàng</span>
             </Link>
             <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/flash-sales') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/flash-sales"
+            >
+              <span className="material-symbols-outlined">bolt</span>
+              <span>Quản lý Flash Sale</span>
+            </Link>
+            <Link 
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/customers') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
               href="#"
             >

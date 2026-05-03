@@ -32,7 +32,17 @@ export const checkoutService = {
         include: {
           items: {
             include: {
-              product: true
+              product: {
+                include: {
+                  flashSaleItems: {
+                    where: {
+                      campaign: {
+                        isActive: true
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -42,7 +52,22 @@ export const checkoutService = {
         throw new HttpError("Cart is empty", 400);
       }
 
-      for (const item of cart.items) {
+      const itemsWithFinalPrice = cart.items.map((item) => {
+        const flashSaleItem = item.product.flashSaleItems[0];
+        let price = item.product.price;
+        
+        if (flashSaleItem) {
+          const discount = new Prisma.Decimal(flashSaleItem.discountPercentage).div(100);
+          price = price.mul(new Prisma.Decimal(1).sub(discount));
+        }
+
+        return {
+          ...item,
+          finalPrice: price
+        };
+      });
+
+      for (const item of itemsWithFinalPrice) {
         if (!item.product.isActive) {
           throw new HttpError(
             `Product ${item.product.name} is no longer available`,
@@ -58,12 +83,12 @@ export const checkoutService = {
         }
       }
 
-      const totalAmount = cart.items.reduce(
-        (total, item) => total.plus(item.product.price.mul(item.quantity)),
+      const totalAmount = itemsWithFinalPrice.reduce(
+        (total, item) => total.plus(item.finalPrice.mul(item.quantity)),
         new Prisma.Decimal(0)
       );
 
-      for (const item of cart.items) {
+      for (const item of itemsWithFinalPrice) {
         const stockUpdate = await tx.product.updateMany({
           where: {
             id: item.productId,
@@ -96,10 +121,10 @@ export const checkoutService = {
           shippingPhone: checkoutData.shippingPhone,
           shippingAddress: checkoutData.shippingAddress,
           items: {
-            create: cart.items.map((item) => ({
+            create: itemsWithFinalPrice.map((item) => ({
               productId: item.productId,
               quantity: item.quantity,
-              unitPrice: item.product.price
+              unitPrice: item.finalPrice
             }))
           }
         },

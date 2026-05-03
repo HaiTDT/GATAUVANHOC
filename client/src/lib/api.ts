@@ -31,6 +31,11 @@ export type Product = {
   isFlashSale: boolean;
   categoryId: string;
   category?: Category;
+  flashSaleItems?: Array<{
+    id: string;
+    discountPercentage: number;
+    campaign: FlashSaleCampaign;
+  }>;
 };
 
 export type Blog = {
@@ -44,11 +49,37 @@ export type Blog = {
   updatedAt: string;
 };
 
+export type FlashSaleItem = {
+  id: string;
+  campaignId: string;
+  productId: string;
+  product: Product;
+  discountPercentage: number;
+  stockLimit: number;
+  soldCount: number;
+};
+
+export type FlashSaleCampaign = {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  items?: FlashSaleItem[];
+  _count?: {
+    items: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type CartItem = {
   id: string;
   productId: string;
   quantity: number;
-  lineTotal?: string;
+  unitPrice?: string | number;
+  lineTotal?: string | number;
   product: Product;
 };
 
@@ -348,6 +379,49 @@ export const api = {
 
   deleteBlog(id: string) {
     return apiRequest<void>(`/api/blogs/${id}`, { method: "DELETE" });
+  },
+
+  getFeaturedFlashSale() {
+    return apiRequest<FlashSaleCampaign | null>("/api/flash-sales/featured");
+  },
+
+  getAdminFlashSales() {
+    return apiRequest<FlashSaleCampaign[]>("/api/flash-sales");
+  },
+
+  getAdminFlashSale(id: string) {
+    return apiRequest<FlashSaleCampaign>(`/api/flash-sales/${id}`);
+  },
+
+  createFlashSale(body: Partial<FlashSaleCampaign>) {
+    return apiRequest<FlashSaleCampaign>("/api/flash-sales", {
+      method: "POST",
+      body
+    });
+  },
+
+  updateFlashSale(id: string, body: Partial<FlashSaleCampaign>) {
+    return apiRequest<FlashSaleCampaign>(`/api/flash-sales/${id}`, {
+      method: "PUT",
+      body
+    });
+  },
+
+  deleteFlashSale(id: string) {
+    return apiRequest<void>(`/api/flash-sales/${id}`, { method: "DELETE" });
+  },
+
+  addFlashSaleItem(campaignId: string, body: { productId: string; discountPercentage: number; stockLimit?: number }) {
+    return apiRequest<FlashSaleItem>(`/api/flash-sales/${campaignId}/items`, {
+      method: "POST",
+      body
+    });
+  },
+
+  removeFlashSaleItem(campaignId: string, productId: string) {
+    return apiRequest<void>(`/api/flash-sales/${campaignId}/items/${productId}`, {
+      method: "DELETE"
+    });
   }
 };
 

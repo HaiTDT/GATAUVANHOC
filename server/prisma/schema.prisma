@@ -67,6 +67,7 @@ model Product {
   cartItems   CartItem[]
   orderItems  OrderItem[]
   reviews     Review[]
+  flashSaleItems FlashSaleItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
@@ -161,4 +162,36 @@ model Blog {
   updatedAt DateTime @updatedAt
 
   @@map("blogs")
+}
+
+model FlashSaleCampaign {
+  id          String   @id @default(uuid())
+  name        String
+  startTime   DateTime
+  endTime     DateTime
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  items       FlashSaleItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("flash_sale_campaigns")
+}
+
+model FlashSaleItem {
+  id                 String   @id @default(uuid())
+  campaignId         String
+  campaign           FlashSaleCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  discountPercentage Int      // 0-100
+  stockLimit         Int      @default(0)
+  soldCount          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([campaignId, productId])
+  @@index([campaignId])
+  @@index([productId])
+  @@map("flash_sale_items")
 }

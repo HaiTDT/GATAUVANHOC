@@ -16,7 +16,14 @@ const cartInclude = {
     include: {
       product: {
         include: {
-          category: true
+          category: true,
+          flashSaleItems: {
+            where: {
+              campaign: {
+                isActive: true
+              }
+            }
+          }
         }
       }
     },
@@ -47,14 +54,25 @@ const toPositiveInt = (value: unknown, field: string) => {
 };
 
 const formatCart = (cart: CartWithItems) => {
-  const items = cart.items.map((item) => ({
-    ...item,
-    lineTotal: item.product.price.mul(item.quantity).toFixed(2)
-  }));
+  const items = cart.items.map((item) => {
+    const flashSaleItem = item.product.flashSaleItems[0];
+    let unitPrice = item.product.price;
+    
+    if (flashSaleItem) {
+      const discount = new Prisma.Decimal(flashSaleItem.discountPercentage).div(100);
+      unitPrice = unitPrice.mul(new Prisma.Decimal(1).sub(discount));
+    }
 
-  const totalAmount = cart.items
+    return {
+      ...item,
+      unitPrice: unitPrice.toFixed(2),
+      lineTotal: unitPrice.mul(item.quantity).toFixed(2)
+    };
+  });
+
+  const totalAmount = items
     .reduce(
-      (total, item) => total.plus(item.product.price.mul(item.quantity)),
+      (total, item) => total.plus(new Prisma.Decimal(item.lineTotal)),
       new Prisma.Decimal(0)
     )
     .toFixed(2);

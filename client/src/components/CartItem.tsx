@@ -45,8 +45,15 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
         </div>
       </div>
       
-      <div className="md:col-span-2 text-center">
-        <span className="font-body font-medium">{formatPrice(item.product.price)}</span>
+      <div className="md:col-span-2 text-center flex flex-col items-center gap-1">
+        <span className="font-body font-bold text-on-surface">
+          {formatPrice(item.unitPrice || item.product.price)}
+        </span>
+        {item.unitPrice && Number(item.unitPrice) < Number(item.product.price) && (
+          <span className="bg-orange-100 text-orange-600 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
+            Flash Sale
+          </span>
+        )}
       </div>
       
       <div className="md:col-span-2 flex justify-center">
