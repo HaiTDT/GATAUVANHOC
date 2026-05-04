@@ -100,7 +100,7 @@ export default function Home() {
                 </div>
               </div>
               <Link className="text-on-secondary-fixed-variant font-bold border-b-2 border-on-secondary-fixed-variant pb-1 hover:opacity-70 transition-opacity"
-                href="/products">Xem tất cả deal hời</Link>
+                href="/flash-sale">Xem tất cả deal hời</Link>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -174,26 +174,28 @@ export default function Home() {
              </div>
           ) : (
             blogs.map((blog) => (
-              <article key={blog.id} className="group cursor-pointer">
-                <div className="aspect-[16/10] rounded-xl overflow-hidden mb-6 bg-surface-container-low organic-shadow">
-                  <img 
-                    src={blog.imageUrl || "https://images.unsplash.com/photo-1615397323214-729227520e5c?auto=format&fit=crop&q=80&w=800"} 
-                    alt={blog.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                  />
-                </div>
-                <div className="flex items-center gap-4 text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">
-                  <span className="text-secondary">Làm đẹp</span>
-                  <span>•</span>
-                  <span>{new Date(blog.createdAt).toLocaleDateString('vi-VN')}</span>
-                </div>
-                <h3 className="font-headline text-xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors line-clamp-2">
-                  {blog.title}
-                </h3>
-                <p className="text-slate-600 line-clamp-3 text-sm leading-relaxed">
-                  {blog.excerpt || blog.content.substring(0, 150) + "..."}
-                </p>
-              </article>
+              <Link key={blog.id} href={`/blogs/${blog.id}`} className="group cursor-pointer">
+                <article>
+                  <div className="aspect-[16/10] rounded-xl overflow-hidden mb-6 bg-surface-container-low organic-shadow">
+                    <img 
+                      src={blog.imageUrl || "https://images.unsplash.com/photo-1615397323214-729227520e5c?auto=format&fit=crop&q=80&w=800"} 
+                      alt={blog.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                  </div>
+                  <div className="flex items-center gap-4 text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">
+                    <span className="text-secondary">Làm đẹp</span>
+                    <span>•</span>
+                    <span>{new Date(blog.createdAt).toLocaleDateString('vi-VN')}</span>
+                  </div>
+                  <h3 className="font-headline text-xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors line-clamp-2">
+                    {blog.title}
+                  </h3>
+                  <p className="text-slate-600 line-clamp-3 text-sm leading-relaxed">
+                    {blog.excerpt || blog.content.substring(0, 150) + "..."}
+                  </p>
+                </article>
+              </Link>
             ))
           )}
         </div>

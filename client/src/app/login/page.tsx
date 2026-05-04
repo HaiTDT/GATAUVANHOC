@@ -17,8 +17,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     // Clear Google session cache mỗi khi vào trang login
-    if (window.google?.accounts?.id) {
-      window.google.accounts.id.disableAutoSelect();
+    const google = (window as any).google;
+    if (google?.accounts?.id) {
+      google.accounts.id.disableAutoSelect();
       
       // Clear Google cookies to force re-login
       const cookies = [
@@ -41,7 +42,7 @@ export default function LoginPage() {
     try {
       const token = credentialResponse.credential;
       await registerWithGoogle(token);
-      router.push("/products");
+      router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập với Google thất bại");
     } finally {
@@ -56,7 +57,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      router.push("/products");
+      router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {
@@ -67,7 +68,7 @@ export default function LoginPage() {
   return (
     <>
       <div className="fixed inset-0 z-0">
-        <img alt="Botanical Background" className="w-full h-full object-cover opacity-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLiBgG8H4R4nEW0-xaFI6ZHQd4zBXyGlaStshdD2rxrJ8xPHNq58jBHQIcAFTF2k4B89rjW9vàNef0eV-9dVKBjK5xmNDFrWXdtD0FfWuR5-lhJKNpOGcBI0qYR_MA6VIyvàQqN_6o0aL58BS3dqmsLKLjmmPdEDgB0ssgmJ0vàlbzDPgAZnQHhn_jAf6mawQvà_7AE_dWGTm5kmxx4nVQa4DzumyYV9ZCEWzhbVlhPm8wNyRmtEL7cBAWT9nTYG-MPN-uOvàPgfhG1ovàGa" />
+        <img alt="Botanical Background" className="w-full h-full object-cover opacity-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLiBgG8H4R4nEW0-xaFI6ZHQd4zBXyGlaStshdD2rxrJ8xPHNq58jBHQIcAFTF2k4B89rjW9&Nef0eV-9dVKBjK5xmNDFrWXdtD0FfWuR5-lhJKNpOGcBI0qYR_MA6VIy&QqN_6o0aL58BS3dqmsLKLjmmPdEDgB0ssgmJ0&lbzDPgAZnQHhn_jAf6mawQ&_7AE_dWGTm5kmxx4nVQa4DzumyYV9ZCEWzhbVlhPm8wNyRmtEL7cBAWT9nTYG-MPN-uO&PgfhG1o&Ga" />
         <div className="absolute inset-0 bg-surface-container-low/60 backdrop-blur-sm"></div>
       </div>
       
@@ -150,7 +151,6 @@ export default function LoginPage() {
                 size="large"
                 width="100%"
                 locale="vi_VN"
-                prompt="login"
                 ux_mode="popup"
               />
             </div>

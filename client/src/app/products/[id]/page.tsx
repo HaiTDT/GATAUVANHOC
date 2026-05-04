@@ -53,6 +53,16 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleBuyNow = async () => {
+    try {
+      await api.addCartItem({ productId, quantity });
+      refreshCart();
+      window.location.href = "/cart";
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Không thể thực hiện mua ngay");
+    }
+  };
+
   const submitReview = async (event: FormEvent) => {
     event.preventDefault();
     setMessage("");
@@ -194,7 +204,7 @@ export default function ProductDetailPage() {
             <button
               className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors shadow-md disabled:opacity-50"
               disabled={!product.isActive || product.stock <= 0}
-              onClick={addToCart}
+              onClick={handleBuyNow}
               type="button"
             >
               Mua ngay

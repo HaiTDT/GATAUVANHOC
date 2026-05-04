@@ -13,6 +13,7 @@ import { healthRouter } from "./routes/health";
 import { orderRouter } from "./routes/orders.routes";
 import { productRouter } from "./routes/products";
 
+import { analyticsRouter } from "./routes/analytics.routes";
 import { blogRouter } from "./routes/blogs.routes";
 import { flashSaleRouter } from "./routes/flash-sale.routes";
 
@@ -30,7 +31,8 @@ app.use(
     credentials: true
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(morgan("dev"));
 
 app.get("/", (_req, res) => {
@@ -48,6 +50,7 @@ app.use("/api/cart", cartRouter);
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/admin/analytics", analyticsRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/flash-sales", flashSaleRouter);
 

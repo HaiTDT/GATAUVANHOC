@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { ErrorMessage } from "../../../../../components/ui";
 import { api } from "../../../../../lib/api";
+import RichTextEditor from "../../../../../components/admin/RichTextEditor";
 
 const emptyBlogForm = {
   title: "",
@@ -125,14 +126,11 @@ export default function AdminEditBlogPage() {
 
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-on-surface mb-2">Nội dung chi tiết</label>
-              <textarea 
-                rows={12} 
+              <RichTextEditor 
                 value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                className="w-full rounded-lg border-surface-variant bg-surface-container-low focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary px-4 py-3 text-sm transition-colors font-mono"
-                placeholder="Nhập nội dung bài viết..."
-                required
-              ></textarea>
+                onChange={(content) => setForm({ ...form, content })}
+                placeholder="Nhập nội dung bài viết với hình ảnh, định dạng..."
+              />
             </div>
           </div>
           

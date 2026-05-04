@@ -1,0 +1,78 @@
+===========================================================================
+     HUONG DAN LOGIC TINH TOAN & THUAT TOAN ANALYTICS - HASAKI MIS
+===========================================================================
+
+Tai lieu nay giai thich cac cong thuc va logic nghiep vu duoc ap dung trong 
+cac module Quan tri Thong minh (BI) cua he thong Hasaki.
+
+---------------------------------------------------------------------------
+1. MO HINH PHAN KHUC KHACH HANG RFM
+---------------------------------------------------------------------------
+Day la phuong phap phan tich hanh vi khach hang dua tren 3 chi so:
+
+- Recency (R): So ngay ke tu don hang cuoi cung den hien tai.
+  (R cang thap cang tot -> Khach hang con dang tuong tac).
+- Frequency (F): Tong so don hang thanh cong.
+  (F cang cao cang tot -> Khach hang trung thanh).
+- Monetary (M): Tong so tien da chi tieu.
+  (M cang cao cang tot -> Khach hang mang lai gia tri lon).
+
+* THUAT TOAN QUINTILES:
+He thong sap xep tat ca khach hang va chia deu thanh 5 nhom (moi nhom 20%).
+- Top 20% cao nhat: 5 diem.
+- 20% tiep theo: 4 diem.
+...
+- 20% thap nhat: 1 diem.
+
+* PHAN LOAI PHAN KHUC (SEGMENTATION):
+- Champions (Tinh hoa): R>=4, F>=4, M>=4.
+- Loyal (Trung thanh): R>=3, F>=4, M>=4.
+- At Risk (Nguy co): R<=2, F<=3, M<=3.
+- Lost (Da mat): R=1, F=1, M=1.
+
+---------------------------------------------------------------------------
+2. CHI SO DOANH THU & TANG TRUONG
+---------------------------------------------------------------------------
+- Growth Rate (Toc do tang truong):
+  [(Doanh thu ky nay - Doanh thu ky truoc) / Doanh thu ky truoc] * 100%.
+
+- AOV (Average Order Value - Gia tri don trung binh):
+  Tong doanh thu / Tong so don hang.
+
+- Revenue by Category:
+  Phan bo doanh thu theo danh muc san pham de xac dinh nganh hang chu luc.
+
+---------------------------------------------------------------------------
+3. MARKETING PERFORMANCE (BI SIMULATION)
+---------------------------------------------------------------------------
+Dua tren doanh thu thuc te de uoc tinh hieu qua:
+
+- Ad Spend (Chi phi): Mac dinh 15% doanh thu.
+- CAC (Cost Per Acquisition): Chi phi / So luong khach hang moi.
+- ROAS (Return on Ad Spend): Doanh thu / Chi phi quang cao.
+  (ROAS > 3 duoc coi la co loi nhuan).
+- Conversion Rate: Ty le chuyen doi tu click sang don hang (Gia dinh 2.5%).
+
+---------------------------------------------------------------------------
+4. QUAN LY TON KHO & DU BAO (INVENTORY)
+---------------------------------------------------------------------------
+- Sales Velocity (Toc do ban): So luong ban ra trung binh trong 30 ngay.
+- Safety Stock (Ton kho an toan): Muc du phong de tranh dut hang.
+- Cong thuc goi y nhap hang (Restock Suggestion):
+  (Sales Velocity * 1.5) - So luong ton kho hien tai.
+  (He so 1.5 giup duy tri hang trong luc cho nha cung cap giao moi).
+
+---------------------------------------------------------------------------
+5. QUY TRINH BI ENVIRONMENT (6 THANH PHAN)
+---------------------------------------------------------------------------
+He thong van hanh theo luong chuan BI:
+1. Data Sources: PostgreSQL (Dua tren giao dich thuc).
+2. ETL: Xu ly tai analytics.service.ts (Lam sach, loc don PAID).
+3. Data Mart: Cac snapshot du lieu da tinh toan san.
+4. Analytics Engine: Tinh RFM Score, Growth Rate, Velocity.
+5. Advanced Analytics: Du bao ton kho, phan tich xu huong.
+6. BI Tools: Dashboards Admin Revenue, CRM, Marketing, Inventory.
+
+===========================================================================
+Hasaki MIS Analytics - Powering Data-Driven Decisions
+===========================================================================

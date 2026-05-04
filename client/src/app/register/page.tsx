@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
     try {
       await register(form);
-      router.push("/products");
+      router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng ký thất bại");
     } finally {
@@ -36,7 +36,7 @@ export default function RegisterPage() {
   return (
     <>
       <div className="fixed inset-0 z-0">
-        <img alt="Botanical Background" className="w-full h-full object-cover opacity-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLiBgG8H4R4nEW0-xaFI6ZHQd4zBXyGlaStshdD2rxrJ8xPHNq58jBHQIcAFTF2k4B89rjW9vàNef0eV-9dVKBjK5xmNDFrWXdtD0FfWuR5-lhJKNpOGcBI0qYR_MA6VIyvàQqN_6o0aL58BS3dqmsLKLjmmPdEDgB0ssgmJ0vàlbzDPgAZnQHhn_jAf6mawQvà_7AE_dWGTm5kmxx4nVQa4DzumyYV9ZCEWzhbVlhPm8wNyRmtEL7cBAWT9nTYG-MPN-uOvàPgfhG1ovàGa" />
+        <img alt="Botanical Background" className="w-full h-full object-cover opacity-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLiBgG8H4R4nEW0-xaFI6ZHQd4zBXyGlaStshdD2rxrJ8xPHNq58jBHQIcAFTF2k4B89rjW9&Nef0eV-9dVKBjK5xmNDFrWXdtD0FfWuR5-lhJKNpOGcBI0qYR_MA6VIy&QqN_6o0aL58BS3dqmsLKLjmmPdEDgB0ssgmJ0&lbzDPgAZnQHhn_jAf6mawQ&_7AE_dWGTm5kmxx4nVQa4DzumyYV9ZCEWzhbVlhPm8wNyRmtEL7cBAWT9nTYG-MPN-uO&PgfhG1o&Ga" />
         <div className="absolute inset-0 bg-surface-container-low/60 backdrop-blur-sm"></div>
       </div>
       

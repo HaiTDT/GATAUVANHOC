@@ -27,17 +27,17 @@ export default function AdminFlashSaleDetailPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [discount, setDiscount] = useState(10);
 
+  const [isProductsLoading, setIsProductsLoading] = useState(false);
+
   const load = async () => {
     try {
       setLoading(true);
-      const [campaignData, productsData, categoriesData] = await Promise.all([
+      const [campaignData, categoriesData] = await Promise.all([
         api.getAdminFlashSale(id),
-        api.getProducts({ limit: 500 }),
         api.getCategories()
       ]);
       
       setCampaign(campaignData);
-      setProducts(productsData.data);
       setCategories(categoriesData);
       
       setName(campaignData.name);
@@ -51,9 +51,28 @@ export default function AdminFlashSaleDetailPage() {
     }
   };
 
+  const loadProducts = async () => {
+    try {
+      setIsProductsLoading(true);
+      const productsData = await api.getProducts({ 
+        categoryId: selectedCategoryId || undefined,
+        limit: 1000 
+      });
+      setProducts(productsData.data);
+    } catch (err) {
+      setError("Không thể tải danh sách sản phẩm");
+    } finally {
+      setIsProductsLoading(false);
+    }
+  };
+
   useEffect(() => {
     load();
   }, [id]);
+
+  useEffect(() => {
+    loadProducts();
+  }, [selectedCategoryId]);
 
   const saveCampaign = async () => {
     try {
@@ -203,15 +222,13 @@ export default function AdminFlashSaleDetailPage() {
                 <select 
                   value={selectedProductId}
                   onChange={(e) => setSelectedProductId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-orange-200 bg-white text-sm outline-none focus:ring-2 focus:ring-orange-200"
+                  disabled={isProductsLoading}
+                  className="w-full px-3 py-2 rounded-lg border border-orange-200 bg-white text-sm outline-none focus:ring-2 focus:ring-orange-200 disabled:bg-orange-50"
                 >
-                  <option value="">-- Chọn sản phẩm --</option>
-                  {products
-                    .filter(p => !selectedCategoryId || p.categoryId === selectedCategoryId)
-                    .map(p => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
-                    ))
-                  }
+                  <option value="">{isProductsLoading ? "Đang tải sản phẩm..." : "-- Chọn sản phẩm --"}</option>
+                  {!isProductsLoading && products.map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
                 </select>
               </div>
 

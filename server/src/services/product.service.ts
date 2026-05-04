@@ -208,7 +208,7 @@ const toProductUpdateData = (input: ProductInput): Prisma.ProductUpdateInput => 
 
 const getPagination = (query: ProductQuery) => {
   const page = Math.max(1, toOptionalInt(query.page, "page") ?? 1);
-  const limit = Math.min(100, Math.max(1, toOptionalInt(query.limit, "limit") ?? 10));
+  const limit = Math.min(2000, Math.max(1, toOptionalInt(query.limit, "limit") ?? 10));
 
   return {
     page,

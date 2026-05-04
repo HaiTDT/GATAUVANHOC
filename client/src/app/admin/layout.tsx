@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <p className="text-white/60 text-[10px] uppercase tracking-widest mt-1">Hệ thống quản trị</p>
             </div>
           </div>
-          <nav className="flex-1 space-y-1 px-2">
+          <nav className="flex-1 space-y-1 px-2 overflow-y-auto no-scrollbar">
             <Link 
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
               href="/admin"
@@ -69,13 +69,47 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="material-symbols-outlined">bolt</span>
               <span>Quản lý Flash Sale</span>
             </Link>
+
+            {/* Phân tích & Báo cáo */}
+            <div className="mx-4 mt-5 mb-2">
+              <p className="text-white/30 text-[9px] uppercase tracking-[0.2em] font-bold">Phân tích & Báo cáo</p>
+            </div>
+            <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/revenue') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/revenue"
+            >
+              <span className="material-symbols-outlined">monitoring</span>
+              <span>Doanh thu & Tăng trưởng</span>
+            </Link>
             <Link 
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/customers') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
-              href="#"
+              href="/admin/customers"
             >
-              <span className="material-symbols-outlined">group</span>
-              <span>Quản trị Khách hàng CRM</span>
+              <span className="material-symbols-outlined">groups</span>
+              <span>Phân khúc Khách hàng</span>
             </Link>
+            <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/marketing') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/marketing"
+            >
+              <span className="material-symbols-outlined">campaign</span>
+              <span>Hiệu quả Marketing</span>
+            </Link>
+            <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/inventory') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/inventory"
+            >
+              <span className="material-symbols-outlined">inventory_2</span>
+              <span>Quản lý Tồn kho</span>
+            </Link>
+            <Link 
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 ${isActive('/admin/bi-architecture') ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:text-white hover:bg-white/5'}`} 
+              href="/admin/bi-architecture"
+            >
+              <span className="material-symbols-outlined">hub</span>
+              <span>Môi trường BI</span>
+            </Link>
+
             <div className="mx-2 my-3 h-px bg-white/10" />
             <Link
               className="flex items-center gap-3 px-4 py-3 rounded-lg mx-2 my-1 transition-all duration-200 text-white/70 hover:text-white hover:bg-white/5"

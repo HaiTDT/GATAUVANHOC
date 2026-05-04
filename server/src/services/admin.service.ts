@@ -227,6 +227,38 @@ export const adminService = {
       topProducts.map((product) => [product.id, product])
     );
 
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const revenueTrendData = await prisma.order.groupBy({
+      by: ["createdAt"],
+      where: {
+        status: { in: [OrderStatus.PAID, OrderStatus.COMPLETED] },
+        createdAt: { gte: sevenDaysAgo }
+      },
+      _sum: { totalAmount: true },
+      orderBy: { createdAt: "asc" }
+    });
+
+    // Group by date (ignoring time)
+    const trendMap = new Map<string, number>();
+    revenueTrendData.forEach((item) => {
+      const dateKey = item.createdAt.toISOString().split("T")[0];
+      const amount = Number(item._sum.totalAmount || 0);
+      trendMap.set(dateKey, (trendMap.get(dateKey) || 0) + amount);
+    });
+
+    const revenueTrend = Array.from({ length: 7 }).map((_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      const dateKey = d.toISOString().split("T")[0];
+      return {
+        date: dateKey,
+        revenue: trendMap.get(dateKey) || 0
+      };
+    });
+
     return {
       totalRevenue: toDecimalString(revenue._sum.totalAmount),
       totalOrders,
@@ -237,7 +269,8 @@ export const adminService = {
         totalSold: row._sum.quantity ?? 0,
         orderItemCount: row._count.id
       })),
-      recentOrders
+      recentOrders,
+      revenueTrend
     };
   }
 };

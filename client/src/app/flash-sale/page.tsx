@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, formatPrice, type FlashSaleCampaign } from "@/lib/api";
+import { useCart } from "@/components/CartProvider";
 
 export default function FlashSalePage() {
+  const router = useRouter();
+  const { refreshCart } = useCart();
   const [campaign, setCampaign] = useState<FlashSaleCampaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [addingId, setAddingId] = useState<string | null>(null);
 
   useEffect(() => {
     api.getFeaturedFlashSale()
@@ -40,6 +45,33 @@ export default function FlashSalePage() {
     return () => clearInterval(timer);
   }, [campaign]);
 
+  const handleAddToCart = async (e: React.MouseEvent, productId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setAddingId(productId);
+    try {
+      await api.addCartItem({ productId, quantity: 1 });
+      refreshCart();
+      alert("Đã thêm vào giỏ hàng thành công!");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Không thể thêm vào giỏ hàng");
+    } finally {
+      setAddingId(null);
+    }
+  };
+
+  const handleBuyNow = async (e: React.MouseEvent, productId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await api.addCartItem({ productId, quantity: 1 });
+      refreshCart();
+      router.push("/cart");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Không thể thực hiện mua ngay");
+    }
+  };
+
   const formatNum = (n: number) => n.toString().padStart(2, "0");
 
   if (loading) {
@@ -65,35 +97,40 @@ export default function FlashSalePage() {
   }
 
   return (
-    <div className="pb-20">
-      <header className="mb-12 text-center bg-orange-50 py-16 rounded-3xl organic-shadow border border-orange-100">
-        <span className="inline-block px-4 py-1.5 bg-orange-500 text-white text-xs font-bold rounded-full mb-6 animate-bounce">
-          GIỚI HẠN THỜI GIAN
-        </span>
-        <h1 className="font-headline text-5xl font-extrabold text-orange-900 mb-6 uppercase tracking-tight">
-          {campaign.name}
-        </h1>
+    <div className="pb-20 px-4 max-w-7xl mx-auto">
+      <header className="mb-12 text-center bg-gradient-to-br from-orange-50 to-red-50 py-16 rounded-3xl organic-shadow border border-orange-100 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-200/20 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-red-200/20 rounded-full -ml-32 -mb-32 blur-3xl"></div>
         
-        <div className="flex justify-center items-center gap-4 mb-8">
-          <div className="text-center">
-            <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl">
-              {formatNum(timeLeft.hours)}
+        <div className="relative z-10">
+          <span className="inline-block px-4 py-1.5 bg-orange-500 text-white text-xs font-bold rounded-full mb-6 animate-bounce shadow-lg">
+            GIỚI HẠN THỜI GIAN
+          </span>
+          <h1 className="font-headline text-5xl font-extrabold text-orange-900 mb-6 uppercase tracking-tight">
+            {campaign.name}
+          </h1>
+          
+          <div className="flex justify-center items-center gap-4 mb-8">
+            <div className="text-center">
+              <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl border-b-4 border-orange-800">
+                {formatNum(timeLeft.hours)}
+              </div>
+              <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Giờ</span>
             </div>
-            <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Giờ</span>
-          </div>
-          <div className="text-orange-600 font-bold text-2xl pb-6">:</div>
-          <div className="text-center">
-            <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl">
-              {formatNum(timeLeft.minutes)}
+            <div className="text-orange-600 font-bold text-2xl pb-6">:</div>
+            <div className="text-center">
+              <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl border-b-4 border-orange-800">
+                {formatNum(timeLeft.minutes)}
+              </div>
+              <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Phút</span>
             </div>
-            <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Phút</span>
-          </div>
-          <div className="text-orange-600 font-bold text-2xl pb-6">:</div>
-          <div className="text-center">
-            <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl animate-pulse">
-              {formatNum(timeLeft.seconds)}
+            <div className="text-orange-600 font-bold text-2xl pb-6">:</div>
+            <div className="text-center">
+              <div className="bg-orange-600 text-white w-16 h-16 flex items-center justify-center rounded-xl text-2xl font-mono font-bold shadow-xl border-b-4 border-orange-800 animate-pulse">
+                {formatNum(timeLeft.seconds)}
+              </div>
+              <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Giây</span>
             </div>
-            <span className="text-[10px] font-bold text-orange-700 uppercase mt-2 block">Giây</span>
           </div>
         </div>
       </header>
@@ -104,8 +141,8 @@ export default function FlashSalePage() {
           const salePrice = Number(p.price) * (1 - item.discountPercentage / 100);
           
           return (
-            <Link key={p.id} href={`/products/${p.id}`} className="group bg-white rounded-2xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300">
-              <div className="aspect-square overflow-hidden bg-slate-50 relative">
+            <div key={p.id} className="group bg-white rounded-2xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300 border border-slate-100">
+              <Link href={`/products/${p.id}`} className="block aspect-square overflow-hidden bg-slate-50 relative">
                 <img 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   alt={p.name} 
@@ -114,22 +151,49 @@ export default function FlashSalePage() {
                 <div className="absolute top-4 left-4 bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
                   -{item.discountPercentage}%
                 </div>
-              </div>
+              </Link>
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="font-bold text-slate-800 text-lg mb-4 line-clamp-2 leading-snug group-hover:text-orange-600 transition-colors">
-                  {p.name}
-                </h3>
-                <div className="flex items-center justify-between mt-auto">
-                  <div>
-                    <span className="text-orange-600 font-bold text-2xl">{formatPrice(salePrice)}</span>
-                    <span className="text-slate-400 line-through text-xs ml-2 block">{formatPrice(p.price)}</span>
+                <Link href={`/products/${p.id}`}>
+                  <h3 className="font-bold text-slate-800 text-lg mb-4 line-clamp-2 leading-snug group-hover:text-orange-600 transition-colors h-12">
+                    {p.name}
+                  </h3>
+                </Link>
+                <div className="mb-6">
+                  <span className="text-orange-600 font-bold text-2xl">{formatPrice(salePrice)}</span>
+                  <span className="text-slate-400 line-through text-xs ml-2">{formatPrice(p.price)}</span>
+                  
+                  <div className="mt-4 bg-slate-100 h-2 rounded-full overflow-hidden relative">
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-1000"
+                      style={{ width: `${Math.max(15, (p.stock / 100) * 100)}%` }}
+                    />
                   </div>
-                  <button className="bg-slate-900 text-white w-10 h-10 rounded-full hover:bg-orange-600 transition-colors flex items-center justify-center shadow-md">
-                    <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                  <div className="flex justify-between mt-1.5">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sắp cháy hàng</span>
+                    <span className="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Còn {p.stock} sp</span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2 mt-auto">
+                  <button 
+                    onClick={(e) => handleBuyNow(e, p.id)}
+                    className="flex-1 bg-orange-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-orange-700 transition-colors shadow-md shadow-orange-200"
+                  >
+                    Mua ngay
+                  </button>
+                  <button 
+                    onClick={(e) => handleAddToCart(e, p.id)}
+                    disabled={addingId === p.id}
+                    className="w-12 h-12 bg-slate-100 text-slate-800 rounded-xl hover:bg-orange-100 hover:text-orange-600 transition-colors flex items-center justify-center border border-slate-200 disabled:opacity-50"
+                    title="Thêm vào giỏ hàng"
+                  >
+                    <span className="material-symbols-outlined text-xl">
+                      {addingId === p.id ? 'sync' : 'add_shopping_cart'}
+                    </span>
                   </button>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>

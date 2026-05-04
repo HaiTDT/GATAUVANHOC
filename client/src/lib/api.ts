@@ -352,6 +352,7 @@ export const api = {
         orderItemCount: number;
       }>;
       recentOrders: Order[];
+      revenueTrend: Array<{ date: string; revenue: number }>;
     }>("/api/admin/dashboard");
   },
 
@@ -429,7 +430,100 @@ export const api = {
     return apiRequest<void>(`/api/flash-sales/${campaignId}/items/${productId}`, {
       method: "DELETE"
     });
+  },
+
+  getRevenueAnalytics(params: Record<string, string | number | undefined> = {}) {
+    return apiRequest<RevenueAnalytics>(
+      `/api/admin/analytics/revenue${toQueryString(params)}`
+    );
+  },
+
+  getCustomerSegmentation(params: Record<string, string | number | undefined> = {}) {
+    return apiRequest<CustomerSegmentationResponse>(
+      `/api/admin/analytics/customers${toQueryString(params)}`
+    );
+  },
+
+  getMarketingAnalytics() {
+    return apiRequest<any>("/api/admin/analytics/marketing");
+  },
+
+  getInventoryAnalytics() {
+    return apiRequest<any>("/api/admin/analytics/inventory");
   }
+};
+
+/* ─── Analytics Types ────────────────────────── */
+
+export type RevenueSummary = {
+  currentRevenue: string;
+  previousRevenue: string;
+  growthRate: number;
+  totalOrders: number;
+  previousOrders: number;
+  orderGrowthRate: number;
+  averageOrderValue: string;
+};
+
+export type RevenueTrendPoint = {
+  date: string;
+  revenue: string;
+  orders: number;
+};
+
+export type CategoryRevenue = {
+  categoryId: string;
+  categoryName: string;
+  revenue: string;
+  percentage: number;
+};
+
+export type BrandRevenue = {
+  brand: string;
+  revenue: string;
+  orderCount: number;
+};
+
+export type OrderStatusCount = {
+  status: string;
+  count: number;
+};
+
+export type RevenueAnalytics = {
+  summary: RevenueSummary;
+  revenueTrend: RevenueTrendPoint[];
+  revenueByCategory: CategoryRevenue[];
+  revenueByBrand: BrandRevenue[];
+  orderStatusDistribution: OrderStatusCount[];
+};
+
+export type SegmentSummary = {
+  segment: string;
+  label: string;
+  count: number;
+  percentage: number;
+  totalRevenue: string;
+  avgOrderValue: string;
+};
+
+export type CustomerRFM = {
+  id: string;
+  email: string;
+  fullName: string | null;
+  phone: string | null;
+  recencyDays: number;
+  frequency: number;
+  monetary: string;
+  rScore: number;
+  fScore: number;
+  mScore: number;
+  segment: string;
+  lastOrderDate: string | null;
+};
+
+export type CustomerSegmentationResponse = {
+  segmentSummary: SegmentSummary[];
+  customers: Paginated<CustomerRFM>;
 };
 
 export const formatPrice = (value: string | number) =>
