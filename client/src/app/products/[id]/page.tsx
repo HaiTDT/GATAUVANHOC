@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "../../../components/AuthProvider";
 import { ErrorMessage } from "../../../components/ui";
-import { api, type Product, type Review } from "../../../lib/api";
+import { api, formatPrice, type Product, type Review } from "../../../lib/api";
 import { useCart } from "../../../components/CartProvider";
 
 export default function ProductDetailPage() {
@@ -79,6 +79,8 @@ export default function ProductDetailPage() {
     }
   };
 
+  const formatNum = (n: number) => n.toString().padStart(2, "0");
+
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -89,11 +91,11 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* IMAGE */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface-container-lowest rounded-xl overflow-hidden aspect-square flex items-center justify-center p-8 organic-shadow">
+          <div className="bg-surface-container-lowest rounded-xl overflow-hidden aspect-square flex items-center justify-center p-4 md:p-8 organic-shadow border border-stone-100">
             {product.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={product.imageUrl} className="w-full h-full object-contain" alt={product.name} />
@@ -104,20 +106,22 @@ export default function ProductDetailPage() {
         </div>
 
         {/* INFO */}
-        <div className="lg:col-span-5 space-y-8">
-          <span className="text-primary font-semibold uppercase text-sm">
-            {product.brand ?? product.category?.name ?? "Sản phẩm"}
-          </span>
+        <div className="lg:col-span-5 space-y-4 md:space-y-8">
+          <div>
+            <span className="text-primary font-semibold uppercase text-xs md:text-sm">
+              {product.brand ?? product.category?.name ?? "Sản phẩm"}
+            </span>
 
-          <h1 className="text-4xl font-headline font-bold text-on-surface">
-            {product.name}
-          </h1>
+            <h1 className="text-2xl md:text-4xl font-headline font-bold text-on-surface mt-1">
+              {product.name}
+            </h1>
+          </div>
 
           <div className="flex items-center gap-4">
              <div className="flex text-yellow-500">
                {[1, 2, 3, 4, 5].map((star) => (
                  <span
-                   className="material-symbols-outlined text-sm"
+                   className="material-symbols-outlined text-[14px] md:text-sm"
                    style={{ fontVariationSettings: "'FILL' 1" }}
                    key={star}
                  >
@@ -125,12 +129,12 @@ export default function ProductDetailPage() {
                  </span>
                ))}
              </div>
-             <span className="text-sm font-medium text-on-surface-variant">
+             <span className="text-xs md:text-sm font-medium text-on-surface-variant">
                 {reviewMeta.averageRating} / 5 ({reviewMeta.totalReviews} đánh giá)
              </span>
           </div>
 
-          <p className="text-lg leading-relaxed text-on-surface-variant">
+          <p className="text-sm md:text-lg leading-relaxed text-on-surface-variant">
             {product.description ?? "Chưa có mô tả cho sản phẩm này."}
           </p>
 
@@ -144,7 +148,7 @@ export default function ProductDetailPage() {
 
         {/* BUY */}
         <div className="lg:col-span-3">
-          <div className="bg-surface-container-lowest rounded-xl p-6 space-y-6 organic-shadow">
+          <div className="bg-surface-container-lowest rounded-xl p-6 space-y-6 organic-shadow border border-stone-100">
             <span className="text-sm text-on-surface-variant font-medium">Giá sản phẩm</span>
             {product.flashSaleItems?.[0] ? (() => {
               const item = product.flashSaleItems[0];
@@ -153,75 +157,74 @@ export default function ProductDetailPage() {
               const isEnded = now > end;
 
               if (isEnded) return (
-                <div className="text-3xl font-headline font-bold text-primary">
-                  {Number(product.price).toLocaleString()}đ
+                <div className="text-2xl md:text-3xl font-headline font-bold text-primary">
+                  {formatPrice(product.price)}
                 </div>
               );
 
               return (
-                <div className="space-y-3 p-4 rounded-xl border bg-orange-50 border-orange-100 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-widest text-orange-600">
-                    <span className="material-symbols-outlined text-[18px] animate-pulse">bolt</span>
-                    Đang diễn ra Flash Sale
+                <div className="space-y-3 p-4 rounded-xl border bg-orange-50 border-orange-100">
+                  <div className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-widest text-orange-600">
+                    <span className="material-symbols-outlined text-[16px] animate-pulse">bolt</span>
+                    Flash Sale
                   </div>
-                  <div className="flex items-end gap-3">
-                    <div className="text-4xl font-headline font-bold text-orange-600">
-                      {Number(Number(product.price) * (1 - item.discountPercentage / 100)).toLocaleString()}đ
+                  <div className="flex items-end gap-2 md:gap-3">
+                    <div className="text-2xl md:text-4xl font-headline font-bold text-orange-600">
+                      {formatPrice(Number(product.price) * (1 - item.discountPercentage / 100))}
                     </div>
                     <div className="flex flex-col mb-1">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold mb-1 w-fit text-white bg-orange-500">
+                      <span className="px-1.5 py-0.5 rounded text-[8px] md:text-[10px] font-bold mb-1 w-fit text-white bg-orange-500">
                         -{item.discountPercentage}%
                       </span>
-                      <span className="text-sm text-slate-400 line-through font-medium">
-                        {Number(product.price).toLocaleString()}đ
+                      <span className="text-xs md:text-sm text-slate-400 line-through font-medium">
+                        {formatPrice(product.price)}
                       </span>
                     </div>
                   </div>
-                  <p className="text-[10px] text-orange-500 font-medium italic mt-1">
-                    Kết thúc lúc: {new Date(item.campaign.endTime).toLocaleString('vi-VN')}
-                  </p>
                 </div>
               );
             })() : (
-              <div className="text-3xl font-headline font-bold text-primary">
-                {Number(product.price).toLocaleString()}đ
+              <div className="text-2xl md:text-3xl font-headline font-bold text-primary">
+                {formatPrice(product.price)}
               </div>
             )}
             
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-on-surface-variant">Số lượng</label>
               <input
-                className="rounded-lg border border-outline-variant bg-white px-3 py-2 w-20 focus:ring-primary text-center font-bold text-on-surface"
+                className="rounded-lg border border-outline-variant bg-white px-3 py-2 w-16 md:w-20 focus:ring-primary text-center font-bold text-on-surface text-sm"
                 min="1"
                 max={product.stock}
                 onChange={(event) => setQuantity(Number(event.target.value))}
                 type="number"
                 value={quantity}
               />
-              <span className="text-xs text-on-surface-variant">Còn {product.stock} sp</span>
+              <span className="text-[10px] md:text-xs text-on-surface-variant">Còn {product.stock} sp</span>
             </div>
 
-            <button
-              className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors shadow-md disabled:opacity-50"
-              disabled={!product.isActive || product.stock <= 0}
-              onClick={handleBuyNow}
-              type="button"
-            >
-              Mua ngay
-            </button>
+            <div className="flex flex-col gap-3">
+              <button
+                className="w-full py-3 md:py-4 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-md disabled:opacity-50 text-sm md:text-base"
+                disabled={!product.isActive || product.stock <= 0}
+                onClick={handleBuyNow}
+                type="button"
+              >
+                Mua ngay
+              </button>
 
-            <button
-              className="w-full py-4 bg-surface-container-high text-on-surface font-bold rounded-lg hover:bg-surface-variant transition-colors disabled:opacity-50"
-              disabled={!product.isActive || product.stock <= 0}
-              onClick={addToCart}
-              type="button"
-            >
-              Thêm vào giỏ hàng
-            </button>
+              <button
+                className="w-full py-3 md:py-4 bg-stone-100 text-stone-900 font-bold rounded-lg hover:bg-stone-200 transition-colors disabled:opacity-50 text-sm md:text-base"
+                disabled={!product.isActive || product.stock <= 0}
+                onClick={addToCart}
+                type="button"
+              >
+                Thêm vào giỏ hàng
+              </button>
+            </div>
 
-            <div className="text-sm text-on-surface-variant pt-4 border-t border-outline-variant/30">
+            <div className="text-[10px] md:text-sm text-on-surface-variant pt-4 border-t border-stone-100">
               <div className="flex items-start gap-3 mb-2">
-                 <span className="material-symbols-outlined text-primary">local_shipping</span>
+                 <span className="material-symbols-outlined text-primary text-[18px] md:text-[24px]">local_shipping</span>
                  <div>
                     <p className="font-semibold text-on-surface">Giao hàng dự kiến</p>
                     <p>Trong 2-3 ngày làm việc</p>
@@ -232,25 +235,25 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      <section className="mt-32 grid gap-12 lg:grid-cols-[1fr_400px]">
-        <div>
-          <h2 className="mb-8 text-3xl font-headline font-bold text-primary">Đánh giá từ khách hàng</h2>
+      <section className="mt-16 md:mt-32 grid gap-12 lg:grid-cols-[1fr_400px]">
+        <div className="order-2 lg:order-1">
+          <h2 className="mb-6 md:mb-8 text-2xl md:text-3xl font-headline font-bold text-primary text-center md:text-left">Đánh giá khách hàng</h2>
           {reviews.length === 0 ? (
-            <div className="bg-surface-container-low p-8 rounded-xl text-center text-on-surface-variant">
+            <div className="bg-stone-50 p-8 rounded-xl text-center text-stone-500 text-sm border border-stone-100 border-dashed">
                Chưa có đánh giá nào cho sản phẩm này.
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {reviews.map((review) => (
-                <article className="rounded-xl bg-surface-container-lowest p-6 organic-shadow" key={review.id}>
+                <article className="rounded-xl bg-white p-4 md:p-6 shadow-sm border border-stone-100" key={review.id}>
                   <div className="flex items-center justify-between gap-3 mb-4">
                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold font-headline uppercase">
+                       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold font-headline uppercase text-xs md:text-base">
                           {review.userName?.[0] || 'U'}
                        </div>
                        <div>
-                          <p className="font-bold text-on-surface">{review.userName}</p>
-                          <div className="flex text-yellow-500 text-xs">
+                          <p className="font-bold text-stone-900 text-sm md:text-base">{review.userName}</p>
+                          <div className="flex text-yellow-500 text-[10px] md:text-xs">
                              {Array.from({ length: 5 }).map((_, i) => (
                                <span
                                  className="material-symbols-outlined"
@@ -264,22 +267,22 @@ export default function ProductDetailPage() {
                        </div>
                     </div>
                   </div>
-                  <p className="text-on-surface-variant leading-relaxed">{review.comment ?? "Không có bình luận."}</p>
+                  <p className="text-stone-600 leading-relaxed text-xs md:text-sm">{review.comment ?? "Không có bình luận."}</p>
                 </article>
               ))}
             </div>
           )}
         </div>
-        <div>
-           <form className="space-y-6 rounded-xl bg-surface-container-lowest p-8 organic-shadow sticky top-24" onSubmit={submitReview}>
-             <h2 className="font-headline font-bold text-xl text-primary">Viết đánh giá của bạn</h2>
-             {!user && <p className="text-sm text-secondary p-3 bg-secondary-fixed rounded-md">Vui lòng đăng nhập và mua sản phẩm để đánh giá.</p>}
+        <div className="order-1 lg:order-2">
+           <form className="space-y-6 rounded-xl bg-white p-6 md:p-8 shadow-sm lg:sticky lg:top-24 border border-stone-100" onSubmit={submitReview}>
+             <h2 className="font-headline font-bold text-lg md:text-xl text-primary">Viết đánh giá của bạn</h2>
+             {!user && <p className="text-xs text-secondary p-3 bg-secondary-fixed rounded-md">Vui lòng đăng nhập để đánh giá.</p>}
              
              <div className="space-y-4">
                 <div>
-                   <label className="block text-sm font-semibold mb-2 text-on-surface">Đánh giá sao</label>
+                   <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Đánh giá sao</label>
                    <select
-                     className="w-full rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm focus:ring-primary text-on-surface"
+                     className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
                      disabled={!user}
                      onChange={(event) => setRating(Number(event.target.value))}
                      value={rating}
@@ -292,20 +295,20 @@ export default function ProductDetailPage() {
                    </select>
                 </div>
                 <div>
-                   <label className="block text-sm font-semibold mb-2 text-on-surface">Nội dung đánh giá</label>
+                   <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Nội dung đánh giá</label>
                    <textarea
-                     className="w-full rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm focus:ring-primary text-on-surface"
+                     className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
                      disabled={!user}
                      onChange={(event) => setComment(event.target.value)}
                      rows={4}
-                     placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
+                     placeholder="Chia sẻ trải nghiệm của bạn..."
                      value={comment}
                    />
                 </div>
              </div>
 
              <button
-               className="w-full cta-gradient px-4 py-4 font-bold text-white rounded-lg shadow-md hover:opacity-90 transition-opacity disabled:opacity-50"
+               className="w-full cta-gradient px-4 py-3 md:py-4 font-bold text-white rounded-lg shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
                disabled={!user}
                type="submit"
              >
@@ -314,6 +317,6 @@ export default function ProductDetailPage() {
            </form>
         </div>
       </section>
-    </>
+    </div>
   );
 }

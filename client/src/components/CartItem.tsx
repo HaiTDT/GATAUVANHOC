@@ -21,9 +21,9 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-6 bg-surface-container-lowest rounded-xl p-6 transition-all organic-shadow border border-outline-variant/30">
-      <div className="md:col-span-6 flex items-center gap-6">
-        <Link href={`/products/${item.productId}`} className="w-24 h-24 flex-shrink-0 bg-surface-container rounded-xl overflow-hidden block">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center py-4 md:py-6 bg-surface-container-lowest rounded-xl p-4 md:p-6 transition-all organic-shadow border border-outline-variant/30 relative">
+      <div className="flex-1 flex items-center gap-4 md:gap-6 w-full">
+        <Link href={`/products/${item.productId}`} className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-surface-container rounded-lg md:rounded-xl overflow-hidden block">
           {item.product.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -32,58 +32,59 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
               src={item.product.imageUrl}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-slate-500 text-xs">No image</div>
+            <div className="flex h-full items-center justify-center text-slate-500 text-[10px]">No image</div>
           )}
         </Link>
-        <div>
+        <div className="flex-1 min-w-0">
           <Link href={`/products/${item.productId}`}>
-            <h3 className="text-lg font-bold text-on-surface hover:text-primary transition-colors">{item.product.name}</h3>
+            <h3 className="text-sm md:text-lg font-bold text-on-surface hover:text-primary transition-colors line-clamp-2">{item.product.name}</h3>
           </Link>
-          <p className="text-sm text-on-surface-variant mt-1 italic">
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs md:text-sm font-bold text-on-surface">
+              {formatPrice(item.unitPrice || item.product.price)}
+            </span>
+            {item.unitPrice && Number(item.unitPrice) < Number(item.product.price) && (
+              <span className="bg-orange-100 text-orange-600 text-[8px] md:text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
+                Flash Sale
+              </span>
+            )}
+          </div>
+          <p className="text-[10px] md:text-sm text-on-surface-variant mt-0.5 italic">
             Còn lại: {item.product.stock}
           </p>
         </div>
       </div>
       
-      <div className="md:col-span-2 text-center flex flex-col items-center gap-1">
-        <span className="font-body font-bold text-on-surface">
-          {formatPrice(item.unitPrice || item.product.price)}
-        </span>
-        {item.unitPrice && Number(item.unitPrice) < Number(item.product.price) && (
-          <span className="bg-orange-100 text-orange-600 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
-            Flash Sale
-          </span>
-        )}
-      </div>
-      
-      <div className="md:col-span-2 flex justify-center">
-        <div className="flex items-center bg-surface-container rounded-full px-3 py-1 border border-outline-variant/50">
+      <div className="flex items-center justify-between w-full md:w-auto md:contents gap-4">
+        {/* Quantity Controls */}
+        <div className="flex items-center bg-stone-50 dark:bg-stone-800 rounded-full px-2 py-1 border border-outline-variant/30">
           <button 
-            className="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-container-high rounded-full transition-colors disabled:opacity-50"
+            className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-primary hover:bg-stone-200 dark:hover:bg-stone-700 rounded-full transition-colors disabled:opacity-50"
             onClick={decrement}
             disabled={item.quantity <= 1}
           >
-            <span className="material-symbols-outlined text-sm">remove</span>
+            <span className="material-symbols-outlined text-[16px] md:text-sm">remove</span>
           </button>
-          <span className="mx-4 font-bold text-on-surface w-4 text-center">{item.quantity}</span>
+          <span className="mx-2 md:mx-4 font-bold text-on-surface text-sm w-4 text-center">{item.quantity}</span>
           <button 
-            className="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-container-high rounded-full transition-colors disabled:opacity-50"
+            className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-primary hover:bg-stone-200 dark:hover:bg-stone-700 rounded-full transition-colors disabled:opacity-50"
             onClick={increment}
           >
-            <span className="material-symbols-outlined text-sm">add</span>
+            <span className="material-symbols-outlined text-[16px] md:text-sm">add</span>
           </button>
         </div>
-      </div>
-      
-      <div className="md:col-span-2 flex flex-col items-end gap-2">
-        <span className="text-lg font-bold text-on-surface">{formatPrice(item.lineTotal ?? 0)}</span>
-        <button
-          className="text-on-surface-variant hover:text-error transition-colors p-2"
-          onClick={() => onDelete(item.id)}
-          title="Xóa sản phẩm"
-        >
-          <span className="material-symbols-outlined">delete</span>
-        </button>
+        
+        {/* Total Price & Delete */}
+        <div className="flex flex-col items-end gap-1 md:ml-4">
+          <span className="text-sm md:text-lg font-bold text-secondary">{formatPrice(item.lineTotal ?? 0)}</span>
+          <button
+            className="text-on-surface-variant hover:text-error transition-colors p-1"
+            onClick={() => onDelete(item.id)}
+            title="Xóa sản phẩm"
+          >
+            <span className="material-symbols-outlined text-lg">delete</span>
+          </button>
+        </div>
       </div>
     </div>
   );
