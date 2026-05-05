@@ -13,10 +13,20 @@ export function Header() {
   const searchParams = useSearchParams();
   const { user, logout } = useAuth();
   const { totalItems } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const activeGroup = searchParams.get("group");
   const isHome = pathname === "/" && !activeGroup;
+
+  const handleSearch = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <header className="fixed top-0 w-full z-50 bg-white dark:bg-stone-900 backdrop-blur-md shadow-sm border-b border-stone-200 dark:border-stone-800">
@@ -34,12 +44,16 @@ export function Header() {
             </Link>
           </div>
 
-          <div className="hidden md:block flex-1 max-w-xl relative">
+          <form onSubmit={handleSearch} className="hidden md:block flex-1 max-w-xl relative">
             <input
               className="w-full bg-surface-variant dark:bg-stone-800 border-none rounded-sm px-4 py-2 text-sm focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-all"
-              placeholder="Tìm kiếm sản phẩm chăm sóc da..." type="text" />
-            <span className="material-symbols-outlined absolute right-3 top-2 text-primary">search</span>
-          </div>
+              placeholder="Tìm kiếm sản phẩm chăm sóc da..." 
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit" className="material-symbols-outlined absolute right-3 top-2 text-primary hover:scale-110 transition-transform">search</button>
+          </form>
 
           <div className="flex items-center gap-2 md:gap-6">
             <span className="hidden xl:block text-emerald-900 dark:text-emerald-400 font-medium text-sm">Hotline: 1900 1234</span>
@@ -59,7 +73,7 @@ export function Header() {
               >
                 <span className="material-symbols-outlined text-[20px] md:text-[24px]">shopping_cart</span>
                 {totalItems > 0 && (
-                  <span className="absolute top-1 right-1 bg-secondary text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                  <span className="absolute top-1 right-1 bg-secondary text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-bold">
                     {totalItems}
                   </span>
                 )}
@@ -98,12 +112,16 @@ export function Header() {
         </div>
 
         {/* Search Mobile */}
-        <div className="md:hidden relative mb-2">
+        <form onSubmit={handleSearch} className="md:hidden relative mb-2">
           <input
             className="w-full bg-stone-100 dark:bg-stone-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-primary"
-            placeholder="Tìm kiếm..." type="text" />
-          <span className="material-symbols-outlined absolute right-3 top-2 text-primary text-[20px]">search</span>
-        </div>
+            placeholder="Tìm kiếm..." 
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit" className="material-symbols-outlined absolute right-3 top-2 text-primary text-[20px] hover:scale-110 transition-transform">search</button>
+        </form>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center justify-center gap-8">

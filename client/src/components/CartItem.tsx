@@ -65,7 +65,7 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
           >
             <span className="material-symbols-outlined text-[16px] md:text-sm">remove</span>
           </button>
-          <span className="mx-2 md:mx-4 font-bold text-on-surface text-sm w-4 text-center">{item.quantity}</span>
+          <span className="mx-2 md:mx-4 font-bold text-stone-900 dark:text-stone-100 text-sm w-4 text-center">{item.quantity}</span>
           <button 
             className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center text-primary hover:bg-stone-200 dark:hover:bg-stone-700 rounded-full transition-colors disabled:opacity-50"
             onClick={increment}

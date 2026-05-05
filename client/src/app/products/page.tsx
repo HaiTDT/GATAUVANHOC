@@ -31,6 +31,7 @@ export default function ProductsPage() {
 function ProductsContent() {
   const searchParams = useSearchParams();
   const groupKey = searchParams.get("group") ?? "";
+  const initialSearch = searchParams.get("search") ?? "";
   const initialFlashSale = searchParams.get("flashSale") === "true";
 
   // Lấy cấu hình nhóm hiện tại
@@ -40,7 +41,7 @@ function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [meta, setMeta] = useState({ page: 1, totalPages: 1, total: 0 });
   const [filters, setFilters] = useState<Filters>({
-    search: "",
+    search: initialSearch,
     categoryId: "",
     brand: "",
     minPrice: "",
@@ -83,10 +84,10 @@ function ProductsContent() {
     api.getCategories().then(setAllCategories).catch(() => setAllCategories([]));
   }, []);
 
-  // Reset filters khi group thay đổi
+  // Reset filters khi group hoặc search thay đổi
   useEffect(() => {
     setFilters({
-      search: "",
+      search: initialSearch,
       categoryId: "",
       brand: "",
       minPrice: "",
@@ -95,7 +96,7 @@ function ProductsContent() {
       page: 1,
       isFlashSale: initialFlashSale || undefined
     });
-  }, [groupKey, initialFlashSale]);
+  }, [groupKey, initialSearch, initialFlashSale]);
 
 
 

@@ -182,7 +182,7 @@ function SidebarContent({ categories, brand, categoryId, minPrice, maxPrice, dis
           <div className="space-y-1">
             <span className="text-[10px] text-stone-400 font-bold uppercase pl-1">Từ</span>
             <input
-              className="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              className="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 px-3 py-2.5 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium"
               min="0"
               onChange={(event) => onChange({ minPrice: event.target.value })}
               placeholder="0"
@@ -193,7 +193,7 @@ function SidebarContent({ categories, brand, categoryId, minPrice, maxPrice, dis
           <div className="space-y-1">
             <span className="text-[10px] text-stone-400 font-bold uppercase pl-1">Đến</span>
             <input
-              className="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              className="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 px-3 py-2.5 text-sm text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium"
               min="0"
               onChange={(event) => onChange({ maxPrice: event.target.value })}
               placeholder="5tr+"
