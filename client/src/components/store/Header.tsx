@@ -131,7 +131,7 @@ export function Header() {
         </nav>
 
         {/* Mobile Menu Overlay */}
-        <div className={`lg:hidden fixed inset-0 top-[115px] md:top-[130px] z-40 bg-white dark:bg-stone-900 transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className={`lg:hidden fixed inset-0 top-[115px] md:top-[130px] z-40 bg-stone-50 dark:bg-stone-900 transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-2xl border-t border-stone-100 dark:border-stone-800`}>
           <div className="flex flex-col p-6 gap-6">
             <Link 
               onClick={() => setIsMenuOpen(false)}

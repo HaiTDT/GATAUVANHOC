@@ -42,8 +42,8 @@ export function Sidebar({
         <span className="material-symbols-outlined transition-transform duration-300" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>expand_more</span>
       </button>
 
-      <aside className={`${isOpen ? 'block' : 'hidden'} md:block flex flex-col gap-6 sticky top-24 h-fit animate-in fade-in duration-300`}>
-        <div className="bg-stone-50 dark:bg-stone-900 p-6 rounded-xl flex flex-col gap-6 border border-stone-100 dark:border-stone-800">
+      <aside className={`${isOpen ? 'block' : 'hidden'} md:block flex flex-col gap-6 sticky top-24 h-fit animate-in fade-in slide-in-from-top-2 duration-300 z-10`}>
+        <div className="bg-white dark:bg-stone-900 p-6 rounded-xl flex flex-col gap-6 border border-emerald-100 dark:border-stone-800 shadow-xl md:shadow-none md:bg-stone-50">
           <div>
             <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-50 font-headline mb-1">
               Bộ lọc
