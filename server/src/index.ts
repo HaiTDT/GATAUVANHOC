@@ -27,7 +27,14 @@ const clientUrl = process.env.CLIENT_URL ?? "http://localhost:3000";
 app.use(helmet());
 app.use(
   cors({
-    origin: clientUrl,
+    origin: (origin, callback) => {
+      const allowedOrigins = [clientUrl, "http://localhost:3000", "https://mis-hasaki-client.vercel.app"];
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
