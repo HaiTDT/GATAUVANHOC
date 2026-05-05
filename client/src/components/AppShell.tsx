@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { Footer } from "./store/Footer";
 import { Header } from "./store/Header";
+import { MobileBottomNav } from "./MobileBottomNav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -22,13 +23,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main
         className={
           isCatalogPage
-            ? "flex-1 pt-32"
-            : "mx-auto w-full max-w-7xl flex-1 px-4 py-8 pt-32 sm:px-6 lg:px-8"
+            ? "flex-1 pt-32 pb-20 md:pb-0"
+            : "mx-auto w-full max-w-7xl flex-1 px-4 py-8 pt-32 pb-20 md:pb-8 sm:px-6 lg:px-8"
         }
       >
         {children}
       </main>
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }
+
