@@ -131,36 +131,58 @@ export function Header() {
         </nav>
 
         {/* Mobile Menu Overlay */}
-        <div className={`lg:hidden fixed inset-0 top-[115px] md:top-[130px] z-40 bg-stone-50 dark:bg-stone-900 transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-2xl border-t border-stone-100 dark:border-stone-800`}>
-          <div className="flex flex-col p-6 gap-6">
-            <Link 
-              onClick={() => setIsMenuOpen(false)}
-              className={`text-lg font-headline ${isHome ? 'text-primary font-bold' : 'text-stone-600 dark:text-stone-300'}`}
-              href="/"
-            >
-              Trang chủ
-            </Link>
-            {CATEGORY_GROUPS.map((group) => (
-              <Link
-                key={group.key}
-                onClick={() => setIsMenuOpen(false)}
-                className={`text-lg font-headline ${activeGroup === group.key ? 'text-primary font-bold' : 'text-stone-600 dark:text-stone-300'}`}
-                href={`/products?group=${group.key}`}
-              >
-                {group.label}
-              </Link>
-            ))}
-            <Link
-              onClick={() => setIsMenuOpen(false)}
-              className={`text-lg font-headline font-bold ${pathname === '/flash-sale' ? 'text-orange-600' : 'text-orange-500'}`}
-              href="/flash-sale"
-            >
-              Khuyến mãi Flash Sale
-            </Link>
-            <hr className="border-stone-100 dark:border-stone-800" />
-            <div className="flex flex-col gap-4 text-sm text-stone-500">
-              <p>Hotline: 1900 1234</p>
-              <p>Hệ thống 150 cửa hàng toàn quốc</p>
+        <div className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
+          
+          {/* Menu Content */}
+          <div className={`absolute left-0 top-0 h-full w-[280px] bg-white dark:bg-stone-900 shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="flex flex-col p-6 h-full overflow-y-auto">
+              <div className="flex items-center justify-between mb-8">
+                <span className="text-xl font-bold text-emerald-900 dark:text-emerald-50">Menu</span>
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-stone-500">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              
+              <nav className="flex flex-col gap-4">
+                <Link 
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`text-base font-bold py-2 border-b border-stone-100 dark:border-stone-800 ${isHome ? 'text-primary' : 'text-stone-800 dark:text-stone-200'}`}
+                  href="/"
+                >
+                  Trang chủ
+                </Link>
+                {CATEGORY_GROUPS.map((group) => (
+                  <Link
+                    key={group.key}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`text-base font-bold py-2 border-b border-stone-100 dark:border-stone-800 ${activeGroup === group.key ? 'text-primary' : 'text-stone-800 dark:text-stone-200'}`}
+                    href={`/products?group=${group.key}`}
+                  >
+                    {group.label}
+                  </Link>
+                ))}
+                <Link
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`text-base font-bold py-2 text-orange-600 flex items-center justify-between border-b border-stone-100 dark:border-stone-800 ${pathname === '/flash-sale' ? 'bg-orange-50 px-2 rounded-lg' : ''}`}
+                  href="/flash-sale"
+                >
+                  Khuyến mãi Flash Sale
+                  <span className="material-symbols-outlined text-sm">bolt</span>
+                </Link>
+              </nav>
+
+              <div className="mt-auto pt-8 flex flex-col gap-4">
+                <div className="flex items-center gap-3 text-stone-600 dark:text-stone-400">
+                  <span className="material-symbols-outlined text-sm">phone_in_talk</span>
+                  <span className="text-sm font-medium">1900 1234</span>
+                </div>
+                <div className="flex items-center gap-3 text-stone-600 dark:text-stone-400">
+                  <span className="material-symbols-outlined text-sm">location_on</span>
+                  <span className="text-sm font-medium">Hệ thống 150 cửa hàng</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
