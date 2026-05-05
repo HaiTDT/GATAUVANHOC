@@ -6,8 +6,8 @@ import { CartProvider } from "../components/CartProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Cosmetics E-commerce",
-  description: "Website thuong mai dien tu cho my pham"
+  title: "Hasaki",
+  description: "Hasaki - Hệ thống mỹ phẩm & chăm sóc sắc đẹp chính hãng"
 };
 
 export default function RootLayout({

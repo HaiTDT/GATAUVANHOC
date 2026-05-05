@@ -160,7 +160,7 @@ function ProductsContent() {
             {filters.isFlashSale
               ? "Ưu đãi có hạn – Nhanh tay kẻo lỡ!"
               : activeGroup
-              ? `Khám phá bộ sưu tập ${activeGroup.label} tại Botanical Atelier`
+              ? `Khám phá bộ sưu tập ${activeGroup.label} tại Hasaki`
               : "Khám phá các sản phẩm chăm sóc da và làm đẹp cao cấp"}
           </p>
         </div>

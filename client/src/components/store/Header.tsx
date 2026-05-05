@@ -21,7 +21,7 @@ export function Header() {
       <div className="flex flex-col w-full max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-8 mb-4">
           <Link href="/" className="text-2xl font-bold tracking-tight text-emerald-900 dark:text-emerald-50 font-headline">
-            Botanical Atelier
+            HASAKI
           </Link>
           <div className="flex-1 max-w-xl relative">
             <input

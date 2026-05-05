@@ -260,9 +260,21 @@ export default function AdminProductsPage() {
               >
                 <span className="material-symbols-outlined text-lg">chevron_left</span>
               </button>
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const pageNum = Math.max(1, Math.min(page - 2 + i, totalPages - 4 + i));
-                return (
+              {(() => {
+                const pagesToShow = 5;
+                let startPage = Math.max(1, page - Math.floor(pagesToShow / 2));
+                let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+                if (endPage - startPage + 1 < pagesToShow) {
+                  startPage = Math.max(1, endPage - pagesToShow + 1);
+                }
+
+                const pages = [];
+                for (let i = startPage; i <= endPage; i++) {
+                  pages.push(i);
+                }
+
+                return pages.map((pageNum) => (
                   <button
                     key={pageNum}
                     className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${pageNum === page ? 'bg-primary text-white' : 'border border-outline-variant text-slate-600 hover:bg-slate-100'}`}
@@ -271,8 +283,8 @@ export default function AdminProductsPage() {
                   >
                     {pageNum}
                   </button>
-                );
-              })}
+                ));
+              })()}
               <button
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant text-slate-600 hover:bg-slate-100 disabled:opacity-40 transition-colors"
                 disabled={page >= totalPages}

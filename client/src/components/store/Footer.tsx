@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-gray-100 dark:bg-stone-950 w-full pt-16 pb-8 border-none mt-auto">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto px-8 mb-16">
         <div className="col-span-1 md:col-span-1">
-          <div className="text-xl font-bold text-emerald-900 dark:text-emerald-50 mb-6">Botanical Atelier</div>
+          <div className="text-xl font-bold text-emerald-900 dark:text-emerald-50 mb-6">HASAKI</div>
           <p className="text-stone-500 dark:text-stone-400 text-sm leading-relaxed mb-6">Vẻ đẹp bắt nguồn từ sự thấu hiểu
             thiên nhiên và khoa học làn da.</p>
           <div className="flex gap-4">
@@ -70,7 +70,7 @@ export function Footer() {
       </div>
       <div
         className="max-w-7xl mx-auto px-8 pt-8 border-t border-stone-300 dark:border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-stone-500 dark:text-stone-400 text-sm">© 2026 Botanical Atelier. Tất cả quyền được bảo lưu.</p>
+        <p className="text-stone-500 dark:text-stone-400 text-sm">© 2026 Hasaki. Tất cả quyền được bảo lưu.</p>
         <div className="flex gap-6">
           <img alt="Visa" className="h-4 grayscale"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6uJOmPmZRevàCNfjxZb1COSKq6m_yAMWBbIvàxYRKRzQUMgGgX9DVZJlclleaDnMiB32edUz2A6kdaRpESL6lDdPZQ9xXvà0zVT7xCbuGLHhEdWLnyXvàuyo-XI09Ynhe9__DGiáYJuQ0t6fyeKkqHbFwZH8rt254Kgxy2bwru204U6zEpFQz-vàD8EYGkWYax8e94N-77q9mIUzhqEunnbeGhtRJsz_psMbInmYbI2lSrq9_At2zEYqiaiPiYcQV4dpvà-PwxJG5gfixBk-" />
