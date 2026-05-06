@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { Protected } from "../../components/Protected";
 import { ErrorMessage } from "../../components/ui";
-import { api, formatPrice, type Cart } from "../../lib/api";
+import { api, formatPrice, type Cart, type Address } from "../../lib/api";
 import { useCart } from "../../components/CartProvider";
 
 function CheckoutContent() {
@@ -14,13 +14,43 @@ function CheckoutContent() {
     shippingPhone: "",
     shippingAddress: ""
   });
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [showAddressBook, setShowAddressBook] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     refreshCart();
+    fetchAddresses();
   }, [refreshCart]);
+
+  const fetchAddresses = async () => {
+    try {
+      const data = await api.getAddresses();
+      setAddresses(data);
+      // Auto-fill default address if form is empty
+      const defaultAddr = data.find(a => a.isDefault);
+      if (defaultAddr && !form.shippingName && !form.shippingPhone && !form.shippingAddress) {
+        setForm({
+          shippingName: defaultAddr.fullName,
+          shippingPhone: defaultAddr.phone,
+          shippingAddress: `${defaultAddr.detail}, ${defaultAddr.ward}, ${defaultAddr.district}, ${defaultAddr.province}`
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch addresses", error);
+    }
+  };
+
+  const handleSelectAddress = (addr: Address) => {
+    setForm({
+      shippingName: addr.fullName,
+      shippingPhone: addr.phone,
+      shippingAddress: `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`
+    });
+    setShowAddressBook(false);
+  };
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -97,10 +127,60 @@ function CheckoutContent() {
                 </div>
 
                 <div className="pt-8 border-t border-surface-variant">
-                  <h3 className="text-xl font-headline font-bold text-on-surface mb-6 flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary">location_on</span>
-                    Địa chỉ giao hàng
-                  </h3>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-headline font-bold text-on-surface flex items-center gap-3">
+                      <span className="material-symbols-outlined text-primary">location_on</span>
+                      Địa chỉ giao hàng
+                    </h3>
+                    {addresses.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddressBook(true)}
+                        className="text-sm font-bold text-primary hover:text-secondary flex items-center gap-1 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-sm">book</span>
+                        Sổ địa chỉ
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Address Book Modal */}
+                  {showAddressBook && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-lg organic-shadow overflow-hidden">
+                        <div className="p-6 border-b border-outline-variant flex justify-between items-center">
+                          <h3 className="text-xl font-headline font-bold">Chọn địa chỉ giao hàng</h3>
+                          <button onClick={() => setShowAddressBook(false)} className="text-on-surface-variant hover:text-on-surface">
+                            <span className="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                        <div className="p-6 max-h-[60vh] overflow-y-auto space-y-4">
+                          {addresses.map(addr => (
+                            <div
+                              key={addr.id}
+                              onClick={() => handleSelectAddress(addr)}
+                              className="p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 cursor-pointer transition-all group"
+                            >
+                              <div className="flex justify-between items-start">
+                                <h4 className="font-bold text-on-surface">{addr.fullName}</h4>
+                                {addr.isDefault && (
+                                  <span className="text-[10px] bg-secondary/10 text-secondary px-2 py-0.5 rounded font-bold uppercase">Mặc định</span>
+                                )}
+                              </div>
+                              <p className="text-sm text-on-surface-variant mt-1">{addr.phone}</p>
+                              <p className="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                                {addr.detail}, {addr.ward}, {addr.district}, {addr.province}
+                              </p>
+                              <div className="mt-3 flex items-center text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                                Chọn địa chỉ này <span className="material-symbols-outlined text-xs ml-1">arrow_forward</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label className="block text-sm font-semibold text-on-surface-variant mb-2">Địa chỉ chi tiết (Số nhà, đường...)</label>
                     <textarea

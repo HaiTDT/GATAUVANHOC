@@ -22,6 +22,7 @@ type AuthContextValue = {
   }) => Promise<void>;
   registerWithGoogle: (googleToken: string) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -96,9 +97,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const latestUser = await api.getProfile();
+      setUser(latestUser);
+    } catch (error) {
+      console.error("Failed to refresh user", error);
+    }
+  }, []);
+
   const value = useMemo(
-    () => ({ ready, user, login, register, registerWithGoogle, logout }),
-    [ready, user, login, register, registerWithGoogle, logout]
+    () => ({ ready, user, login, register, registerWithGoogle, logout, refreshUser }),
+    [ready, user, login, register, registerWithGoogle, logout, refreshUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

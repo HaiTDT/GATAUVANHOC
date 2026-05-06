@@ -8,7 +8,32 @@ export type User = {
   email: string;
   fullName?: string | null;
   phone?: string | null;
+  birthday?: string | null;
+  gender?: string | null;
+  avatar?: string | null;
   role: Role;
+};
+
+export type FavoriteProduct = {
+  id: string;
+  userId: string;
+  productId: string;
+  product: Product;
+  createdAt: string;
+};
+
+export type Address = {
+  id: string;
+  userId: string;
+  fullName: string;
+  phone: string;
+  province: string;
+  district: string;
+  ward: string;
+  detail: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Category = {
@@ -207,10 +232,13 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}) {
     return undefined as T;
   }
 
-  const data = await response.json().catch(() => null);
+  const data = await response.json().catch(async () => {
+    const text = await response.text().catch(() => null);
+    return text ? { message: text } : null;
+  });
 
   if (!response.ok) {
-    throw new ApiError(data?.message ?? "Request failed", response.status);
+    throw new ApiError(data?.message || `Request failed with status ${response.status}`, response.status);
   }
 
   return data as T;
@@ -450,6 +478,82 @@ export const api = {
 
   getInventoryAnalytics() {
     return apiRequest<any>("/api/admin/analytics/inventory");
+  },
+
+  // User Profile & Account
+  getProfile() {
+    return apiRequest<User>("/api/user/profile");
+  },
+
+  updateProfile(body: Partial<User>) {
+    return apiRequest<User>("/api/user/profile", { method: "PUT", body });
+  },
+
+  changePassword(body: { currentPassword: string; newPassword: string }) {
+    return apiRequest<{ message: string }>("/api/user/change-password", {
+      method: "PUT",
+      body
+    });
+  },
+
+  // Favorites
+  getFavorites() {
+    return apiRequest<FavoriteProduct[]>("/api/user/favorites");
+  },
+
+  addToFavorites(productId: string) {
+    return apiRequest<{ message: string }>(`/api/user/favorites/${productId}`, {
+      method: "POST"
+    });
+  },
+
+  removeFromFavorites(productId: string) {
+    return apiRequest<{ message: string }>(`/api/user/favorites/${productId}`, {
+      method: "DELETE"
+    });
+  },
+
+  // Addresses
+  getAddresses() {
+    return apiRequest<Address[]>("/api/user/addresses");
+  },
+
+  addAddress(body: Omit<Address, "id" | "userId" | "createdAt" | "updatedAt">) {
+    return apiRequest<Address>("/api/user/addresses", { method: "POST", body });
+  },
+
+  updateAddress(id: string, body: Partial<Address>) {
+    return apiRequest<Address>(`/api/user/addresses/${id}`, {
+      method: "PUT",
+      body
+    });
+  },
+
+  deleteAddress(id: string) {
+    return apiRequest<{ message: string }>(`/api/user/addresses/${id}`, {
+      method: "DELETE"
+    });
+  },
+
+  setDefaultAddress(id: string) {
+    return apiRequest<Address>(`/api/user/addresses/${id}/default`, {
+      method: "PUT"
+    });
+  },
+
+  // Auth
+  forgotPassword(email: string) {
+    return apiRequest<{ message: string; token?: string }>("/auth/forgot-password", {
+      method: "POST",
+      body: { email }
+    });
+  },
+
+  resetPassword(body: { token: string; newPassword: string }) {
+    return apiRequest<{ message: string }>("/auth/reset-password", {
+      method: "POST",
+      body
+    });
   }
 };
 

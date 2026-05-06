@@ -76,5 +76,28 @@ export const authController = {
     } catch (error) {
       return handleAuthError(error, res);
     }
+  },
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const { email } = req.body;
+      if (!email) throw new AuthError("Email is required", 400);
+      const token = await authService.forgotPassword(email);
+      // In simulation, we return the token to let the user "see" what would be in the email
+      return res.json({ message: "Reset token generated", token });
+    } catch (error) {
+      return handleAuthError(error, res);
+    }
+  },
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { token, newPassword } = req.body;
+      if (!token || !newPassword) throw new AuthError("Token and new password are required", 400);
+      await authService.resetPassword(token, newPassword);
+      return res.json({ message: "Mật khẩu đã được đặt lại thành công" });
+    } catch (error) {
+      return handleAuthError(error, res);
+    }
   }
 };

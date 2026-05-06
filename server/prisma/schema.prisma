@@ -29,15 +29,52 @@ model User {
   passwordHash String
   fullName     String?
   phone        String?
+  birthday     DateTime?
+  gender       String?
+  avatar       String?
   googleId     String?
   role         Role     @default(CUSTOMER)
   cart         Cart?
   orders       Order[]
   reviews      Review[]
+  favorites    FavoriteProduct[]
+  addresses    Address[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   @@map("users")
+}
+
+model FavoriteProduct {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@map("favorite_products")
+}
+
+model Address {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName        String
+  phone           String
+  province        String
+  district        String
+  ward            String
+  detail          String
+  isDefault       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@map("addresses")
 }
 
 model Category {
@@ -69,6 +106,7 @@ model Product {
   orderItems  OrderItem[]
   reviews     Review[]
   flashSaleItems FlashSaleItem[]
+  favoriteProducts FavoriteProduct[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 

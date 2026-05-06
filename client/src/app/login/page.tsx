@@ -108,9 +108,9 @@ export default function LoginPage() {
                   <label className="block text-sm font-semibold text-on-surface-variant">
                     Mật khẩu
                   </label>
-                  <a className="text-xs font-medium text-secondary hover:opacity-80 transition-opacity" href="#">
+                  <Link className="text-xs font-medium text-secondary hover:opacity-80 transition-opacity" href="/forgot-password">
                     Quên mật khẩu?
-                  </a>
+                  </Link>
                 </div>
                 <div className="relative">
                   <input 

@@ -48,6 +48,23 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         
+        <button
+          className="absolute top-2 right-2 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 bg-white/80 backdrop-blur text-secondary rounded-full shadow-lg flex items-center justify-center hover:bg-secondary hover:text-white transition-all z-10"
+          onClick={async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              await api.addToFavorites(product.id);
+              setMessage("Đã lưu vào yêu thích");
+            } catch {
+              setMessage("Không thể lưu yêu thích");
+            }
+          }}
+          type="button"
+        >
+          <span className="material-symbols-outlined text-lg md:text-xl">favorite</span>
+        </button>
+
         {/* Actions - Visible on hover (Desktop) and Always (Mobile if needed, or simplified) */}
         <div className="absolute bottom-2 left-2 right-2 md:bottom-4 md:left-4 md:right-4 flex gap-1 md:gap-2 opacity-100 md:opacity-0 md:translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button

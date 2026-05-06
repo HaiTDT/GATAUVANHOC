@@ -204,5 +204,43 @@ export const authService = {
       user,
       token: createToken(user)
     };
+  },
+
+  async forgotPassword(email: string): Promise<string> {
+    const normalizedEmail = normalizeEmail(email);
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail }
+    });
+
+    if (!user) {
+      throw new AuthError("Không tìm thấy người dùng với email này", 404);
+    }
+
+    // Generate a reset token (valid for 1 hour)
+    const resetToken = jwt.sign(
+      { sub: user.id, email: user.email, type: "reset" },
+      getJwtSecret(),
+      { expiresIn: "1h" }
+    );
+
+    // In a real app, send this via email. For now, we simulate.
+    console.log(`[RESET PASSWORD] Token for ${email}: ${resetToken}`);
+    
+    return resetToken;
+  },
+
+  async resetPassword(token: string, newPass: string): Promise<void> {
+    try {
+      const payload = jwt.verify(token, getJwtSecret()) as any;
+      if (payload.type !== "reset") throw new Error();
+
+      const passwordHash = await bcrypt.hash(newPass, SALT_ROUNDS);
+      await prisma.user.update({
+        where: { id: payload.sub },
+        data: { passwordHash }
+      });
+    } catch (error) {
+      throw new AuthError("Mã khôi phục không hợp lệ hoặc đã hết hạn", 401);
+    }
   }
 };
