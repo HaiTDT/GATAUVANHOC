@@ -1,214 +1,187 @@
-# 💄 Cosmetics E-commerce Monorepo
+# 💄 Hasaki MIS - Hệ thống Thương mại Điện tử Mỹ phẩm & Quản trị Thông minh (BI)
 
-Một nền tảng thương mại điện tử chuyên cung cấp mỹ phẩm được xây dựng theo kiến trúc Monorepo. Dự án cung cấp đầy đủ các tính năng cho khách hàng (mua sắm, giỏ hàng, thanh toán) và quản trị viên (quản lý sản phẩm, danh mục, đơn hàng).
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![Express](https://img.shields.io/badge/Express-4.18-blue?style=flat-square&logo=express)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-## 🚀 Tính năng nổi bật
+Hasaki MIS là một hệ sinh thái thương mại điện tử full-stack hiện đại, được thiết kế chuyên biệt cho ngành mỹ phẩm. Không chỉ dừng lại ở một trang web bán hàng thông thường, dự án còn tích hợp hệ thống **Quản trị Thông minh (MIS)** với các công cụ **Business Intelligence (BI)** mạnh mẽ, giúp doanh nghiệp tối ưu hóa vận hành dựa trên dữ liệu thực tế.
 
-### Dành cho Khách hàng (Customer)
-- **Xác thực & Phân quyền**: Đăng ký, đăng nhập an toàn sử dụng JWT & bcrypt.
-- **Duyệt sản phẩm**: Xem danh sách sản phẩm, chi tiết sản phẩm, lọc theo danh mục.
-- **Giỏ hàng (Cart)**: Thêm, sửa, xóa sản phẩm trong giỏ hàng.
-- **Thanh toán (Checkout)**: Quy trình đặt hàng, nhập thông tin giao hàng.
-- **Đơn hàng (Orders)**: Theo dõi lịch sử và trạng thái đơn hàng.
-- **Đánh giá (Reviews)**: Đánh giá và nhận xét sản phẩm đã mua.
-- **Khám phá Nội dung**: Xem các bài viết tin tức và bí quyết làm đẹp (Blog).
-- **Săn Sale**: Mua sắm các sản phẩm giới hạn trong chương trình Flash Sale tại trang chủ.
+---
 
-### Dành cho Quản trị viên (Admin)
-- Quản lý danh mục sản phẩm (Categories).
-- Quản lý sản phẩm (Products) bao gồm giá cả, hình ảnh, tồn kho và thiết lập Flash Sale.
-- Quản lý đơn hàng (Orders) và thay đổi trạng thái giao hàng.
-- Quản lý bài viết (Blogs): Tạo và chỉnh sửa nội dung tin tức, bài viết làm đẹp hiển thị ở trang chủ.
-- Bảng điều khiển quản trị (Dashboard).
+## 📝 Tổng quan dự án
+
+- **Tên dự án:** Hasaki MIS (Cosmetics E-commerce)
+- **Mô tả:** Nền tảng thương mại điện tử theo kiến trúc Monorepo, kết hợp giữa giao diện mua sắm tối ưu và bảng điều khiển quản trị chuyên sâu.
+- **Mục tiêu:** Giải quyết bài toán quản lý bán hàng và phân tích dữ liệu kinh doanh, từ phân khúc khách hàng tự động đến dự báo tồn kho.
+- **Đối tượng người dùng:** Khách hàng mua sắm mỹ phẩm trực tuyến và Nhà quản lý doanh nghiệp (Admins).
+
+---
+
+## 🌐 Demo & Deployment
+
+Hệ thống đã được triển khai trực tuyến tại:
+- **Frontend (Vercel):** [https://mis-hasaki-client.vercel.app](https://mis-hasaki-client.vercel.app)
+- **Backend API (Render):** [https://mis-hasaki.onrender.com](https://your-backend-link.onrender.com)
+
+---
 
 ## 🛠️ Công nghệ sử dụng (Tech Stack)
 
-### Client (Frontend)
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **UI Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 3](https://tailwindcss.com/)
-- **Ngôn ngữ**: TypeScript
+### Frontend (Client)
+- **Framework:** Next.js 15 (App Router)
+- **UI & Logic:** React 19, Google OAuth 2.0 Integration
+- **Styling:** Tailwind CSS (Giao diện hiện đại, Material Design 3 influences)
+- **Charts:** Chart.js 4 & react-chartjs-2 (Trực quan hóa dữ liệu BI)
+- **Editor:** React Quill (Trình soạn thảo văn bản cho Blog)
+- **Icons:** Google Material Symbols & Lucide React
 
-### Server (Backend)
-- **Framework**: [Express.js](https://expressjs.com/)
-- **Ngôn ngữ**: Node.js & TypeScript
-- **Bảo mật**: Helmet, CORS, JWT
-- **Database ORM**: [Prisma](https://www.prisma.io/)
+### Backend (Server)
+- **Runtime:** Node.js & TypeScript
+- **Framework:** Express.js
+- **ORM:** Prisma
+- **Bảo mật:** JWT Authentication, Bcrypt, CORS, Helmet
 
-### Database & DevOps
-- **Cơ sở dữ liệu**: PostgreSQL 16 — hosted trên [Neon](https://neon.tech/) (cloud, serverless)
-- **ORM**: Prisma (schema migration & type-safe queries)
-- **Containerization** *(tuỳ chọn)*: Docker & Docker Compose (chạy DB local)
-- **Workspace Manager**: npm workspaces (Monorepo)
+### Hạ tầng & Cơ sở dữ liệu
+- **Database:** PostgreSQL (Hosted trên Neon Serverless)
+- **DevOps:** Docker & Docker Compose
+- **Kiến trúc:** Monorepo sử dụng `npm workspaces`
+
+---
+
+## ✨ Chức năng chính
+
+### 🛒 Dành cho Khách hàng (Customer)
+- **Xác thực:** Đăng nhập truyền thống hoặc qua Google OAuth 2.0.
+- **Trải nghiệm mua sắm:** Duyệt sản phẩm theo danh mục chi tiết (Toner, Serum, v.v.).
+- **Flash Sales:** Hệ thống săn sale thời gian thực với đồng hồ đếm ngược.
+- **Giỏ hàng & Thanh toán:** Quy trình đặt hàng tối ưu, quản lý giỏ hàng thông minh.
+- **Tài khoản cá nhân:** Theo dõi lịch sử đơn hàng, quản lý sổ địa chỉ và đánh giá sản phẩm.
+- **Blog làm đẹp:** Cập nhật tin tức và mẹo chăm sóc da.
+
+### 🛡️ Dành cho Quản trị viên (Admin & MIS)
+- **Dashboard BI:** Theo dõi Doanh thu, AOV (Giá trị đơn trung bình) và Tốc độ tăng trưởng thời gian thực.
+- **Quản trị Kho thông minh:** Tự động tính toán "Tốc độ bán hàng" (Sales Velocity) và đưa ra gợi ý nhập hàng.
+- **Phân tích CRM:** Áp dụng mô hình **RFM** (Recency, Frequency, Monetary) để phân loại khách hàng:
+  - *Champions:* Khách hàng tinh hoa, trung thành.
+  - *At Risk:* Khách hàng có nguy cơ rời bỏ.
+  - *Lost:* Khách hàng đã mất cần kích cầu.
+- **Marketing Performance:** Theo dõi các chỉ số CAC (Chi phí thu hút khách hàng) và ROAS (Lợi nhuận trên chi phí quảng cáo).
+
+---
 
 ## 📂 Cấu trúc thư mục
 
-Dự án được tổ chức theo dạng Monorepo với cấu trúc như sau:
-
 ```text
 .
-├── client/                 # Ứng dụng Next.js (Frontend)
+├── client/                 # Frontend Next.js 15
 │   ├── src/
-│   │   ├── app/            # Next.js App Router (pages, layouts)
-│   │   ├── components/     # Các React components dùng chung
-│   │   └── lib/            # Tiện ích, hooks, API calls
+│   │   ├── app/            # App Router (Pages, Layouts)
+│   │   ├── components/     # Các UI Components & BI Charts
+│   │   ├── hooks/          # Custom React Hooks
+│   │   └── lib/            # API Client & Constants
 │   └── package.json
-├── server/                 # Ứng dụng Express.js (Backend API)
+├── server/                 # Backend Express.js API
 │   ├── prisma/
-│   │   └── schema.prisma   # Định nghĩa cấu trúc database cho Prisma
+│   │   └── schema.prisma   # Định nghĩa Schema & Database Model
 │   ├── src/
-│   │   ├── controllers/    # Xử lý logic của các API endpoints
-│   │   ├── middlewares/    # Middleware xác thực, phân quyền, lỗi
-│   │   ├── routes/         # Định nghĩa các endpoints (auth, products, admin, v.v.)
-│   │   ├── services/       # Xử lý logic nghiệp vụ (business logic)
-│   │   └── types/          # Khai báo TypeScript types/interfaces
+│   │   ├── controllers/    # Xử lý Logic API
+│   │   ├── services/       # Xử lý nghiệp vụ BI & Analytics
+│   │   ├── routes/         # Định nghĩa các Endpoint API
+│   │   └── middlewares/    # Middleware xác thực & kiểm soát lỗi
 │   └── package.json
-├── docker-compose.yml      # Cấu hình container PostgreSQL
-└── package.json            # Cấu hình Root Workspace và Scripts
+├── docker-compose.yml      # Cấu hình Database Local
+└── package.json            # Cấu hình Monorepo Workspace
 ```
-
-## 🗄️ Cấu trúc Cơ sở dữ liệu (Database Schema)
-
-Dự án sử dụng PostgreSQL với các Model chính:
-- **User**: Lưu trữ thông tin người dùng và phân quyền (`ADMIN`, `CUSTOMER`).
-- **Category**: Danh mục sản phẩm (ví dụ: Son môi, Chăm sóc da).
-- **Product**: Thông tin chi tiết mỹ phẩm (tên, mô tả, giá, tồn kho, hình ảnh, trạng thái Flash Sale).
-- **Cart & CartItem**: Quản lý giỏ hàng tạm thời của người dùng.
-- **Order & OrderItem**: Lưu trữ thông tin đơn hàng đã đặt và trạng thái giao hàng.
-- **Review**: Lưu trữ đánh giá của khách hàng về sản phẩm.
-- **Blog**: Lưu trữ các bài viết, tin tức, chia sẻ bí quyết làm đẹp hiển thị trên trang chủ.
-
-## ⚙️ Hướng dẫn cài đặt và chạy local
-
-> **Database**: Dự án hiện sử dụng **[Neon](https://neon.tech/)** — PostgreSQL serverless trên cloud. Không cần cài đặt hay chạy Docker để dùng database. Mọi thay đổi dữ liệu (thêm sản phẩm, danh mục...) đều được lưu trực tiếp lên Neon.
-
-### Yêu cầu hệ thống
-
-- [Node.js](https://nodejs.org/) phiên bản **18+**
-- [Git](https://git-scm.com/)
-- *(Tuỳ chọn)* [Docker Desktop](https://www.docker.com/products/docker-desktop/) — chỉ cần nếu muốn chạy database local
 
 ---
 
-### Bước 1 — Clone & Cài đặt Dependencies
+## ⚙️ Hướng dẫn cài đặt
 
+### Yêu cầu hệ thống
+- Node.js 18+ & npm 9+
+- PostgreSQL (Local hoặc Neon Cloud)
+- Docker Desktop (Nếu muốn chạy DB local)
+
+### 1. Clone dự án
 ```bash
-git clone <repo-url>
-cd MIS_HASAKI
+git clone https://github.com/your-username/mis-hasaki.git
+cd mis-hasaki
+```
+
+### 2. Cài đặt Dependencies
+```bash
 npm install
 ```
 
----
+### 3. Cấu hình biến môi trường
+Tạo file `.env` tại các thư mục tương ứng:
 
-### Bước 2 — Cấu hình biến môi trường
-
-Tạo file `server/.env` với nội dung sau:
-
+**Server (`server/.env`):**
 ```env
 PORT=4000
-CLIENT_URL=http://localhost:3000
-DATABASE_URL=postgresql://neondb_owner:<password>@<host>.neon.tech/neondb?sslmode=require
-JWT_SECRET=your_jwt_secret_key_here
+DATABASE_URL="postgresql://user:password@localhost:5432/hasaki_db"
+JWT_SECRET="ma_bi_mat_cua_ban"
+CLIENT_URL="http://localhost:3000"
 ```
 
-> 💡 **Lấy `DATABASE_URL`**: Đăng nhập [Neon Console](https://console.neon.tech/) → chọn project → **Connection Details** → copy chuỗi kết nối `postgresql://...`
-
-Hoặc copy từ file mẫu rồi điền vào:
-
-```bash
-# Windows (PowerShell)
-Copy-Item server/.env.example server/.env
-
-# Linux / macOS
-cp server/.env.example server/.env
-```
-
-Tạo file `client/.env.local`:
-
+**Client (`client/.env.local`):**
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_API_URL="http://localhost:4000"
 ```
 
----
-
-### Bước 3 — Đồng bộ Schema Database
-
-Chạy lệnh này **một lần duy nhất** để Prisma tạo đầy đủ bảng trên Neon:
-
+### 4. Đồng bộ Database (Prisma)
 ```bash
-cd server
-npx prisma db push
+# Chạy tại thư mục gốc
+npm run prisma:generate -w server
+npm run prisma:migrate -w server
 ```
 
-Kết quả thành công:
-
-```
-The database is already in sync with the Prisma schema.
-```
-
----
-
-### Bước 4 — Khởi động dự án
-
-Quay về thư mục gốc và chạy:
-
+### 5. Khởi chạy dự án
 ```bash
-cd ..
 npm run dev
 ```
-
-| Dịch vụ | URL |
-|---------|-----|
-| 🌐 **Client** (Next.js) | http://localhost:3000 |
-| 🔌 **API Server** (Express) | http://localhost:4000 |
-| 🏥 **Health Check** | http://localhost:4000/health |
+*Frontend: http://localhost:3000 | Backend: http://localhost:4000*
 
 ---
 
-### Tài khoản mặc định
+## 📊 Logic phân tích dữ liệu (BI Environment)
 
-| Email | Mật khẩu | Vai trò |
-|-------|----------|---------|
-| `huy@gmail.com` | `123456` | ADMIN |
-| `binh@gmail.com` | `123456` | ADMIN |
-
-> ⚠️ Đổi mật khẩu sau khi chạy lần đầu nếu dùng cho môi trường thực tế.
-
----
-
-### *(Tuỳ chọn)* Chạy Database local với Docker
-
-Nếu muốn dùng PostgreSQL local thay vì Neon:
-
-```bash
-# 1. Khởi động container
-npm run db:up
-
-# 2. Đổi DATABASE_URL trong server/.env thành:
-# DATABASE_URL=postgresql://cosmetics:cosmetics_password@localhost:5432/cosmetics_ecommerce?schema=public
-
-# 3. Chạy migration
-npm run prisma:migrate
-```
+Hệ thống vận hành theo quy trình BI 6 thành phần:
+1. **Data Sources:** Dữ liệu giao dịch thực tế từ PostgreSQL.
+2. **ETL:** Xử lý, làm sạch dữ liệu tại `analytics.service.ts`.
+3. **Data Mart:** Các snapshot dữ liệu đã được tính toán sẵn để tối ưu hiệu năng.
+4. **Analytics Engine:** Tính toán RFM Score, Growth Rate và Sales Velocity.
+5. **Advanced Analytics:** Dự báo tồn kho và phân tích xu hướng mua sắm.
+6. **BI Tools:** Hiển thị Dashboard trực quan cho nhà quản trị.
 
 ---
 
-## 📜 NPM Scripts
+## 🔌 Danh mục API chính
 
-Chạy tại thư mục **gốc** của dự án:
+| Method | Endpoint | Mô tả |
+|--------|----------|-------|
+| `POST` | `/api/auth/login` | Đăng nhập hệ thống |
+| `GET` | `/api/products` | Lấy danh sách sản phẩm (có lọc) |
+| `GET` | `/api/analytics/revenue` | [ADMIN] Thống kê doanh thu |
+| `GET` | `/api/analytics/rfm` | [ADMIN] Phân tích phân khúc khách hàng |
+| `POST` | `/api/checkout` | Xử lý đặt hàng và thanh toán |
 
-| Lệnh | Mô tả |
-|------|-------|
-| `npm run dev` | Khởi động **cả** Client + Server (development) |
-| `npm run dev:client` | Chỉ khởi động frontend Next.js |
-| `npm run dev:server` | Chỉ khởi động backend Express |
-| `npm run build` | Build production cho cả Client và Server |
-| `npm run db:up` | Khởi động PostgreSQL container (Docker) |
-| `npm run db:down` | Dừng và xóa container |
-| `npm run prisma:generate` | Tạo Prisma Client từ schema |
-| `npm run prisma:migrate` | Chạy migration cập nhật cấu trúc DB |
-| `npm run prisma:studio` | Mở Prisma Studio (quản lý DB trực quan) tại cổng `5555` |
+---
 
----- NEW UPDATE ---- 
-// Tạo file .env.local trong client/.env.local copy .env.example bỏ vào 
-// // Tạo file .env trong server/.env copy .env.example bỏ vào 
+## 🤝 Đóng góp
+Nếu bạn có ý tưởng cải thiện dự án, vui lòng:
+1. Fork dự án.
+2. Tạo Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
+4. Push lên Branch (`git push origin feature/AmazingFeature`).
+5. Mở một Pull Request.
+
+---
+
+## 📄 Giấy phép
+Phân phối dưới giấy phép MIT. Xem `LICENSE` để biết thêm chi tiết.
+
+---
+**Hasaki MIS** - *Powering Data-Driven Decisions in Cosmetics Retail.*
