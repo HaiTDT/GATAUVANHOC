@@ -783,7 +783,7 @@ function OrderDetailModal({ order, onClose }: { order: Order, onClose: () => voi
                           <p className="font-bold text-sm text-on-surface line-clamp-2 leading-snug">{item.product?.name}</p>
                           <div className="flex justify-between items-center mt-2">
                              <p className="text-xs text-on-surface-variant">SL: <span className="font-bold text-on-surface">{item.quantity}</span></p>
-                             <p className="font-bold text-sm text-secondary">{formatPrice(item.price)}</p>
+                             <p className="font-bold text-sm text-secondary">{formatPrice(item.unitPrice)}</p>
                           </div>
                        </div>
                     </div>
