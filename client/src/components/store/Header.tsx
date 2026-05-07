@@ -229,6 +229,12 @@ export function Header() {
                 href="#" 
                 onClick={() => setIsMenuOpen(false)} 
               />
+              <MobileMenuItem 
+                icon="article" 
+                label="Góc làm đẹp" 
+                href="/blogs" 
+                onClick={() => setIsMenuOpen(false)} 
+              />
             </div>
 
             {/* Menu Footer Section */}

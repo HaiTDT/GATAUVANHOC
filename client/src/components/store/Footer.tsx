@@ -24,6 +24,7 @@ export function Footer() {
           <h4 className="font-bold text-emerald-900 dark:text-emerald-400 mb-4 md:mb-6 uppercase tracking-wider text-xs">Về chúng tôi</h4>
           <ul className="space-y-3">
             <li><Link className="text-stone-500 dark:text-stone-400 hover:text-emerald-700 transition-colors inline-block text-sm font-semibold" href="/">Trang chủ</Link></li>
+            <li><Link className="text-stone-500 dark:text-stone-400 hover:text-emerald-700 transition-colors inline-block text-sm" href="/blogs">Góc làm đẹp</Link></li>
             <li><a className="text-stone-500 dark:text-stone-400 hover:text-emerald-700 transition-colors inline-block text-sm" href="#">Câu chuyện thương hiệu</a></li>
             <li><a className="text-stone-500 dark:text-stone-400 hover:text-emerald-700 transition-colors inline-block text-sm" href="#">Hệ thống cửa hàng</a></li>
             <li><a className="text-stone-500 dark:text-stone-400 hover:text-emerald-700 transition-colors inline-block text-sm" href="#">Liên hệ</a></li>
