@@ -1,18 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useCallback, useMemo } from "react";
 import { Protected } from "../../components/Protected";
 import { ErrorMessage } from "../../components/ui";
 import { api, formatPrice, type Cart, type Address } from "../../lib/api";
 import { useCart } from "../../components/CartProvider";
+import { VietnamAddressSelector } from "../../components/VietnamAddressSelector";
 
 function CheckoutContent() {
   const { cart, setCart, refreshCart } = useCart();
   const [form, setForm] = useState({
     shippingName: "",
     shippingPhone: "",
-    shippingAddress: ""
+    shippingAddress: "",
+    province: "",
+    district: "",
+    ward: "",
+    detail: ""
   });
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [showAddressBook, setShowAddressBook] = useState(false);
@@ -35,7 +40,11 @@ function CheckoutContent() {
         setForm({
           shippingName: defaultAddr.fullName,
           shippingPhone: defaultAddr.phone,
-          shippingAddress: `${defaultAddr.detail}, ${defaultAddr.ward}, ${defaultAddr.district}, ${defaultAddr.province}`
+          shippingAddress: `${defaultAddr.detail}, ${defaultAddr.ward}, ${defaultAddr.district}, ${defaultAddr.province}`,
+          province: defaultAddr.province,
+          district: defaultAddr.district,
+          ward: defaultAddr.ward,
+          detail: defaultAddr.detail
         });
       }
     } catch (error) {
@@ -47,10 +56,29 @@ function CheckoutContent() {
     setForm({
       shippingName: addr.fullName,
       shippingPhone: addr.phone,
-      shippingAddress: `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`
+      shippingAddress: `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`,
+      province: addr.province,
+      district: addr.district,
+      ward: addr.ward,
+      detail: addr.detail
     });
     setShowAddressBook(false);
   };
+
+  const handleAddressSelect = useCallback(({ province, district, ward }: { province: string, district: string, ward: string }) => {
+    setForm(prev => {
+      if (prev.province === province && prev.district === district && prev.ward === ward) return prev;
+      const newForm = { ...prev, province, district, ward };
+      const addrString = [newForm.detail, ward, district, province].filter(Boolean).join(", ");
+      return { ...newForm, shippingAddress: addrString };
+    });
+  }, []);
+
+  const addressInitialValues = useMemo(() => ({
+    province: form.province,
+    district: form.district,
+    ward: form.ward
+  }), [form.province, form.district, form.ward]);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -181,16 +209,29 @@ function CheckoutContent() {
                     </div>
                   )}
 
-                  <div>
-                    <label className="block text-sm font-semibold text-on-surface-variant mb-2">Địa chỉ chi tiết (Số nhà, đường...)</label>
-                    <textarea
-                      className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-primary px-4 py-3 text-on-surface transition-colors"
-                      onChange={(event) => setForm({ ...form, shippingAddress: event.target.value })}
-                      required
-                      rows={3}
-                      placeholder="Nhập địa chỉ nhận hàng"
-                      value={form.shippingAddress}
+                  <div className="space-y-6">
+                    <VietnamAddressSelector 
+                      initialValues={addressInitialValues}
+                      onSelect={handleAddressSelect}
                     />
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-on-surface-variant mb-2">Địa chỉ chi tiết (Số nhà, đường...)</label>
+                      <input
+                        className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-primary px-4 py-3 text-on-surface transition-colors"
+                        onChange={(event) => {
+                          const detail = event.target.value;
+                          const addrString = [detail, form.ward, form.district, form.province].filter(Boolean).join(", ");
+                          setForm({ ...form, detail, shippingAddress: addrString });
+                        }}
+                        required
+                        placeholder="Nhập số nhà, tên đường..."
+                        value={form.detail}
+                      />
+                    </div>
+
+                    {/* Hidden input for concatenated address to ensure form validity if needed, though we use the state */}
+                    <input type="hidden" name="shippingAddress" value={form.shippingAddress} required />
                   </div>
                 </div>
 

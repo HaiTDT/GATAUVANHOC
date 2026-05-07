@@ -55,7 +55,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(decodeTokenUser(storedToken));
     }
 
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+
+    window.addEventListener('auth-unauthorized', handleUnauthorized);
+
     setReady(true);
+
+    return () => {
+      window.removeEventListener('auth-unauthorized', handleUnauthorized);
+    };
   }, []);
 
   const persistSession = useCallback((token: string, nextUser: User) => {

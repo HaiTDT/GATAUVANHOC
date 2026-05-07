@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Protected } from "../../components/Protected";
 import { EmptyState, ErrorMessage } from "../../components/ui";
 import { api, formatPrice, type Order, type User, type FavoriteProduct, type Address, type Product } from "../../lib/api";
 import { useAuth } from "../../components/AuthProvider";
 import { ProductCard } from "../../components/ProductCard";
+import { VietnamAddressSelector } from "../../components/VietnamAddressSelector";
 
 type Section = "orders" | "profile" | "favorites" | "addresses";
 
@@ -570,6 +571,20 @@ function AddressModal({ address, onClose, onSave }: { address: Address | null, o
     detail: address?.detail || "",
     isDefault: address?.isDefault || false
   });
+  
+  const handleAddressSelect = useCallback(({ province, district, ward }: { province: string, district: string, ward: string }) => {
+    setFormData(prev => {
+      if (prev.province === province && prev.district === district && prev.ward === ward) return prev;
+      return { ...prev, province, district, ward };
+    });
+  }, []);
+
+  const addressInitialValues = useMemo(() => ({
+    province: formData.province,
+    district: formData.district,
+    ward: formData.ward
+  }), [formData.province, formData.district, formData.ward]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -631,41 +646,12 @@ function AddressModal({ address, onClose, onSave }: { address: Address | null, o
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Tỉnh / Thành phố</label>
-              <input 
-                required
-                type="text" 
-                value={formData.province}
-                onChange={e => setFormData({...formData, province: e.target.value})}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary/20 text-sm"
-                placeholder="VD: TP. Hồ Chí Minh"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Quận / Huyện</label>
-              <input 
-                required
-                type="text" 
-                value={formData.district}
-                onChange={e => setFormData({...formData, district: e.target.value})}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary/20 text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Phường / Xã</label>
-              <input 
-                required
-                type="text" 
-                value={formData.ward}
-                onChange={e => setFormData({...formData, ward: e.target.value})}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary/20 text-sm"
-              />
-            </div>
+          <div className="space-y-4">
+            <VietnamAddressSelector 
+              initialValues={addressInitialValues}
+              onSelect={handleAddressSelect}
+            />
+            
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Số nhà, tên đường</label>
               <input 

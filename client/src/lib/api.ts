@@ -238,6 +238,14 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      tokenStore.clear();
+      // If we are in a browser, we can trigger a reload or event to update UI
+      if (typeof window !== 'undefined') {
+         // Dispatch an event so other components know they should re-check auth
+         window.dispatchEvent(new Event('auth-unauthorized'));
+      }
+    }
     throw new ApiError(data?.message || `Request failed with status ${response.status}`, response.status);
   }
 
