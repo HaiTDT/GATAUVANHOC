@@ -74,20 +74,29 @@ const CATEGORY_COLORS = [
 export default function RevenueDashboardPage() {
   const [data, setData] = useState<RevenueAnalytics | null>(null);
   const [period, setPeriod] = useState("30d");
+  const [province, setProvince] = useState("");
+  const [provinces, setProvinces] = useState<{ code: number; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/p/")
+      .then((res) => res.json())
+      .then((data) => setProvinces(data))
+      .catch((err) => console.error("Failed to fetch provinces", err));
+  }, []);
 
   useEffect(() => {
     setLoading(true);
     setError("");
     api
-      .getRevenueAnalytics({ period })
+      .getRevenueAnalytics({ period, province })
       .then(setData)
       .catch((err) =>
         setError(err instanceof Error ? err.message : "Không thể tải dữ liệu")
       )
       .finally(() => setLoading(false));
-  }, [period]);
+  }, [period, province]);
 
   const trendChartData = useMemo(() => {
     if (!data) return null;
@@ -205,20 +214,40 @@ export default function RevenueDashboardPage() {
             Phân tích chi tiết doanh thu, xu hướng và hiệu suất kinh doanh
           </p>
         </div>
-        <div className="flex bg-surface-container-low rounded-xl p-1 gap-1">
-          {PERIOD_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setPeriod(opt.value)}
-              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
-                period === opt.value
-                  ? "bg-primary text-white shadow-md"
-                  : "text-slate-600 hover:bg-surface-container-high"
-              }`}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative">
+            <select
+              value={province}
+              onChange={(e) => setProvince(e.target.value)}
+              className="px-4 py-2 pr-10 text-xs font-semibold rounded-lg bg-surface-container-low text-slate-600 appearance-none cursor-pointer hover:bg-surface-container-high transition-colors focus:ring-2 focus:ring-primary/20 border-none w-full sm:w-48"
             >
-              {opt.label}
-            </button>
-          ))}
+              <option value="">Tất cả Tỉnh/Thành phố</option>
+              {provinces.map((p) => (
+                <option key={p.code} value={p.name}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-sm">
+              expand_more
+            </span>
+          </div>
+
+          <div className="flex bg-surface-container-low rounded-xl p-1 gap-1">
+            {PERIOD_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setPeriod(opt.value)}
+                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+                  period === opt.value
+                    ? "bg-primary text-white shadow-md"
+                    : "text-slate-600 hover:bg-surface-container-high"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -234,7 +263,7 @@ export default function RevenueDashboardPage() {
       ) : data ? (
         <>
           {/* KPI Cards */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
             <div className="bg-surface-container-lowest p-6 rounded-xl organic-shadow relative overflow-hidden group">
               <div className="flex justify-between items-start mb-3">
                 <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -284,6 +313,32 @@ export default function RevenueDashboardPage() {
               </p>
               <div className="absolute -right-4 -bottom-4 opacity-5">
                 <span className="material-symbols-outlined text-7xl">receipt_long</span>
+              </div>
+            </div>
+
+            <div className="bg-surface-container-lowest p-6 rounded-xl organic-shadow relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-3">
+                <div className="w-11 h-11 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                  <span
+                    className="material-symbols-outlined text-2xl"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    groups
+                  </span>
+                </div>
+                <GrowthBadge value={data.summary.customerGrowthRate} />
+              </div>
+              <h3 className="text-slate-500 text-xs font-medium uppercase tracking-wider">
+                Tổng khách hàng
+              </h3>
+              <p className="text-2xl font-bold font-headline text-on-surface mt-1">
+                {data.summary.totalCustomers}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">
+                Kỳ trước: {data.summary.previousCustomers}
+              </p>
+              <div className="absolute -right-4 -bottom-4 opacity-5">
+                <span className="material-symbols-outlined text-7xl">people</span>
               </div>
             </div>
 

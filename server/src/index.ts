@@ -17,6 +17,7 @@ import { analyticsRouter } from "./routes/analytics.routes";
 import { blogRouter } from "./routes/blogs.routes";
 import { flashSaleRouter } from "./routes/flash-sale.routes";
 import { userRouter } from "./routes/user.routes";
+import { aiRouter } from "./routes/ai.routes";
 
 dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
@@ -62,6 +63,7 @@ app.use("/api/admin/analytics", analyticsRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/flash-sales", flashSaleRouter);
 app.use("/api/user", userRouter);
+app.use("/api/ai", aiRouter);
 
 app.listen(port, () => {
   console.log(`API server listening on http://localhost:${port}`);

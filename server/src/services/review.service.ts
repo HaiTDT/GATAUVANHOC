@@ -98,6 +98,36 @@ export const reviewService = {
     };
   },
 
+  async checkEligibility(userId: string, productId: string) {
+    const purchasedItem = await prisma.orderItem.findFirst({
+      where: {
+        productId,
+        order: {
+          userId,
+          status: {
+            in: purchasedStatuses
+          }
+        }
+      },
+      select: { id: true }
+    });
+
+    if (!purchasedItem) {
+      return { canReview: false, reason: "Bạn cần mua sản phẩm để có thể đánh giá." };
+    }
+
+    const existingReview = await prisma.review.findFirst({
+      where: { userId, productId },
+      select: { id: true }
+    });
+
+    if (existingReview) {
+      return { canReview: false, reason: "Bạn đã đánh giá sản phẩm này rồi." };
+    }
+
+    return { canReview: true };
+  },
+
   async createReview(userId: string, productId: string, input: ReviewInput) {
     const rating = toRating(input.rating);
     const comment = toOptionalComment(input.comment);

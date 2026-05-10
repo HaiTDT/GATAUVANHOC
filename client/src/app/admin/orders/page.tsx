@@ -8,6 +8,13 @@ import { api, formatPrice, type Order, type OrderStatus } from "../../../lib/api
 const filterStatuses = ["", "PENDING", "PAID", "CANCELLED", "COMPLETED"] as const;
 const updateStatuses: OrderStatus[] = ["PENDING", "PAID", "CANCELLED", "COMPLETED"];
 
+const STATUS_LABELS: Record<string, string> = {
+  PENDING: "Chờ xử lý",
+  PAID: "Đã thanh toán",
+  CANCELLED: "Đã hủy",
+  COMPLETED: "Hoàn thành"
+};
+
 function AdminOrdersContent() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [status, setStatus] = useState("");
@@ -26,7 +33,7 @@ function AdminOrdersContent() {
         total: result.meta.total
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cannot load admin orders");
+      setError(err instanceof Error ? err.message : "Không thể tải danh sách đơn hàng");
     }
   };
 
@@ -40,16 +47,16 @@ function AdminOrdersContent() {
       await api.updateAdminOrderStatus(orderId, nextStatus);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cannot update order");
+      setError(err instanceof Error ? err.message : "Không thể cập nhật đơn hàng");
     }
   };
 
   return (
     <div>
-      <PageHeader title="Admin orders" description="Review orders and update fulfillment status." />
+      <PageHeader title="Quản lý Đơn hàng" description="Xem danh sách và cập nhật trạng thái đơn hàng." />
       <ErrorMessage message={error} />
       <div className="mb-4 max-w-xs">
-        <Field label="Filter status">
+        <Field label="Lọc theo trạng thái">
           <select
             className={inputClass}
             onChange={(event) => {
@@ -60,21 +67,21 @@ function AdminOrdersContent() {
           >
             {filterStatuses.map((value) => (
               <option key={value || "all"} value={value}>
-                {value || "All"}
+                {value ? STATUS_LABELS[value] : "Tất cả"}
               </option>
             ))}
           </select>
         </Field>
       </div>
       {orders.length === 0 ? (
-        <EmptyState message="No orders." />
+        <EmptyState message="Không có đơn hàng nào." />
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
             <article className="rounded-lg border border-slate-200 bg-white p-5" key={order.id}>
               <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                  <p className="font-semibold">Order #{order.id.slice(0, 8)}</p>
+                  <p className="font-semibold">Đơn hàng #{order.id.slice(0, 8)}</p>
                   <p className="text-sm text-slate-600">
                     {order.user?.email} · {new Date(order.createdAt).toLocaleString("vi-VN")}
                   </p>
@@ -92,7 +99,7 @@ function AdminOrdersContent() {
                   >
                     {updateStatuses.map((value) => (
                       <option key={value} value={value}>
-                        {value}
+                        {STATUS_LABELS[value]}
                       </option>
                     ))}
                   </select>
@@ -117,10 +124,10 @@ function AdminOrdersContent() {
           onClick={() => setPage(meta.page - 1)}
           type="button"
         >
-          Previous
+          Trang trước
         </button>
         <span className="text-sm text-slate-600">
-          Page {meta.page} / {meta.totalPages} · {meta.total} orders
+          Trang {meta.page} / {meta.totalPages} · {meta.total} đơn hàng
         </span>
         <button
           className="rounded-md border border-slate-300 px-3 py-2 text-sm disabled:opacity-50"
@@ -128,7 +135,7 @@ function AdminOrdersContent() {
           onClick={() => setPage(meta.page + 1)}
           type="button"
         >
-          Next
+          Trang sau
         </button>
       </div>
     </div>

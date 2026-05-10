@@ -20,16 +20,34 @@ export default function ProductDetailPage() {
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [canReview, setCanReview] = useState(false);
+  const [reviewReason, setReviewReason] = useState("");
 
   const load = async () => {
     try {
-      const [productData, reviewData] = await Promise.all([
+      const promises: any[] = [
         api.getProduct(productId),
         api.getProductReviews(productId)
-      ]);
+      ];
+      
+      if (user) {
+        promises.push(api.checkReviewEligibility(productId).catch(() => ({ canReview: false })));
+      }
+
+      const results = await Promise.all(promises);
+      const productData = results[0];
+      const reviewData = results[1];
+      
       setProduct(productData);
       setReviews(reviewData.data);
       setReviewMeta(reviewData.meta);
+
+      if (user && results[2]) {
+        setCanReview(results[2].canReview);
+        if (results[2].reason) {
+          setReviewReason(results[2].reason);
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Cannot load product");
     }
@@ -276,44 +294,50 @@ export default function ProductDetailPage() {
         <div className="order-1 lg:order-2">
            <form className="space-y-6 rounded-xl bg-white p-6 md:p-8 shadow-sm lg:sticky lg:top-24 border border-stone-100" onSubmit={submitReview}>
              <h2 className="font-headline font-bold text-lg md:text-xl text-primary">Viết đánh giá của bạn</h2>
-             {!user && <p className="text-xs text-secondary p-3 bg-secondary-fixed rounded-md">Vui lòng đăng nhập để đánh giá.</p>}
              
-             <div className="space-y-4">
-                <div>
-                   <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Đánh giá sao</label>
-                   <select
-                     className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
-                     disabled={!user}
-                     onChange={(event) => setRating(Number(event.target.value))}
-                     value={rating}
-                   >
-                     {[5, 4, 3, 2, 1].map((value) => (
-                       <option key={value} value={value}>
-                         {value} Sao
-                       </option>
-                     ))}
-                   </select>
-                </div>
-                <div>
-                   <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Nội dung đánh giá</label>
-                   <textarea
-                     className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
-                     disabled={!user}
-                     onChange={(event) => setComment(event.target.value)}
-                     rows={4}
-                     placeholder="Chia sẻ trải nghiệm của bạn..."
-                     value={comment}
-                   />
-                </div>
-             </div>
+             {!user ? (
+               <p className="text-xs text-secondary p-3 bg-secondary-fixed rounded-md">Vui lòng đăng nhập để đánh giá.</p>
+             ) : !canReview ? (
+               <p className="text-xs text-orange-700 p-3 bg-orange-50 border border-orange-200 rounded-md">
+                 {reviewReason || "Bạn chưa thể đánh giá sản phẩm này."}
+               </p>
+             ) : (
+               <>
+                 <div className="space-y-4">
+                    <div>
+                       <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Đánh giá sao</label>
+                       <select
+                         className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
+                         onChange={(event) => setRating(Number(event.target.value))}
+                         value={rating}
+                       >
+                         {[5, 4, 3, 2, 1].map((value) => (
+                           <option key={value} value={value}>
+                             {value} Sao
+                           </option>
+                         ))}
+                       </select>
+                    </div>
+                    <div>
+                       <label className="block text-xs md:text-sm font-semibold mb-2 text-stone-700">Nội dung đánh giá</label>
+                       <textarea
+                         className="w-full rounded-lg border border-stone-200 bg-white px-3 md:px-4 py-2 md:py-3 text-sm focus:ring-1 focus:ring-primary outline-none"
+                         onChange={(event) => setComment(event.target.value)}
+                         rows={4}
+                         placeholder="Chia sẻ trải nghiệm của bạn..."
+                         value={comment}
+                       />
+                    </div>
+                 </div>
 
-             <button
-               className="w-full cta-gradient px-4 py-3 md:py-4 font-bold text-white rounded-lg shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
-               disabled={!user}
-               type="submit"
-             >
-               Gửi đánh giá
-             </button>
+                 <button
+                   className="w-full cta-gradient px-4 py-3 md:py-4 font-bold text-white rounded-lg shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                   type="submit"
+                 >
+                   Gửi đánh giá
+                 </button>
+               </>
+             )}
            </form>
         </div>
       </section>

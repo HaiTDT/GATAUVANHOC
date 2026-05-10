@@ -32,6 +32,18 @@ export const reviewController = {
     }
   },
 
+  async checkEligibility(req: Request, res: Response) {
+    try {
+      const result = await reviewService.checkEligibility(
+        getUserId(req),
+        req.params.productId
+      );
+      return res.json(result);
+    } catch (error) {
+      return handleError(error, res);
+    }
+  },
+
   async createReview(req: Request, res: Response) {
     try {
       const result = await reviewService.createReview(

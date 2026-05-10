@@ -206,7 +206,7 @@ export default function AdminEditProductPage() {
                 onChange={(e) => setForm({ ...form, isFlashSale: e.target.checked })}
                 className="rounded border-surface-variant text-secondary focus:ring-secondary"
               />
-              <label htmlFor="isFlashSale" className="text-sm font-bold text-secondary cursor-pointer">Thêm vào danh sách Flash Sale trên Trang Chủ</label>
+              <label htmlFor="isFlashSale" className="text-sm font-bold text-secondary cursor-pointer">Sản phẩm nổi bật (hiển thị trên Trang Chủ)</label>
             </div>
 
             <div className="md:col-span-2">

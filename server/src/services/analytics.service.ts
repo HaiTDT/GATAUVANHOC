@@ -14,6 +14,7 @@ type RevenueQuery = {
   period?: unknown;
   startDate?: unknown;
   endDate?: unknown;
+  province?: unknown;
 };
 
 type CustomerQuery = {
@@ -133,21 +134,28 @@ export const analyticsService = {
     const prevStart = new Date(start.getTime() - daysCount * 86_400_000);
     const prevEnd = start;
 
-    const paidWhere = {
+    const paidWhere: Prisma.OrderWhereInput = {
       status: { in: PAID_STATUSES as unknown as OrderStatus[] },
       createdAt: { gte: start, lte: end }
     };
 
-    const prevPaidWhere = {
+    const prevPaidWhere: Prisma.OrderWhereInput = {
       status: { in: PAID_STATUSES as unknown as OrderStatus[] },
       createdAt: { gte: prevStart, lte: prevEnd }
     };
+
+    if (typeof query.province === "string" && query.province) {
+      paidWhere.shippingAddress = { contains: query.province, mode: "insensitive" };
+      prevPaidWhere.shippingAddress = { contains: query.province, mode: "insensitive" };
+    }
 
     const [
       currentAgg,
       previousAgg,
       currentCount,
       previousCount,
+      currentCustomersAgg,
+      previousCustomersAgg,
       allOrdersInRange,
       categoryBreakdown,
       statusDist
@@ -169,6 +177,20 @@ export const analyticsService = {
 
       // Previous order count
       prisma.order.count({ where: prevPaidWhere }),
+
+      // Current customer count
+      prisma.order.findMany({
+        where: paidWhere,
+        distinct: ["userId"],
+        select: { userId: true }
+      }),
+
+      // Previous customer count
+      prisma.order.findMany({
+        where: prevPaidWhere,
+        distinct: ["userId"],
+        select: { userId: true }
+      }),
 
       // All paid orders in range for trend
       prisma.order.findMany({
@@ -197,7 +219,12 @@ export const analyticsService = {
       // Order status distribution (all statuses in date range)
       prisma.order.groupBy({
         by: ["status"],
-        where: { createdAt: { gte: start, lte: end } },
+        where: {
+          createdAt: { gte: start, lte: end },
+          ...(typeof query.province === "string" && query.province
+            ? { shippingAddress: { contains: query.province, mode: "insensitive" } }
+            : {})
+        },
         _count: { id: true }
       })
     ]);
@@ -215,9 +242,17 @@ export const analyticsService = {
     const orderGrowthRate = previousCount === 0
       ? 100
       : ((currentCount - previousCount) / previousCount) * 100;
+      
     const aov = currentCount > 0
       ? currentRevenue.div(currentCount).toFixed(2)
       : "0.00";
+
+    const currentCustomersCount = currentCustomersAgg.length;
+    const previousCustomersCount = previousCustomersAgg.length;
+
+    const customerGrowthRate = previousCustomersCount === 0
+      ? 100
+      : ((currentCustomersCount - previousCustomersCount) / previousCustomersCount) * 100;
 
     // Revenue trend (group by day)
     const trendMap = new Map<string, { revenue: Prisma.Decimal; orders: number }>();
@@ -309,7 +344,10 @@ export const analyticsService = {
         totalOrders: currentCount,
         previousOrders: previousCount,
         orderGrowthRate: Math.round(orderGrowthRate * 100) / 100,
-        averageOrderValue: aov
+        averageOrderValue: aov,
+        totalCustomers: currentCustomersCount,
+        previousCustomers: previousCustomersCount,
+        customerGrowthRate: Math.round(customerGrowthRate * 100) / 100
       },
       revenueTrend,
       revenueByCategory,

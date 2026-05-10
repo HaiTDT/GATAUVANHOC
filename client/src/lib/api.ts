@@ -345,6 +345,10 @@ export const api = {
     });
   },
 
+  checkReviewEligibility(productId: string) {
+    return apiRequest<{ canReview: boolean; reason?: string }>(`/api/products/${productId}/reviews/eligibility`);
+  },
+
   getCart() {
     return apiRequest<Cart>("/api/cart");
   },
@@ -567,7 +571,7 @@ export const api = {
 
 /* ─── Analytics Types ────────────────────────── */
 
-export type RevenueSummary = {
+export interface RevenueSummary {
   currentRevenue: string;
   previousRevenue: string;
   growthRate: number;
@@ -575,6 +579,9 @@ export type RevenueSummary = {
   previousOrders: number;
   orderGrowthRate: number;
   averageOrderValue: string;
+  totalCustomers: number;
+  previousCustomers: number;
+  customerGrowthRate: number;
 };
 
 export type RevenueTrendPoint = {

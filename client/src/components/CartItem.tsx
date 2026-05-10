@@ -21,8 +21,8 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center py-4 md:py-6 bg-surface-container-lowest rounded-xl p-4 md:p-6 transition-all organic-shadow border border-outline-variant/30 relative">
-      <div className="flex-1 flex items-center gap-4 md:gap-6 w-full">
+    <div className="flex flex-col md:grid md:grid-cols-12 gap-4 md:gap-4 items-start md:items-center py-4 md:py-6 bg-surface-container-lowest rounded-xl p-4 md:p-6 transition-all organic-shadow border border-outline-variant/30 relative">
+      <div className="flex items-center gap-4 md:gap-6 w-full md:col-span-6">
         <Link href={`/products/${item.productId}`} className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-surface-container rounded-lg md:rounded-xl overflow-hidden block">
           {item.product.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -39,23 +39,37 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
           <Link href={`/products/${item.productId}`}>
             <h3 className="text-sm md:text-lg font-bold text-on-surface hover:text-primary transition-colors line-clamp-2">{item.product.name}</h3>
           </Link>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs md:text-sm font-bold text-on-surface">
+          <div className="flex md:hidden items-center gap-2 mt-1">
+            <span className="text-xs font-bold text-on-surface">
               {formatPrice(item.unitPrice || item.product.price)}
             </span>
             {item.unitPrice && Number(item.unitPrice) < Number(item.product.price) && (
-              <span className="bg-orange-100 text-orange-600 text-[8px] md:text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
+              <span className="bg-orange-100 text-orange-600 text-[8px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
                 Flash Sale
               </span>
             )}
           </div>
+          {item.unitPrice && Number(item.unitPrice) < Number(item.product.price) && (
+            <div className="hidden md:block mt-1">
+              <span className="bg-orange-100 text-orange-600 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
+                Flash Sale
+              </span>
+            </div>
+          )}
           <p className="text-[10px] md:text-sm text-on-surface-variant mt-0.5 italic">
             Còn lại: {item.product.stock}
           </p>
         </div>
       </div>
       
-      <div className="flex items-center justify-between w-full md:w-auto md:contents gap-4">
+      {/* Unit Price - Hidden on mobile, shown on desktop col 2 */}
+      <div className="hidden md:flex md:col-span-2 justify-center items-center">
+         <span className="text-sm md:text-base font-bold text-on-surface">
+            {formatPrice(item.unitPrice || item.product.price)}
+         </span>
+      </div>
+
+      <div className="flex items-center justify-between w-full md:w-auto md:col-span-2 md:justify-center gap-4">
         {/* Quantity Controls */}
         <div className="flex items-center bg-stone-50 dark:bg-stone-800 rounded-full px-2 py-1 border border-outline-variant/30">
           <button 
@@ -74,9 +88,9 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
           </button>
         </div>
         
-        {/* Total Price & Delete */}
-        <div className="flex flex-col items-end gap-1 md:ml-4">
-          <span className="text-sm md:text-lg font-bold text-secondary">{formatPrice(item.lineTotal ?? 0)}</span>
+        {/* Total Price & Delete - Mobile view */}
+        <div className="flex md:hidden flex-col items-end gap-1">
+          <span className="text-sm font-bold text-secondary">{formatPrice(item.lineTotal ?? 0)}</span>
           <button
             className="text-on-surface-variant hover:text-error transition-colors p-1"
             onClick={() => onDelete(item.id)}
@@ -85,6 +99,18 @@ export function CartItem({ item, onUpdateQuantity, onDelete }: CartItemProps) {
             <span className="material-symbols-outlined text-lg">delete</span>
           </button>
         </div>
+      </div>
+
+      {/* Total Price & Delete - Desktop view */}
+      <div className="hidden md:flex md:col-span-2 justify-end items-center gap-4">
+        <span className="text-lg font-bold text-secondary">{formatPrice(item.lineTotal ?? 0)}</span>
+        <button
+          className="text-on-surface-variant hover:text-error transition-colors p-1"
+          onClick={() => onDelete(item.id)}
+          title="Xóa sản phẩm"
+        >
+          <span className="material-symbols-outlined text-xl">delete</span>
+        </button>
       </div>
     </div>
   );

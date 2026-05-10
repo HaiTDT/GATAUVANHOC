@@ -3,6 +3,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AppShell } from "../components/AppShell";
 import { AuthProvider } from "../components/AuthProvider";
 import { CartProvider } from "../components/CartProvider";
+import Chatbot from "../components/Chatbot";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({
           <AuthProvider>
             <CartProvider>
               <AppShell>{children}</AppShell>
+              <Chatbot />
             </CartProvider>
           </AuthProvider>
         </GoogleOAuthProvider>

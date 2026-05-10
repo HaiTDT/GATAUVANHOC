@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { api, formatPrice, type Blog, type FlashSaleCampaign } from "@/lib/api";
+import { api, formatPrice, type Blog, type FlashSaleCampaign, type Product } from "@/lib/api";
 
 export default function Home() {
   const [featuredCampaign, setFeaturedCampaign] = useState<FlashSaleCampaign | null>(null);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
@@ -13,11 +14,13 @@ export default function Home() {
   useEffect(() => {
     Promise.all([
       api.getFeaturedFlashSale(),
-      api.getBlogs({ isActive: true, limit: 3 })
+      api.getBlogs({ isActive: true, limit: 3 }),
+      api.getProducts({ isFlashSale: true, limit: 8 })
     ])
-      .then(([flashRes, blogsRes]) => {
+      .then(([flashRes, blogsRes, featuredRes]) => {
         setFeaturedCampaign(flashRes);
         setBlogs(blogsRes.data);
+        setFeaturedProducts(featuredRes.data);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
@@ -76,6 +79,49 @@ export default function Home() {
                 ƯU ĐÃI</Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PHẦN SẢN PHẨM NỔI BẬT */}
+      <section className="mb-12 md:mb-24">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4">
+          <div>
+            <span className="text-secondary font-bold tracking-widest text-[10px] md:text-xs uppercase">BÁN CHẠY NHẤT</span>
+            <h2 className="font-headline text-2xl md:text-4xl font-extrabold text-primary mt-2">Sản phẩm nổi bật</h2>
+          </div>
+          <Link href="/products?isFlashSale=true" className="text-primary text-sm font-bold flex items-center gap-2 hover:translate-x-2 transition-transform">
+            Xem tất cả <span className="material-symbols-outlined">arrow_forward</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+          {loading ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="h-[300px] md:h-[400px] rounded-xl bg-surface-container-lowest/50 animate-pulse border border-outline-variant/30" />
+            ))
+          ) : featuredProducts.length === 0 ? (
+            <div className="col-span-2 md:col-span-3 lg:col-span-4 text-center py-12 text-on-surface-variant font-medium text-sm border border-dashed rounded-xl">
+              Chưa có sản phẩm nổi bật nào.
+            </div>
+          ) : (
+            featuredProducts.map((p) => (
+              <Link key={p.id} href={`/products/${p.id}`} className="group bg-surface-container-lowest rounded-xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-outline-variant/30">
+                <div className="block aspect-square overflow-hidden bg-surface-container-low relative">
+                  <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    alt={p.name} src={p.imageUrl || 'https://via.placeholder.com/400'} />
+                </div>
+                <div className="p-3 md:p-5 flex flex-col flex-1">
+                  <h3 className="font-bold text-primary text-sm md:text-base mb-2 group-hover:underline line-clamp-2 leading-snug">{p.name}</h3>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mt-auto gap-2 pt-2">
+                    <div className="text-secondary font-bold text-base md:text-lg">{formatPrice(p.price)}</div>
+                    <button className="hidden sm:flex bg-primary text-white w-8 h-8 rounded-full hover:bg-primary-container hover:text-primary transition-colors items-center justify-center shadow-md self-end md:self-auto">
+                      <span className="material-symbols-outlined text-[16px] md:text-sm">add_shopping_cart</span>
+                    </button>
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </section>
 
