@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCart } from "./CartProvider";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  const { totalItems } = useCart();
 
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 z-[100] pb-safe">
+    <div className="md:hidden fixed bottom-0 left-0 w-full bg-pearl dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 z-[100] pb-safe">
       <div className="flex items-center justify-around h-16">
         <BottomNavItem 
           icon="home" 
@@ -20,30 +18,22 @@ export function MobileBottomNav() {
           active={isActive("/")} 
         />
         <BottomNavItem 
-          icon="grid_view" 
-          label="Danh mục" 
-          href="/products" 
-          active={isActive("/products")} 
+          icon="menu_book" 
+          label="Bài học" 
+          href="/lessons" 
+          active={isActive("/lessons")} 
         />
         <BottomNavItem 
-          icon="bolt" 
-          label="Khuyến mãi" 
-          href="/flash-sale" 
-          active={isActive("/flash-sale")} 
-          iconClass="text-orange-500"
+          icon="school" 
+          label="Khóa học" 
+          href="/courses" 
+          active={isActive("/courses")} 
         />
         <BottomNavItem 
-          icon="shopping_cart" 
-          label="Giỏ hàng" 
-          href="/cart" 
-          active={isActive("/cart")} 
-          badge={totalItems}
-        />
-        <BottomNavItem 
-          icon="person" 
-          label="Tài khoản" 
-          href="/orders" 
-          active={isActive("/orders")} 
+          icon="trending_up" 
+          label="Tiến độ" 
+          href="/learning-progress" 
+          active={isActive("/learning-progress")} 
         />
       </div>
     </div>

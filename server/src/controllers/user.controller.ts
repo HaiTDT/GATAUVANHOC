@@ -44,31 +44,51 @@ export const userController = {
     }
   },
 
-  // Favorites
-  async getFavorites(req: Request, res: Response) {
+  // Favorite Lessons
+  async getFavoriteLessons(req: Request, res: Response) {
     try {
-      const favorites = await userService.getFavorites(req.user!.id);
+      const favorites = await userService.getFavoriteLessons(req.user!.id);
       res.json(favorites);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   },
 
-  async addToFavorites(req: Request, res: Response) {
+  async addToFavoriteLessons(req: Request, res: Response) {
     try {
-      const { productId } = req.params;
-      await userService.addToFavorites(req.user!.id, productId);
+      const { lessonId } = req.params;
+      await userService.addToFavoriteLessons(req.user!.id, lessonId);
       res.status(201).json({ message: "Added to favorites" });
     } catch (error: any) {
       res.status(400).json({ message: error.message });
     }
   },
 
-  async removeFromFavorites(req: Request, res: Response) {
+  async removeFromFavoriteLessons(req: Request, res: Response) {
     try {
-      const { productId } = req.params;
-      await userService.removeFromFavorites(req.user!.id, productId);
+      const { lessonId } = req.params;
+      await userService.removeFromFavoriteLessons(req.user!.id, lessonId);
       res.json({ message: "Removed from favorites" });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  },
+
+  // Submissions
+  async getSubmissions(req: Request, res: Response) {
+    try {
+      const submissions = await userService.getSubmissions(req.user!.id);
+      res.json(submissions);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  async submitAssignment(req: Request, res: Response) {
+    try {
+      const { assignmentId, content, answers } = req.body;
+      const submission = await userService.submitAssignment(req.user!.id, assignmentId, content, answers);
+      res.status(201).json(submission);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
     }

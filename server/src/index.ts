@@ -6,18 +6,20 @@ import morgan from "morgan";
 import path from "path";
 import { adminRouter } from "./routes/admin.routes";
 import { authRouter } from "./routes/auth";
-import { cartRouter } from "./routes/cart.routes";
 import { categoryRouter } from "./routes/categories";
-import { checkoutRouter } from "./routes/checkout.routes";
 import { healthRouter } from "./routes/health";
-import { orderRouter } from "./routes/orders.routes";
-import { productRouter } from "./routes/products";
-
 import { analyticsRouter } from "./routes/analytics.routes";
 import { blogRouter } from "./routes/blogs.routes";
-import { flashSaleRouter } from "./routes/flash-sale.routes";
 import { userRouter } from "./routes/user.routes";
 import { aiRouter } from "./routes/ai.routes";
+
+// New routes to be added
+import { lessonRouter } from "./routes/lessons.routes";
+import { assignmentRouter } from "./routes/assignments.routes";
+import { bannerRouter } from "./routes/banners.routes";
+import { adminAssignmentRouter } from "./routes/admin.assignments.routes";
+import { adminCourseRouter } from "./routes/admin.courses.routes";
+import { publicCourseRouter } from "./routes/courses.routes";
 
 dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
@@ -46,7 +48,7 @@ app.use(morgan("dev"));
 
 app.get("/", (_req, res) => {
   res.json({
-    name: "Cosmetics E-commerce API",
+    name: "Ga Tau Van Hoc API",
     status: "running"
   });
 });
@@ -54,14 +56,15 @@ app.get("/", (_req, res) => {
 app.use("/health", healthRouter);
 app.use("/auth", authRouter);
 app.use("/api/categories", categoryRouter);
-app.use("/api/products", productRouter);
-app.use("/api/cart", cartRouter);
-app.use("/api/checkout", checkoutRouter);
-app.use("/api/orders", orderRouter);
+app.use("/api/lessons", lessonRouter);
+app.use("/api/courses", publicCourseRouter);
+app.use("/api/assignments", assignmentRouter);
+app.use("/api/admin", adminCourseRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/admin", adminAssignmentRouter);
 app.use("/api/admin/analytics", analyticsRouter);
 app.use("/api/blogs", blogRouter);
-app.use("/api/flash-sales", flashSaleRouter);
+app.use("/api/banners", bannerRouter);
 app.use("/api/user", userRouter);
 app.use("/api/ai", aiRouter);
 

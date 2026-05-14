@@ -16,36 +16,9 @@ const handleError = (error: unknown, res: Response) => {
 };
 
 export const analyticsController = {
-  async getRevenueAnalytics(req: Request, res: Response) {
+  async getStudentClassification(req: Request, res: Response) {
     try {
-      const result = await analyticsService.getRevenueAnalytics(req.query);
-      return res.json(result);
-    } catch (error) {
-      return handleError(error, res);
-    }
-  },
-
-  async getCustomerSegmentation(req: Request, res: Response) {
-    try {
-      const result = await analyticsService.getCustomerSegmentation(req.query);
-      return res.json(result);
-    } catch (error) {
-      return handleError(error, res);
-    }
-  },
-
-  async getMarketingAnalytics(_req: Request, res: Response) {
-    try {
-      const result = await analyticsService.getMarketingAnalytics();
-      return res.json(result);
-    } catch (error) {
-      return handleError(error, res);
-    }
-  },
-
-  async getInventoryAnalytics(_req: Request, res: Response) {
-    try {
-      const result = await analyticsService.getInventoryAnalytics();
+      const result = await analyticsService.getStudentClassification();
       return res.json(result);
     } catch (error) {
       return handleError(error, res);

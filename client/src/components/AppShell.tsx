@@ -8,7 +8,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isCatalogPage = pathname === "/products";
+  const isCatalogPage = pathname === "/lessons";
   const isAdminPage = pathname?.startsWith("/admin");
 
   if (isAdminPage) {
@@ -34,4 +34,3 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-

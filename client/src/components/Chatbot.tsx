@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
+
+const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
 interface Message {
   role: "user" | "model";
@@ -89,8 +91,8 @@ export default function Chatbot() {
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
             </div>
             <div>
-              <h3 className="font-bold text-lg leading-tight">Hasaki Assistant</h3>
-              <p className="text-emerald-100 text-xs">Sẵn sàng hỗ trợ bạn 24/7</p>
+              <h3 className="font-bold text-lg leading-tight">Ga Tàu Assistant</h3>
+              <p className="text-emerald-100 text-xs">Hỗ trợ học tập 24/7</p>
             </div>
           </div>
 
@@ -133,7 +135,7 @@ export default function Chatbot() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Hỏi tôi về sản phẩm..."
+                placeholder="Hỏi về bài học, kiến thức..."
                 className="flex-1 bg-transparent py-3 px-4 text-sm outline-none text-gray-700"
               />
               <button

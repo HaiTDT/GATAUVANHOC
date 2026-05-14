@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/@prisma/client"
 }
 
 datasource db {
@@ -8,19 +9,13 @@ datasource db {
 }
 
 enum Role {
-  CUSTOMER
-  ADMIN
+  CUSTOMER // Keep CUSTOMER/STUDENT conceptually same for auth compatibility
+  ADMIN // Keep ADMIN for teachers/admins
 }
 
-enum OrderStatus {
+enum SubmissionStatus {
   PENDING
-  PAID
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-  COMPLETED
-  REFUNDED
+  GRADED
 }
 
 model User {
@@ -34,29 +29,17 @@ model User {
   avatar       String?
   googleId     String?
   role         Role     @default(CUSTOMER)
-  cart         Cart?
-  orders       Order[]
-  reviews      Review[]
-  favorites    FavoriteProduct[]
-  addresses    Address[]
+  
+  submissions      Submission[]
+  learningProgress LearningProgress[]
+  favoriteLessons  FavoriteLesson[]
+  addresses        Address[]
+  enrollments      Enrollment[]
+  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   @@map("users")
-}
-
-model FavoriteProduct {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-
-  @@unique([userId, productId])
-  @@index([userId])
-  @@index([productId])
-  @@map("favorite_products")
 }
 
 model Address {
@@ -77,117 +60,221 @@ model Address {
   @@map("addresses")
 }
 
+model Course {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  description String?     @db.Text
+  content     String?     @db.Text
+  price       Float       @default(0)
+  imageUrl    String?
+  isActive    Boolean     @default(true)
+  
+  assignments Assignment[]
+  enrollments Enrollment[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("courses")
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  status    EnrollmentStatus @default(PENDING)
+  amount    Float
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
+enum EnrollmentStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
 model Category {
   id          String    @id @default(uuid())
   name        String
   slug        String    @unique
   description String?
-  products    Product[]
+  lessons     Lesson[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@map("categories")
 }
 
-model Product {
+model Lesson {
   id          String      @id @default(uuid())
-  name        String
+  title       String
   slug        String      @unique
   description String?
-  brand       String?
-  price       Decimal     @db.Decimal(10, 2)
+  content     String?     @db.Text
+  videoUrl    String?
   imageUrl    String?
-  stock       Int         @default(0)
   isActive    Boolean     @default(true)
-  isFlashSale Boolean     @default(false)
+  
+  grade       Int?
+  
   categoryId  String
   category    Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-  reviews     Review[]
-  flashSaleItems FlashSaleItem[]
-  favoriteProducts FavoriteProduct[]
+  
+  assignments      Assignment[]
+  favoriteLessons  FavoriteLesson[]
+  learningProgress LearningProgress[]
+  
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([categoryId])
-  @@map("products")
+  @@index([grade])
+  @@map("lessons")
 }
 
-model Cart {
-  id        String     @id @default(uuid())
-  userId    String     @unique
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     CartItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  @@map("carts")
+enum AssignmentType {
+  ESSAY
+  QUIZ
 }
 
-model CartItem {
-  id        String   @id @default(uuid())
-  cartId    String
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  quantity  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Assignment {
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  content     String         @db.Text
+  type        AssignmentType @default(ESSAY)
+  points      Int            @default(10)
+  dueDate     DateTime?
+  duration    Int?           // Duration in minutes for timed quizzes
+  
+  lessonId    String?
+  lesson      Lesson?         @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  
+  courseId    String?
+  course      Course?         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  questions   Question[]
+  submissions Submission[]
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
-  @@unique([cartId, productId])
-  @@index([cartId])
-  @@index([productId])
-  @@map("cart_items")
+  @@index([lessonId])
+  @@index([courseId])
+  @@map("assignments")
 }
 
-model Order {
-  id              String      @id @default(uuid())
-  userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Restrict)
-  status          OrderStatus @default(PENDING)
-  totalAmount     Decimal     @db.Decimal(10, 2)
-  shippingName    String
-  shippingPhone   String
-  shippingAddress String
-  items           OrderItem[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+model Question {
+  id           String      @id @default(uuid())
+  assignmentId String
+  assignment   Assignment  @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  text         String      @db.Text
+  type         QuestionType @default(MULTIPLE_CHOICE)
+  points       Int         @default(1)
+  order        Int         @default(0)
+  
+  options      QuestionOption[]
+  answers      SubmissionAnswer[]
+  
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@map("questions")
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  SHORT_ANSWER
+  ESSAY
+}
+
+model QuestionOption {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  isCorrect  Boolean  @default(false)
+  
+  @@map("question_options")
+}
+
+model Submission {
+  id           String   @id @default(uuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  content      String?  @db.Text // Legacy support or overall summary
+  status       SubmissionStatus @default(PENDING)
+  score        Float?
+  teacherComment String? @db.Text
+  attemptNumber Int      @default(1)
+  
+  answers      SubmissionAnswer[]
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([userId])
-  @@map("orders")
+  @@index([assignmentId])
+  @@map("submissions")
 }
 
-model OrderItem {
-  id        String   @id @default(uuid())
-  orderId   String
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  quantity  Int
-  unitPrice Decimal  @db.Decimal(10, 2)
-  createdAt DateTime @default(now())
-
-  @@index([orderId])
-  @@index([productId])
-  @@map("order_items")
+model SubmissionAnswer {
+  id           String   @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  questionId   String
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  answerText   String?  @db.Text
+  optionId     String?  // For MCQ
+  isCorrect    Boolean? // Cached result for MCQ
+  
+  @@map("submission_answers")
 }
 
-model Review {
+model LearningProgress {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  rating    Int
-  comment   String?
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  isCompleted Boolean @default(false)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, productId])
+  @@unique([userId, lessonId])
   @@index([userId])
-  @@index([productId])
-  @@map("reviews")
+  @@index([lessonId])
+  @@map("learning_progress")
+}
+
+model FavoriteLesson {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("favorite_lessons")
 }
 
 model Blog {
@@ -202,35 +289,16 @@ model Blog {
 
   @@map("blogs")
 }
-
-model FlashSaleCampaign {
+model Banner {
   id          String   @id @default(uuid())
-  name        String
-  startTime   DateTime
-  endTime     DateTime
+  title       String
+  subtitle    String?
+  imageUrl    String
+  linkUrl     String?
+  order       Int      @default(0)
   isActive    Boolean  @default(true)
-  isFeatured  Boolean  @default(false)
-  items       FlashSaleItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@map("flash_sale_campaigns")
-}
-
-model FlashSaleItem {
-  id                 String   @id @default(uuid())
-  campaignId         String
-  campaign           FlashSaleCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  productId          String
-  product            Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  discountPercentage Int      // 0-100
-  stockLimit         Int      @default(0)
-  soldCount          Int      @default(0)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  @@unique([campaignId, productId])
-  @@index([campaignId])
-  @@index([productId])
-  @@map("flash_sale_items")
+  @@map("banners")
 }

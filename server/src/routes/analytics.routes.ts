@@ -7,7 +7,4 @@ export const analyticsRouter = Router();
 
 analyticsRouter.use(authenticateJwt, requireAdmin);
 
-analyticsRouter.get("/revenue", analyticsController.getRevenueAnalytics);
-analyticsRouter.get("/customers", analyticsController.getCustomerSegmentation);
-analyticsRouter.get("/marketing", analyticsController.getMarketingAnalytics);
-analyticsRouter.get("/inventory", analyticsController.getInventoryAnalytics);
+analyticsRouter.get("/students", analyticsController.getStudentClassification);

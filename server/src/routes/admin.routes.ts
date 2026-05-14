@@ -7,7 +7,7 @@ export const adminRouter = Router();
 
 adminRouter.use(authenticateJwt, requireAdmin);
 
-adminRouter.get("/orders", adminController.getOrders);
-adminRouter.get("/orders/:id", adminController.getOrderDetail);
-adminRouter.put("/orders/:id/status", adminController.updateOrderStatus);
+adminRouter.get("/submissions", adminController.getSubmissions);
+adminRouter.get("/submissions/:id", adminController.getSubmissionDetail);
+adminRouter.put("/submissions/:id", adminController.gradeSubmission);
 adminRouter.get("/dashboard", adminController.getDashboard);

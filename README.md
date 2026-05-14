@@ -1,4 +1,4 @@
-# 💄 Hasaki MIS - Hệ thống Thương mại Điện tử Mỹ phẩm & Quản trị Thông minh (BI)
+# 🚆 Ga Tàu Văn Học - Nền tảng Học tập & Chinh phục Ngữ Văn trực tuyến
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18-blue?style=flat-square&logo=express)](https://expressjs.com/)
@@ -6,24 +6,37 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-Hasaki MIS là một hệ sinh thái thương mại điện tử full-stack hiện đại, được thiết kế chuyên biệt cho ngành mỹ phẩm. Không chỉ dừng lại ở một trang web bán hàng thông thường, dự án còn tích hợp hệ thống **Quản trị Thông minh (MIS)** với các công cụ **Business Intelligence (BI)** mạnh mẽ, giúp doanh nghiệp tối ưu hóa vận hành dựa trên dữ liệu thực tế.
+**Ga Tàu Văn Học** là một hệ sinh thái giáo dục trực tuyến hiện đại, được thiết kế chuyên biệt để truyền cảm hứng và hỗ trợ học sinh chinh phục môn Ngữ Văn. Với giao diện cao cấp, trải nghiệm người dùng tối ưu và hệ thống quản trị thông minh, dự án mang đến một "trạm dừng chân" lý tưởng cho hành trình khám phá tri thức văn học.
 
 ---
 
 ## 📝 Tổng quan dự án
 
-- **Tên dự án:** Hasaki MIS (Cosmetics E-commerce)
-- **Mô tả:** Nền tảng thương mại điện tử theo kiến trúc Monorepo, kết hợp giữa giao diện mua sắm tối ưu và bảng điều khiển quản trị chuyên sâu.
-- **Mục tiêu:** Giải quyết bài toán quản lý bán hàng và phân tích dữ liệu kinh doanh, từ phân khúc khách hàng tự động đến dự báo tồn kho.
-- **Đối tượng người dùng:** Khách hàng mua sắm mỹ phẩm trực tuyến và Nhà quản lý doanh nghiệp (Admins).
+- **Tên dự án:** Ga Tàu Văn Học (Educational Platform)
+- **Mô tả:** Nền tảng học tập trực tuyến theo kiến trúc Monorepo, tích hợp giữa Dashboard học tập cá nhân hóa và bảng điều khiển quản lý nội dung chuyên sâu.
+- **Mục tiêu:** Hiện đại hóa cách tiếp cận môn Văn, từ việc cung cấp bài học chất lượng đến việc chấm điểm và nhận xét bài làm thời gian thực.
+- **Đối tượng người dùng:** Học sinh đang ôn luyện Ngữ Văn và Giáo viên/Quản trị viên (Admins).
 
 ---
 
-## 🌐 Demo & Deployment
+## ✨ Chức năng chính
 
-Hệ thống đã được triển khai trực tuyến tại:
-- **Frontend (Vercel):** [https://mis-hasaki-client.vercel.app](https://mis-hasaki-client.vercel.app)
-- **Backend API (Render):** [https://mis-hasaki.onrender.com](https://your-backend-link.onrender.com)
+### 🎓 Dành cho Học viên (Student)
+- **Xác thực:** Đăng nhập truyền thống hoặc qua Google OAuth 2.0.
+- **Hành trình học tập:** Khám phá bài học, blog kiến thức và đăng ký các khóa học chuyên sâu.
+- **Thanh toán thông minh:** Quy trình đăng ký khóa học mượt mà, tự động mở khóa nội dung với các khóa học miễn phí.
+- **Super Dashboard (Tiến độ học tập):** 
+  - **Tổng quan:** Theo dõi điểm số, số lượng khóa học và hoạt động gần đây.
+  - **Trung tâm Bài tập:** Làm trắc nghiệm (Quiz) và viết bài tự luận (Essay) ngay trong Dashboard.
+  - **Quản lý tài khoản:** Cập nhật hồ sơ cá nhân và bài học yêu thích.
+- **Truy cập:** Nội dung bài tập được bảo vệ, chỉ mở khóa sau khi Admin phê duyệt thanh toán.
+
+### 🛡️ Dành cho Quản trị viên & Giáo viên (Admin)
+- **Dashboard Quản trị:** Theo dõi số lượng học viên, doanh thu và thống kê bài nộp.
+- **Quản lý nội dung:** Hệ thống quản lý Khóa học, Bài học, Bài tập và Banner chuyên nghiệp.
+- **Phê duyệt học viên:** Quy trình xác nhận thanh toán chỉ với một cú nhấp chuột để mở khóa quyền học tập.
+- **Chấm điểm thông minh:** Chấm điểm bài nộp, thêm nhận xét chi tiết để định hướng cho học sinh.
+- **Phân tích học tập:** Theo dõi tiến độ và xếp hạng học viên dựa trên kết quả bài làm.
 
 ---
 
@@ -32,42 +45,18 @@ Hệ thống đã được triển khai trực tuyến tại:
 ### Frontend (Client)
 - **Framework:** Next.js 15 (App Router)
 - **UI & Logic:** React 19, Google OAuth 2.0 Integration
-- **Styling:** Tailwind CSS (Giao diện hiện đại, Material Design 3 influences)
-- **Charts:** Chart.js 4 & react-chartjs-2 (Trực quan hóa dữ liệu BI)
-- **Editor:** React Quill (Trình soạn thảo văn bản cho Blog)
+- **Styling:** Vanilla CSS & Tailwind (Giao diện Premium, Material Design 3, Glassmorphism)
 - **Icons:** Google Material Symbols & Lucide React
 
 ### Backend (Server)
 - **Runtime:** Node.js & TypeScript
 - **Framework:** Express.js
 - **ORM:** Prisma
-- **Bảo mật:** JWT Authentication, Bcrypt, CORS, Helmet
+- **Bảo mật:** JWT Authentication (sub-based), Bcrypt, CORS, Helmet
 
 ### Hạ tầng & Cơ sở dữ liệu
 - **Database:** PostgreSQL (Hosted trên Neon Serverless)
-- **DevOps:** Docker & Docker Compose
 - **Kiến trúc:** Monorepo sử dụng `npm workspaces`
-
----
-
-## ✨ Chức năng chính
-
-### 🛒 Dành cho Khách hàng (Customer)
-- **Xác thực:** Đăng nhập truyền thống hoặc qua Google OAuth 2.0.
-- **Trải nghiệm mua sắm:** Duyệt sản phẩm theo danh mục chi tiết (Toner, Serum, v.v.).
-- **Flash Sales:** Hệ thống săn sale thời gian thực với đồng hồ đếm ngược.
-- **Giỏ hàng & Thanh toán:** Quy trình đặt hàng tối ưu, quản lý giỏ hàng thông minh.
-- **Tài khoản cá nhân:** Theo dõi lịch sử đơn hàng, quản lý sổ địa chỉ và đánh giá sản phẩm.
-- **Blog làm đẹp:** Cập nhật tin tức và mẹo chăm sóc da.
-
-### 🛡️ Dành cho Quản trị viên (Admin & MIS)
-- **Dashboard BI:** Theo dõi Doanh thu, AOV (Giá trị đơn trung bình) và Tốc độ tăng trưởng thời gian thực.
-- **Quản trị Kho thông minh:** Tự động tính toán "Tốc độ bán hàng" (Sales Velocity) và đưa ra gợi ý nhập hàng.
-- **Phân tích CRM:** Áp dụng mô hình **RFM** (Recency, Frequency, Monetary) để phân loại khách hàng:
-  - *Champions:* Khách hàng tinh hoa, trung thành.
-  - *At Risk:* Khách hàng có nguy cơ rời bỏ.
-  - *Lost:* Khách hàng đã mất cần kích cầu.
-- **Marketing Performance:** Theo dõi các chỉ số CAC (Chi phí thu hút khách hàng) và ROAS (Lợi nhuận trên chi phí quảng cáo).
 
 ---
 
@@ -78,111 +67,65 @@ Hệ thống đã được triển khai trực tuyến tại:
 ├── client/                 # Frontend Next.js 15
 │   ├── src/
 │   │   ├── app/            # App Router (Pages, Layouts)
-│   │   ├── components/     # Các UI Components & BI Charts
-│   │   ├── hooks/          # Custom React Hooks
-│   │   └── lib/            # API Client & Constants
-│   └── package.json
-├── server/                 # Backend Express.js API
-│   ├── prisma/
-│   │   └── schema.prisma   # Định nghĩa Schema & Database Model
+│   │   ├── components/     # UI Components (Header, Footer, Protected)
+│   │   ├── lib/            # API Client (Axios-like wrapper), Utils
+│   │   └── styles/         # Toàn bộ CSS định danh phong cách
+├── server/                 # Backend Node.js
 │   ├── src/
-│   │   ├── controllers/    # Xử lý Logic API
-│   │   ├── services/       # Xử lý nghiệp vụ BI & Analytics
-│   │   ├── routes/         # Định nghĩa các Endpoint API
-│   │   └── middlewares/    # Middleware xác thực & kiểm soát lỗi
-│   └── package.json
-├── docker-compose.yml      # Cấu hình Database Local
-└── package.json            # Cấu hình Monorepo Workspace
+│   │   ├── routes/         # Định tuyến API (Auth, Courses, User, Admin)
+│   │   ├── controllers/    # Xử lý logic nghiệp vụ
+│   │   ├── middlewares/    # Bảo mật, Auth, Optional Auth
+│   │   └── lib/            # Prisma Client config
+└── prisma/                 # Schema cơ sở dữ liệu & Migrations
 ```
 
 ---
 
-## ⚙️ Hướng dẫn cài đặt
+## 🚀 Hướng dẫn cài đặt (Local)
 
-### Yêu cầu hệ thống
-- Node.js 18+ & npm 9+
-- PostgreSQL (Local hoặc Neon Cloud)
-- Docker Desktop (Nếu muốn chạy DB local)
+1. **Clone dự án:**
+   ```bash
+   git clone <your-repo-url>
+   cd MIS_HASAKI_SRC_CODE
+   ```
 
-### 1. Clone dự án
-```bash
-git clone https://github.com/your-username/mis-hasaki.git
-cd mis-hasaki
-```
+2. **Cài đặt dependencies:**
+   ```bash
+   npm install
+   ```
 
-### 2. Cài đặt Dependencies
-```bash
-npm install
-```
+3. **Cấu hình môi trường:**
+   - Tạo file `.env` trong thư mục `server/`:
+     ```env
+     PORT=4000
+     DATABASE_URL=postgresql://...
+     JWT_SECRET=your_secure_secret
+     CLIENT_URL=http://localhost:3000
+     ```
 
-### 3. Cấu hình biến môi trường
-Tạo file `.env` tại các thư mục tương ứng:
-
-**Server (`server/.env`):**
-```env
-PORT=4000
-DATABASE_URL="postgresql://user:password@localhost:5432/hasaki_db"
-JWT_SECRET="ma_bi_mat_cua_ban"
-CLIENT_URL="http://localhost:3000"
-```
-
-**Client (`client/.env.local`):**
-```env
-NEXT_PUBLIC_API_URL="http://localhost:4000"
-```
-
-### 4. Đồng bộ Database (Prisma)
-```bash
-# Chạy tại thư mục gốc
-npm run prisma:generate -w server
-npm run prisma:migrate -w server
-```
-
-### 5. Khởi chạy dự án
-```bash
-npm run dev
-```
-*Frontend: http://localhost:3000 | Backend: http://localhost:4000*
+4. **Khởi động dự án:**
+   ```bash
+   npm run dev
+   ```
+   - Frontend sẽ chạy tại: `http://localhost:3000`
+   - Backend sẽ chạy tại: `http://localhost:4000`
 
 ---
 
-## 📊 Logic phân tích dữ liệu (BI Environment)
+## 🌐 Hướng dẫn Deployment
 
-Hệ thống vận hành theo quy trình BI 6 thành phần:
-1. **Data Sources:** Dữ liệu giao dịch thực tế từ PostgreSQL.
-2. **ETL:** Xử lý, làm sạch dữ liệu tại `analytics.service.ts`.
-3. **Data Mart:** Các snapshot dữ liệu đã được tính toán sẵn để tối ưu hiệu năng.
-4. **Analytics Engine:** Tính toán RFM Score, Growth Rate và Sales Velocity.
-5. **Advanced Analytics:** Dự báo tồn kho và phân tích xu hướng mua sắm.
-6. **BI Tools:** Hiển thị Dashboard trực quan cho nhà quản trị.
+### Backend (Render)
+- **Root Directory:** `server`
+- **Build Command:** `npm install && npm run build`
+- **Start Command:** `node dist/index.js`
+- **Envs:** `DATABASE_URL`, `JWT_SECRET`, `CLIENT_URL` (Link Vercel).
 
----
-
-## 🔌 Danh mục API chính
-
-| Method | Endpoint | Mô tả |
-|--------|----------|-------|
-| `POST` | `/api/auth/login` | Đăng nhập hệ thống |
-| `GET` | `/api/products` | Lấy danh sách sản phẩm (có lọc) |
-| `GET` | `/api/analytics/revenue` | [ADMIN] Thống kê doanh thu |
-| `GET` | `/api/analytics/rfm` | [ADMIN] Phân tích phân khúc khách hàng |
-| `POST` | `/api/checkout` | Xử lý đặt hàng và thanh toán |
+### Frontend (Vercel)
+- **Root Directory:** `client`
+- **Build Command:** `next build`
+- **Envs:** `NEXT_PUBLIC_API_URL` (Link Render).
 
 ---
 
-## 🤝 Đóng góp
-Nếu bạn có ý tưởng cải thiện dự án, vui lòng:
-1. Fork dự án.
-2. Tạo Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
-4. Push lên Branch (`git push origin feature/AmazingFeature`).
-5. Mở một Pull Request.
-
----
-
-## 📄 Giấy phép
-Phân phối dưới giấy phép MIT. Xem `LICENSE` để biết thêm chi tiết.
-
----
-**Hasaki MIS** - *Powering Data-Driven Decisions in Cosmetics Retail.*
-# GATAUVANHOC
+## ⚖️ License
+Dự án được phát triển cho mục đích giáo dục và thương mại hóa nội dung số. Bản quyền thuộc về **Ga Tàu Văn Học**.

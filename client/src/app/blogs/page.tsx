@@ -15,7 +15,7 @@ export default function BlogsPage() {
     api.getBlogs({ isActive: true, page, limit: 9 })
       .then((res) => {
         setBlogs(res.data);
-        setTotalPages(res.meta.totalPages);
+        setTotalPages(res.meta?.totalPages || 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
       .catch((err) => console.error(err))
@@ -23,25 +23,25 @@ export default function BlogsPage() {
   }, [page]);
 
   return (
-    <main className="min-h-screen bg-surface-container-lowest pb-24">
+    <main className="min-h-screen bg-stone-50 pb-24">
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden mb-16">
         <img 
-          src="https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?auto=format&fit=crop&q=80&w=1600" 
-          alt="Beauty Blog"
+          src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=1600" 
+          alt="Literature Blog"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/40 to-transparent flex items-center">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl">
-              <span className="inline-block px-3 py-1 bg-secondary text-on-secondary text-[10px] md:text-xs font-bold tracking-widest uppercase mb-4 rounded-sm">
+              <span className="inline-block px-3 py-1 bg-pearl text-primary text-[10px] md:text-xs font-bold tracking-widest uppercase mb-4 rounded-sm">
                 KẾT NỐI & CHIA SẺ
               </span>
               <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-                Góc Làm Đẹp <br /><span className="italic font-light text-secondary-fixed">Hasaki Beauty</span>
+                Bản Tin <br /><span className="italic font-light">Ga Tàu Văn Học</span>
               </h1>
               <p className="text-white/80 text-sm md:text-lg max-w-md leading-relaxed">
-                Nơi cập nhật những xu hướng làm đẹp mới nhất, bí quyết chăm sóc da từ chuyên gia và đánh giá sản phẩm khách quan.
+                Nơi cập nhật những kiến thức văn học mới nhất, bí quyết ôn thi và những cảm nhận sâu sắc về tác phẩm.
               </p>
             </div>
           </div>

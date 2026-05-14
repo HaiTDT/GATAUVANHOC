@@ -14,53 +14,120 @@ export type User = {
   role: Role;
 };
 
-export type FavoriteProduct = {
-  id: string;
-  userId: string;
-  productId: string;
-  product: Product;
-  createdAt: string;
-};
-
-export type Address = {
-  id: string;
-  userId: string;
-  fullName: string;
-  phone: string;
-  province: string;
-  district: string;
-  ward: string;
-  detail: string;
-  isDefault: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type Category = {
   id: string;
   name: string;
   slug: string;
   description?: string | null;
+  createdAt?: string;
 };
 
-export type Product = {
+export type Lesson = {
   id: string;
-  name: string;
+  title: string;
   slug: string;
   description?: string | null;
-  brand?: string | null;
-  price: string | number;
+  content?: string | null;
   imageUrl?: string | null;
-  stock: number;
+  videoUrl?: string | null;
   isActive: boolean;
-  isFlashSale: boolean;
   categoryId: string;
   category?: Category;
-  flashSaleItems?: Array<{
-    id: string;
-    discountPercentage: number;
-    campaign: FlashSaleCampaign;
-  }>;
+  grade?: number | null;
+  createdAt: string;
+};
+
+export type AssignmentType = "ESSAY" | "QUIZ";
+
+export type QuestionType = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "ESSAY";
+
+export type QuestionOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+};
+
+export type Question = {
+  id: string;
+  text: string;
+  type: QuestionType;
+  points: number;
+  order: number;
+  options: QuestionOption[];
+};
+
+export type Course = {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string | null;
+  content?: string | null;
+  price: number;
+  imageUrl?: string | null;
+  isActive: boolean;
+  isEnrolled?: boolean;
+  createdAt: string;
+};
+
+export type EnrollmentStatus = "PENDING" | "PAID" | "CANCELLED";
+
+export type Enrollment = {
+  id: string;
+  userId: string;
+  courseId: string;
+  status: EnrollmentStatus;
+  amount: number;
+  createdAt: string;
+};
+
+export type Assignment = {
+  id: string;
+  title: string;
+  description?: string | null;
+  content: string;
+  type: AssignmentType;
+  points: number;
+  dueDate?: string | null;
+  duration?: number | null;
+  lessonId?: string | null;
+  lesson?: Lesson;
+  courseId?: string | null;
+  course?: Course;
+  questions?: Question[];
+};
+
+export type SubmissionAnswer = {
+  id: string;
+  questionId: string;
+  answerText?: string | null;
+  optionId?: string | null;
+  isCorrect?: boolean | null;
+};
+
+export type SubmissionStatus = "PENDING" | "GRADED" | "SUBMITTED";
+
+export type Submission = {
+  id: string;
+  assignmentId: string;
+  assignment?: Assignment;
+  userId: string;
+  user?: User;
+  content?: string | null;
+  status: SubmissionStatus;
+  score?: number | null;
+  teacherComment?: string | null;
+  attemptNumber: number;
+  answers?: SubmissionAnswer[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type FavoriteLesson = {
+  id: string;
+  userId: string;
+  lessonId: string;
+  lesson: Lesson;
+  createdAt: string;
 };
 
 export type Blog = {
@@ -74,97 +141,56 @@ export type Blog = {
   updatedAt: string;
 };
 
-export type FlashSaleItem = {
+export type Banner = {
   id: string;
-  campaignId: string;
-  productId: string;
-  product: Product;
-  discountPercentage: number;
-  stockLimit: number;
-  soldCount: number;
-};
-
-export type FlashSaleCampaign = {
-  id: string;
-  name: string;
-  startTime: string;
-  endTime: string;
+  title: string;
+  subtitle?: string | null;
+  imageUrl: string;
+  linkUrl?: string | null;
+  order: number;
   isActive: boolean;
-  isFeatured: boolean;
-  items?: FlashSaleItem[];
-  _count?: {
-    items: number;
-  };
   createdAt: string;
   updatedAt: string;
 };
 
-export type CartItem = {
+export interface StudentRFM {
   id: string;
-  productId: string;
-  quantity: number;
-  unitPrice?: string | number;
-  lineTotal?: string | number;
-  product: Product;
-};
+  fullName: string;
+  email: string;
+  rScore: number;
+  fScore: number;
+  mScore: number;
+  segment: string;
+  avgGrade: number;
+  totalSubmissions: number;
+  daysSinceLastSubmission: number;
+}
 
-export type Cart = {
-  id: string;
-  userId: string;
-  items: CartItem[];
-  totalQuantity: number;
-  totalAmount: string;
-};
+export interface StudentSegmentationResponse {
+  segmentSummary: Array<{
+    segment: string;
+    count: number;
+    percentage: number;
+    avgGrade: number;
+    totalRevenue?: number; // Keep for compatibility or remove
+  }>;
+  students: Paginated<StudentRFM>;
+  customers: Paginated<StudentRFM>; // For compatibility during migration
+}
 
-export type OrderItem = {
-  id: string;
-  productId: string;
-  quantity: number;
-  unitPrice: string | number;
-  product: Product;
-};
+export type CustomerSegmentationResponse = StudentSegmentationResponse;
+export type CustomerRFM = StudentRFM;
+export type SegmentSummary = any;
 
-export type OrderStatus =
-  | "PENDING"
-  | "PAID"
-  | "PROCESSING"
-  | "SHIPPED"
-  | "DELIVERED"
-  | "CANCELLED"
-  | "COMPLETED"
-  | "REFUNDED";
-
-export type Order = {
-  id: string;
-  userId: string;
-  user?: User;
-  status: OrderStatus;
-  totalAmount: string | number;
-  shippingName: string;
-  shippingPhone: string;
-  shippingAddress: string;
-  items: OrderItem[];
-  createdAt: string;
-  updatedAt: string;
-};
 
 export type Paginated<T> = {
   data: T[];
-  meta: {
+  meta?: {
     page: number;
     limit: number;
     total: number;
     totalPages: number;
   };
-};
-
-export type Review = {
-  id: string;
-  rating: number;
-  comment?: string | null;
-  userName: string;
-  user: Pick<User, "id" | "email" | "fullName">;
-  createdAt: string;
 };
 
 export class ApiError extends Error {
@@ -240,9 +266,7 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}) {
   if (!response.ok) {
     if (response.status === 401) {
       tokenStore.clear();
-      // If we are in a browser, we can trigger a reload or event to update UI
       if (typeof window !== 'undefined') {
-         // Dispatch an event so other components know they should re-check auth
          window.dispatchEvent(new Event('auth-unauthorized'));
       }
     }
@@ -292,15 +316,32 @@ export const api = {
     });
   },
 
+  forgotPassword(email: string) {
+    return apiRequest("/auth/forgot-password", {
+      method: "POST",
+      body: { email }
+    });
+  },
+
+  resetPassword(body: any) {
+    return apiRequest("/auth/reset-password", {
+      method: "POST",
+      body
+    });
+  },
+
   getCategories() {
     return apiRequest<Category[]>("/api/categories");
   },
 
-  createCategory(body: Partial<Category>) {
-    return apiRequest<Category>("/api/categories", { method: "POST", body });
+  createCategory(body: any) {
+    return apiRequest<Category>("/api/categories", {
+      method: "POST",
+      body
+    });
   },
 
-  updateCategory(id: string, body: Partial<Category>) {
+  updateCategory(id: string, body: any) {
     return apiRequest<Category>(`/api/categories/${id}`, {
       method: "PUT",
       body
@@ -308,104 +349,154 @@ export const api = {
   },
 
   deleteCategory(id: string) {
-    return apiRequest<void>(`/api/categories/${id}`, { method: "DELETE" });
+    return apiRequest(`/api/categories/${id}`, {
+      method: "DELETE"
+    });
   },
 
-  getProducts(params: Record<string, string | number | boolean | undefined> = {}) {
-    return apiRequest<Paginated<Product>>(`/api/products${toQueryString(params)}`);
+  getLessons(params: Record<string, string | number | boolean | undefined> = {}) {
+    return apiRequest<Paginated<Lesson>>(`/api/lessons${toQueryString(params)}`);
   },
 
-  getProduct(id: string) {
-    return apiRequest<Product>(`/api/products/${id}`);
+  getLesson(id: string) {
+    return apiRequest<Lesson>(`/api/lessons/${id}`);
   },
 
-  createProduct(body: Partial<Product>) {
-    return apiRequest<Product>("/api/products", { method: "POST", body });
-  },
-
-  updateProduct(id: string, body: Partial<Product>) {
-    return apiRequest<Product>(`/api/products/${id}`, { method: "PUT", body });
-  },
-
-  deleteProduct(id: string) {
-    return apiRequest<void>(`/api/products/${id}`, { method: "DELETE" });
-  },
-
-  getProductReviews(productId: string) {
-    return apiRequest<{
-      data: Review[];
-      meta: { averageRating: number; totalReviews: number };
-    }>(`/api/products/${productId}/reviews`);
-  },
-
-  createProductReview(productId: string, body: { rating: number; comment?: string }) {
-    return apiRequest(`/api/products/${productId}/reviews`, {
+  createLesson(body: any) {
+    return apiRequest<Lesson>("/api/lessons", {
       method: "POST",
       body
     });
   },
 
-  checkReviewEligibility(productId: string) {
-    return apiRequest<{ canReview: boolean; reason?: string }>(`/api/products/${productId}/reviews/eligibility`);
-  },
-
-  getCart() {
-    return apiRequest<Cart>("/api/cart");
-  },
-
-  addCartItem(body: { productId: string; quantity: number }) {
-    return apiRequest<Cart>("/api/cart/items", { method: "POST", body });
-  },
-
-  updateCartItem(itemId: string, body: { quantity: number }) {
-    return apiRequest<Cart>(`/api/cart/items/${itemId}`, {
+  updateLesson(id: string, body: any) {
+    return apiRequest<Lesson>(`/api/lessons/${id}`, {
       method: "PUT",
       body
     });
   },
 
-  deleteCartItem(itemId: string) {
-    return apiRequest<Cart>(`/api/cart/items/${itemId}`, { method: "DELETE" });
+  deleteLesson(id: string) {
+    return apiRequest(`/api/lessons/${id}`, {
+      method: "DELETE"
+    });
   },
 
-  checkout(body: {
-    shippingName: string;
-    shippingPhone: string;
-    shippingAddress: string;
-  }) {
-    return apiRequest("/api/checkout", { method: "POST", body });
+  // Courses
+  getCourses() {
+    return apiRequest<Course[]>("/api/courses");
   },
 
-  getOrders() {
-    return apiRequest<Order[]>("/api/orders");
+  getCourse(idOrSlug: string) {
+    return apiRequest<Course>(`/api/courses/${idOrSlug}`);
   },
 
-  getAdminDashboard() {
-    return apiRequest<{
-      totalRevenue: string;
-      totalOrders: number;
-      totalProducts: number;
-      totalCustomers: number;
-      topProducts: Array<{
-        product: Product | null;
-        totalSold: number;
-        orderItemCount: number;
-      }>;
-      recentOrders: Order[];
-      revenueTrend: Array<{ date: string; revenue: number }>;
-    }>("/api/admin/dashboard");
+  getMyCourses() {
+    return apiRequest<Course[]>("/api/user/courses");
   },
 
-  getAdminOrders(params: Record<string, string | number | undefined> = {}) {
-    return apiRequest<Paginated<Order>>(
-      `/api/admin/orders${toQueryString(params)}`
-    );
+  getCourseAssignments(courseId: string) {
+    return apiRequest<Assignment[]>(`/api/courses/${courseId}/assignments`);
   },
 
-  updateAdminOrderStatus(id: string, status: OrderStatus) {
-    return apiRequest<Order>(`/api/admin/orders/${id}/status`, {
+  enrollInCourse(courseId: string) {
+    return apiRequest(`/api/courses/${courseId}/enroll`, {
+      method: "POST",
+      body: {}
+    });
+  },
+
+  // Admin Courses
+  getAdminCourses() {
+    return apiRequest<Course[]>("/api/admin/courses");
+  },
+
+  getAdminCourse(id: string) {
+    return apiRequest<Course>(`/api/admin/courses/${id}`);
+  },
+
+  createAdminCourse(body: any) {
+    return apiRequest<Course>("/api/admin/courses", {
+      method: "POST",
+      body
+    });
+  },
+
+  updateAdminCourse(id: string, body: any) {
+    return apiRequest<Course>(`/api/admin/courses/${id}`, {
+      method: "PUT",
+      body
+    });
+  },
+
+  deleteAdminCourse(id: string) {
+    return apiRequest(`/api/admin/courses/${id}`, {
+      method: "DELETE"
+    });
+  },
+
+  getAdminCourseAssignments(courseId: string) {
+    return apiRequest<Assignment[]>(`/api/admin/courses/${courseId}/assignments`);
+  },
+
+  getAdminEnrollments() {
+    return apiRequest<any[]>("/api/admin/enrollments");
+  },
+
+  updateEnrollmentStatus(id: string, status: string) {
+    return apiRequest(`/api/admin/enrollments/${id}`, {
       method: "PUT",
       body: { status }
+    });
+  },
+
+  createAdminCourseAssignment(courseId: string, body: any) {
+    return apiRequest<Assignment>(`/api/admin/courses/${courseId}/assignments`, {
+      method: "POST",
+      body
+    });
+  },
+
+  // Assignments
+  getAssignments() {
+    return apiRequest<Assignment[]>("/api/assignments");
+  },
+
+  getAdminLessonAssignments(lessonId: string) {
+    return apiRequest<Assignment[]>(`/api/admin/lessons/${lessonId}/assignments`);
+  },
+
+  createAdminAssignment(lessonId: string, body: any) {
+    return apiRequest<Assignment>(`/api/admin/lessons/${lessonId}/assignments`, {
+      method: "POST",
+      body
+    });
+  },
+
+  deleteAdminAssignment(id: string) {
+    return apiRequest(`/api/admin/assignments/${id}`, {
+      method: "DELETE"
+    });
+  },
+
+  getMySubmissions() {
+    return apiRequest<Submission[]>("/api/user/submissions");
+  },
+
+  submitAssignment(assignmentId: string, content?: string, answers?: any[]) {
+    return apiRequest<Submission>("/api/user/submissions", {
+      method: "POST",
+      body: { assignmentId, content, answers }
+    });
+  },
+
+  getFavoriteLessons() {
+    return apiRequest<FavoriteLesson[]>("/api/user/favorite-lessons");
+  },
+
+  removeFromFavoriteLessons(lessonId: string) {
+    return apiRequest(`/api/user/favorite-lessons/${lessonId}`, {
+      method: "DELETE"
     });
   },
 
@@ -417,232 +508,94 @@ export const api = {
     return apiRequest<Blog>(`/api/blogs/${id}`);
   },
 
-  createBlog(body: Partial<Blog>) {
-    return apiRequest<Blog>("/api/blogs", { method: "POST", body });
-  },
-
-  updateBlog(id: string, body: Partial<Blog>) {
-    return apiRequest<Blog>(`/api/blogs/${id}`, { method: "PUT", body });
-  },
-
-  deleteBlog(id: string) {
-    return apiRequest<void>(`/api/blogs/${id}`, { method: "DELETE" });
-  },
-
-  getFeaturedFlashSale() {
-    return apiRequest<FlashSaleCampaign | null>("/api/flash-sales/featured");
-  },
-
-  getAdminFlashSales() {
-    return apiRequest<FlashSaleCampaign[]>("/api/flash-sales");
-  },
-
-  getAdminFlashSale(id: string) {
-    return apiRequest<FlashSaleCampaign>(`/api/flash-sales/${id}`);
-  },
-
-  createFlashSale(body: Partial<FlashSaleCampaign>) {
-    return apiRequest<FlashSaleCampaign>("/api/flash-sales", {
+  createBlog(body: any) {
+    return apiRequest<Blog>("/api/blogs", {
       method: "POST",
       body
     });
   },
 
-  updateFlashSale(id: string, body: Partial<FlashSaleCampaign>) {
-    return apiRequest<FlashSaleCampaign>(`/api/flash-sales/${id}`, {
+  updateBlog(id: string, body: any) {
+    return apiRequest<Blog>(`/api/blogs/${id}`, {
       method: "PUT",
       body
     });
   },
 
-  deleteFlashSale(id: string) {
-    return apiRequest<void>(`/api/flash-sales/${id}`, { method: "DELETE" });
+  deleteBlog(id: string) {
+    return apiRequest(`/api/blogs/${id}`, {
+      method: "DELETE"
+    });
   },
 
-  addFlashSaleItem(campaignId: string, body: { productId: string; discountPercentage: number; stockLimit?: number }) {
-    return apiRequest<FlashSaleItem>(`/api/flash-sales/${campaignId}/items`, {
+  getBanners() {
+    return apiRequest<Banner[]>("/api/banners");
+  },
+
+  getAdminBanners() {
+    return apiRequest<Banner[]>("/api/banners/admin-all");
+  },
+
+  createBanner(body: any) {
+    return apiRequest<Banner>("/api/banners", {
       method: "POST",
       body
     });
   },
 
-  removeFlashSaleItem(campaignId: string, productId: string) {
-    return apiRequest<void>(`/api/flash-sales/${campaignId}/items/${productId}`, {
+  updateBanner(id: string, body: any) {
+    return apiRequest<Banner>(`/api/banners/${id}`, {
+      method: "PUT",
+      body
+    });
+  },
+
+  deleteBanner(id: string) {
+    return apiRequest(`/api/banners/${id}`, {
       method: "DELETE"
     });
   },
 
-  getRevenueAnalytics(params: Record<string, string | number | undefined> = {}) {
-    return apiRequest<RevenueAnalytics>(
-      `/api/admin/analytics/revenue${toQueryString(params)}`
-    );
+  getAdminDashboard() {
+    return apiRequest<any>("/api/admin/dashboard");
+  },
+
+  getAdminSubmissions(params: Record<string, string | number | undefined> = {}) {
+    return apiRequest<Paginated<Submission>>(`/api/admin/submissions${toQueryString(params)}`);
+  },
+
+  gradeSubmission(submissionId: string, score: number, teacherComment: string) {
+    return apiRequest<Submission>(`/api/admin/submissions/${submissionId}`, {
+      method: "PUT",
+      body: { score, teacherComment }
+    });
+  },
+
+  getStudentClassification() {
+    return apiRequest<any>("/api/admin/analytics/students");
   },
 
   getCustomerSegmentation(params: Record<string, string | number | undefined> = {}) {
-    return apiRequest<CustomerSegmentationResponse>(
-      `/api/admin/analytics/customers${toQueryString(params)}`
-    );
+    return apiRequest<StudentSegmentationResponse>(`/api/admin/analytics/students${toQueryString(params)}`);
   },
 
-  getMarketingAnalytics() {
-    return apiRequest<any>("/api/admin/analytics/marketing");
-  },
-
-  getInventoryAnalytics() {
-    return apiRequest<any>("/api/admin/analytics/inventory");
-  },
-
-  // User Profile & Account
   getProfile() {
     return apiRequest<User>("/api/user/profile");
   },
 
-  updateProfile(body: Partial<User>) {
-    return apiRequest<User>("/api/user/profile", { method: "PUT", body });
-  },
-
-  changePassword(body: { currentPassword: string; newPassword: string }) {
-    return apiRequest<{ message: string }>("/api/user/change-password", {
+  updateProfile(body: any) {
+    return apiRequest<User>("/api/user/profile", {
       method: "PUT",
       body
     });
   },
 
-  // Favorites
-  getFavorites() {
-    return apiRequest<FavoriteProduct[]>("/api/user/favorites");
-  },
-
-  addToFavorites(productId: string) {
-    return apiRequest<{ message: string }>(`/api/user/favorites/${productId}`, {
-      method: "POST"
-    });
-  },
-
-  removeFromFavorites(productId: string) {
-    return apiRequest<{ message: string }>(`/api/user/favorites/${productId}`, {
-      method: "DELETE"
-    });
-  },
-
-  // Addresses
-  getAddresses() {
-    return apiRequest<Address[]>("/api/user/addresses");
-  },
-
-  addAddress(body: Omit<Address, "id" | "userId" | "createdAt" | "updatedAt">) {
-    return apiRequest<Address>("/api/user/addresses", { method: "POST", body });
-  },
-
-  updateAddress(id: string, body: Partial<Address>) {
-    return apiRequest<Address>(`/api/user/addresses/${id}`, {
+  changePassword(body: any) {
+    return apiRequest("/api/user/change-password", {
       method: "PUT",
-      body
-    });
-  },
-
-  deleteAddress(id: string) {
-    return apiRequest<{ message: string }>(`/api/user/addresses/${id}`, {
-      method: "DELETE"
-    });
-  },
-
-  setDefaultAddress(id: string) {
-    return apiRequest<Address>(`/api/user/addresses/${id}/default`, {
-      method: "PUT"
-    });
-  },
-
-  // Auth
-  forgotPassword(email: string) {
-    return apiRequest<{ message: string; token?: string }>("/auth/forgot-password", {
-      method: "POST",
-      body: { email }
-    });
-  },
-
-  resetPassword(body: { token: string; newPassword: string }) {
-    return apiRequest<{ message: string }>("/auth/reset-password", {
-      method: "POST",
       body
     });
   }
-};
-
-/* ─── Analytics Types ────────────────────────── */
-
-export interface RevenueSummary {
-  currentRevenue: string;
-  previousRevenue: string;
-  growthRate: number;
-  totalOrders: number;
-  previousOrders: number;
-  orderGrowthRate: number;
-  averageOrderValue: string;
-  totalCustomers: number;
-  previousCustomers: number;
-  customerGrowthRate: number;
-};
-
-export type RevenueTrendPoint = {
-  date: string;
-  revenue: string;
-  orders: number;
-};
-
-export type CategoryRevenue = {
-  categoryId: string;
-  categoryName: string;
-  revenue: string;
-  percentage: number;
-};
-
-export type BrandRevenue = {
-  brand: string;
-  revenue: string;
-  orderCount: number;
-};
-
-export type OrderStatusCount = {
-  status: string;
-  count: number;
-};
-
-export type RevenueAnalytics = {
-  summary: RevenueSummary;
-  revenueTrend: RevenueTrendPoint[];
-  revenueByCategory: CategoryRevenue[];
-  revenueByBrand: BrandRevenue[];
-  orderStatusDistribution: OrderStatusCount[];
-};
-
-export type SegmentSummary = {
-  segment: string;
-  label: string;
-  count: number;
-  percentage: number;
-  totalRevenue: string;
-  avgOrderValue: string;
-};
-
-export type CustomerRFM = {
-  id: string;
-  email: string;
-  fullName: string | null;
-  phone: string | null;
-  recencyDays: number;
-  frequency: number;
-  monetary: string;
-  rScore: number;
-  fScore: number;
-  mScore: number;
-  segment: string;
-  lastOrderDate: string | null;
-};
-
-export type CustomerSegmentationResponse = {
-  segmentSummary: SegmentSummary[];
-  customers: Paginated<CustomerRFM>;
 };
 
 export const formatPrice = (value: string | number) =>

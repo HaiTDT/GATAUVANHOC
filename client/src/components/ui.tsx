@@ -1,14 +1,19 @@
 export function PageHeader({
   title,
-  description
+  description,
+  action
 }: {
   title: string;
   description?: string;
+  action?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-semibold text-slate-950 sm:text-3xl">{title}</h1>
-      {description && <p className="mt-2 text-slate-600">{description}</p>}
+    <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-stone-900 sm:text-3xl font-headline tracking-tight">{title}</h1>
+        {description && <p className="mt-1.5 text-stone-500 font-medium">{description}</p>}
+      </div>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }

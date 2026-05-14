@@ -75,26 +75,99 @@ export const userService = {
     });
   },
 
-  // Favorites
-  async getFavorites(userId: string) {
-    return (prisma as any).favoriteProduct.findMany({
+  // Favorite Lessons
+  async getFavoriteLessons(userId: string) {
+    return (prisma as any).favoriteLesson.findMany({
       where: { userId },
-      include: { product: true },
+      include: { lesson: true },
       orderBy: { createdAt: 'desc' }
     });
   },
 
-  async addToFavorites(userId: string, productId: string) {
-    return (prisma as any).favoriteProduct.upsert({
-      where: { userId_productId: { userId, productId } },
-      create: { userId, productId },
+  async addToFavoriteLessons(userId: string, lessonId: string) {
+    return (prisma as any).favoriteLesson.upsert({
+      where: { userId_lessonId: { userId, lessonId } },
+      create: { userId, lessonId },
       update: {}
     });
   },
 
-  async removeFromFavorites(userId: string, productId: string) {
-    return (prisma as any).favoriteProduct.delete({
-      where: { userId_productId: { userId, productId } }
+  async removeFromFavoriteLessons(userId: string, lessonId: string) {
+    return (prisma as any).favoriteLesson.delete({
+      where: { userId_lessonId: { userId, lessonId } }
+    });
+  },
+
+  // Submissions
+  async getSubmissions(userId: string) {
+    return (prisma as any).submission.findMany({
+      where: { userId },
+      include: { 
+        assignment: {
+          include: {
+            questions: {
+              include: { options: true }
+            }
+          }
+        },
+        answers: true
+      },
+      orderBy: { updatedAt: 'desc' }
+    });
+  },
+
+  async submitAssignment(userId: string, assignmentId: string, content?: string, answers?: any[]) {
+    const assignment = await (prisma as any).assignment.findUnique({
+      where: { id: assignmentId },
+      include: { questions: { include: { options: true } } }
+    });
+
+    if (!assignment) throw new Error("Assignment not found");
+
+    let score = null;
+    let status: any = 'PENDING';
+
+    if (assignment.type === 'QUIZ' && answers) {
+      let correctCount = 0;
+      let totalQuestions = assignment.questions.length;
+      
+      // Auto grade MCQ
+      answers.forEach(ans => {
+        const question = assignment.questions.find((q: any) => q.id === ans.questionId);
+        if (question && question.type === 'MULTIPLE_CHOICE') {
+          const correctOption = question.options.find((o: any) => o.isCorrect);
+          if (correctOption && correctOption.id === ans.optionId) {
+            correctCount++;
+            ans.isCorrect = true;
+          } else {
+            ans.isCorrect = false;
+          }
+        }
+      });
+
+      if (totalQuestions > 0) {
+        score = (correctCount / totalQuestions) * 10;
+        status = 'GRADED';
+      }
+    }
+
+    return (prisma as any).submission.create({
+      data: {
+        userId,
+        assignmentId,
+        content,
+        score,
+        status,
+        answers: {
+          create: answers?.map(ans => ({
+            questionId: ans.questionId,
+            answerText: ans.answerText,
+            optionId: ans.optionId,
+            isCorrect: ans.isCorrect
+          }))
+        }
+      },
+      include: { answers: true }
     });
   },
 

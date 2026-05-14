@@ -15,28 +15,28 @@ const handleError = (error: unknown, res: Response) => {
 };
 
 export const adminController = {
-  async getOrders(req: Request, res: Response) {
+  async getSubmissions(req: Request, res: Response) {
     try {
-      const result = await adminService.getOrders(req.query);
+      const result = await adminService.getSubmissions(req.query);
       return res.json(result);
     } catch (error) {
       return handleError(error, res);
     }
   },
 
-  async getOrderDetail(req: Request, res: Response) {
+  async getSubmissionDetail(req: Request, res: Response) {
     try {
-      const order = await adminService.getOrderDetail(req.params.id);
-      return res.json(order);
+      const submission = await adminService.getSubmissionDetail(req.params.id);
+      return res.json(submission);
     } catch (error) {
       return handleError(error, res);
     }
   },
 
-  async updateOrderStatus(req: Request, res: Response) {
+  async gradeSubmission(req: Request, res: Response) {
     try {
-      const order = await adminService.updateOrderStatus(req.params.id, req.body);
-      return res.json(order);
+      const submission = await adminService.gradeSubmission(req.params.id, req.body);
+      return res.json(submission);
     } catch (error) {
       return handleError(error, res);
     }
