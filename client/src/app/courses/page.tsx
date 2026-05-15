@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { api, type Course } from "../../lib/api";
-import { useAuth } from "../../components/AuthProvider";
+import { api, type Course } from "@/lib/api";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);

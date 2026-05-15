@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type Lesson } from "../lib/api";
+import { type Lesson } from "@/lib/api";
 
 export function LessonCard({ lesson }: { lesson: Lesson }) {
   return (

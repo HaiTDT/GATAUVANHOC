@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { useAuth } from "../../components/AuthProvider";
-import { ErrorMessage } from "../../components/ui";
+import { useAuth } from "@/components/AuthProvider";
+import { ErrorMessage } from "@/components/ui";
 
 export default function RegisterPage() {
   const router = useRouter();

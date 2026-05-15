@@ -2,8 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
-import { api } from "../../lib/api";
-import { ErrorMessage } from "../../components/ui";
+import { api } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui";
 import Link from "next/link";
 
 function ResetPasswordContent() {

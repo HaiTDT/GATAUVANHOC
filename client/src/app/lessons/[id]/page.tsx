@@ -65,7 +65,7 @@ export default function LessonDetailPage() {
         )}
 
         <div className="prose prose-stone max-w-none md:prose-lg lg:prose-xl prose-headings:font-headline prose-headings:text-primary prose-a:text-sage hover:prose-a:text-primary prose-img:rounded-xl">
-          <div dangerouslySetInnerHTML={{ __html: lesson.content }} />
+          <div dangerouslySetInnerHTML={{ __html: lesson.content ?? "" }} />
         </div>
         
       </div>

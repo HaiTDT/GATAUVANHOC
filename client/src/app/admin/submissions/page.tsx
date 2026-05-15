@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Protected } from "../../../components/Protected";
-import { EmptyState, ErrorMessage, Field, PageHeader, inputClass } from "../../../components/ui";
-import { api, type Submission, type SubmissionStatus } from "../../../lib/api";
+import { Protected } from "@/components/Protected";
+import { EmptyState, ErrorMessage, Field, PageHeader, inputClass } from "@/components/ui";
+import { api, type Submission, type SubmissionStatus } from "@/lib/api";
 
 const filterStatuses = ["", "PENDING", "GRADED"] as const;
 

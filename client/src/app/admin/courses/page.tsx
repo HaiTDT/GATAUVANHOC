@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { EmptyState, ErrorMessage, PageHeader } from "../../../components/ui";
-import { api, type Course } from "../../../lib/api";
+import { EmptyState, ErrorMessage, PageHeader } from "@/components/ui";
+import { api, type Course } from "@/lib/api";
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);

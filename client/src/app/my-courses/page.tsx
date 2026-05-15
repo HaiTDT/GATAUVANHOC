@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, Course, formatPrice } from "../../lib/api";
-import { useAuth } from "../../components/AuthProvider";
-import { Protected } from "../../components/Protected";
+import { api, Course, formatPrice } from "@/lib/api";
+import { useAuth } from "@/components/AuthProvider";
+import { Protected } from "@/components/Protected";
 import Link from "next/link";
-import { ErrorMessage } from "../../components/ui";
+import { ErrorMessage } from "@/components/ui";
 
 export default function MyCoursesPage() {
   const { user } = useAuth();

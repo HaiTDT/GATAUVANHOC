@@ -8,12 +8,12 @@ import {
   Legend
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { ErrorMessage, PageHeader } from "../../../components/ui";
+import { ErrorMessage, PageHeader } from "@/components/ui";
 import {
   api,
   type StudentSegmentationResponse,
   type StudentRFM
-} from "../../../lib/api";
+} from "@/lib/api";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

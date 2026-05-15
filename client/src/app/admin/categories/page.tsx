@@ -1,9 +1,9 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Protected } from "../../../components/Protected";
-import { EmptyState, ErrorMessage } from "../../../components/ui";
-import { api, type Category } from "../../../lib/api";
+import { Protected } from "@/components/Protected";
+import { EmptyState, ErrorMessage } from "@/components/ui";
+import { api, type Category } from "@/lib/api";
 
 const emptyForm = { name: "", slug: "", description: "" };
 

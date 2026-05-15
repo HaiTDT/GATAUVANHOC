@@ -2,9 +2,9 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { LessonCard } from "../../components/LessonCard";
-import { ErrorMessage } from "../../components/ui";
-import { api, type Lesson, type Category } from "../../lib/api";
+import { LessonCard } from "@/components/LessonCard";
+import { ErrorMessage } from "@/components/ui";
+import { api, type Lesson, type Category } from "@/lib/api";
 
 import { useRouter } from "next/navigation";
 

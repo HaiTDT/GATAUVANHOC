@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { ErrorMessage } from "../../../../components/ui";
-import { api } from "../../../../lib/api";
-import RichTextEditor from "../../../../components/admin/RichTextEditor";
+import { ErrorMessage } from "@/components/ui";
+import { api } from "@/lib/api";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 const emptyBlogForm = {
   title: "",

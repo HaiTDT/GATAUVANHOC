@@ -8,7 +8,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { api, tokenStore, type User } from "../lib/api";
+import { api, tokenStore, type User } from "@/lib/api";
 
 type AuthContextValue = {
   ready: boolean;

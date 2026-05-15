@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { api } from "../../lib/api";
-import { ErrorMessage } from "../../components/ui";
+import { api } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -19,9 +19,9 @@ export default function ForgotPasswordPage() {
     setLoading(true);
 
     try {
-      const response = await api.forgotPassword(email);
+      const response = await api.forgotPassword(email) as any;
       setSuccess("Mã khôi phục đã được tạo! Trong thực tế, mã này sẽ được gửi tới email của bạn.");
-      if (response.token) {
+      if (response?.token) {
         setToken(response.token);
       }
     } catch (err: any) {

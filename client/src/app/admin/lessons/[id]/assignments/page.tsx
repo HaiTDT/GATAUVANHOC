@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ErrorMessage } from "../../../../../../components/ui";
-import { api, type Assignment, type Lesson } from "../../../../../../lib/api";
-import RichTextEditor from "../../../../../../components/admin/RichTextEditor";
+import { ErrorMessage } from "@/components/ui";
+import { api, type Assignment, type Lesson } from "@/lib/api";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 export default function AdminLessonAssignmentsPage() {
   const params = useParams();

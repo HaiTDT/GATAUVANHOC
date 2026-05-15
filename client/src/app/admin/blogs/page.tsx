@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { EmptyState, ErrorMessage } from "../../../components/ui";
-import { api, type Blog } from "../../../lib/api";
+import { EmptyState, ErrorMessage } from "@/components/ui";
+import { api, type Blog } from "@/lib/api";
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Category } from "../../lib/api";
+import type { Category } from "@/lib/api";
 
 type SidebarProps = {
   categories: Category[];

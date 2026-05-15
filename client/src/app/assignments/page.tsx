@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Protected } from "../../components/Protected";
-import { EmptyState, ErrorMessage } from "../../components/ui";
-import { api, type Submission, type User, type FavoriteLesson, type Assignment } from "../../lib/api";
-import { useAuth } from "../../components/AuthProvider";
-import { LessonCard } from "../../components/LessonCard";
+import { Protected } from "@/components/Protected";
+import { EmptyState, ErrorMessage } from "@/components/ui";
+import { api, type Submission, type User, type FavoriteLesson, type Assignment } from "@/lib/api";
+import { useAuth } from "@/components/AuthProvider";
+import { LessonCard } from "@/components/LessonCard";
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { useAuth } from "../../components/AuthProvider";
-import { ErrorMessage } from "../../components/ui";
+import { useAuth } from "@/components/AuthProvider";
+import { ErrorMessage } from "@/components/ui";
 
 export default function LoginPage() {
   const router = useRouter();

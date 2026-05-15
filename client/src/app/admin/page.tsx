@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ErrorMessage } from "../../components/ui";
+import { ErrorMessage } from "@/components/ui";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,7 +15,7 @@ import {
   Filler
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { api } from "../../lib/api";
+import { api } from "@/lib/api";
 
 ChartJS.register(
   CategoryScale,

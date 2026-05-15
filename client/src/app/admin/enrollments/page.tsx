@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api, formatPrice } from "../../../lib/api";
-import { ErrorMessage } from "../../../components/ui";
+import { api, formatPrice } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui";
 
 export default function AdminEnrollmentsPage() {
   const [enrollments, setEnrollments] = useState<any[]>([]);
