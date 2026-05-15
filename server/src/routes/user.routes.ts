@@ -1,6 +1,7 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { userController } from "../controllers/user.controller";
 import { authenticateJwt } from "../middlewares/auth.middleware";
+import { prisma } from "../lib/prisma";
 
 export const userRouter = Router();
 
@@ -29,10 +30,8 @@ userRouter.delete("/addresses/:id", userController.deleteAddress);
 userRouter.put("/addresses/:id/default", userController.setDefaultAddress);
 
 // Enrolled Courses
-userRouter.get("/courses", async (req: any, res) => {
+userRouter.get("/courses", async (req: Request & { user?: any }, res: Response) => {
   try {
-    const { PrismaClient } = require("@prisma/client");
-    const prisma = new PrismaClient();
     const userId = req.user.id;
 
     const enrollments = await prisma.enrollment.findMany({
