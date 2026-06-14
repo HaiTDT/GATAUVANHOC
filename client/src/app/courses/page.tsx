@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, type Course } from "@/lib/api";
 import { useAuth } from "@/components/AuthProvider";
+import { SafeImage } from "@/components/SafeImage";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -59,10 +60,12 @@ function CourseCard({ course }: { course: Course }) {
     <div className="group bg-white rounded-[2rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       <div className="relative aspect-[16/10] overflow-hidden">
         {course.imageUrl ? (
-          <img 
+          <SafeImage 
             src={course.imageUrl} 
             alt={course.title} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           />
         ) : (
           <div className="w-full h-full bg-stone-100 flex items-center justify-center">

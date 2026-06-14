@@ -492,8 +492,8 @@ function AssignmentDetailModal({ assignment, submission, onClose, onSave }: any)
         
         <div className="flex-1 overflow-y-auto p-8 space-y-8">
            {assignment.content && (
-             <div className="bg-stone-50 p-6 rounded-3xl border border-stone-100 prose prose-stone max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: assignment.content }} />
+             <div className="bg-stone-50 p-6 rounded-3xl border border-stone-100 prose prose-stone max-w-none assignment-content">
+                <div dangerouslySetInnerHTML={{ __html: assignment.content.replace(/&nbsp;|\u00A0/g, " ") }} />
              </div>
            )}
 

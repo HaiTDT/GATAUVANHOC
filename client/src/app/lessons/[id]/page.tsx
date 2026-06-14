@@ -46,7 +46,7 @@ export default function LessonDetailPage() {
             {lesson.title}
           </h1>
           <p className="text-stone-500 text-sm md:text-base leading-relaxed">
-            {lesson.description || "Nội dung đang được cập nhật."}
+            {lesson.description?.replace(/&nbsp;|\u00A0/g, " ") || "Nội dung đang được cập nhật."}
           </p>
         </div>
 
@@ -64,8 +64,8 @@ export default function LessonDetailPage() {
           </div>
         )}
 
-        <div className="prose prose-stone max-w-none md:prose-lg lg:prose-xl prose-headings:font-headline prose-headings:text-primary prose-a:text-sage hover:prose-a:text-primary prose-img:rounded-xl">
-          <div dangerouslySetInnerHTML={{ __html: lesson.content ?? "" }} />
+        <div className="prose prose-stone max-w-none md:prose-lg lg:prose-xl prose-headings:font-headline prose-headings:text-primary prose-a:text-sage hover:prose-a:text-primary prose-img:rounded-xl lesson-content">
+          <div dangerouslySetInnerHTML={{ __html: (lesson.content ?? "").replace(/&nbsp;|\u00A0/g, " ") }} />
         </div>
         
       </div>

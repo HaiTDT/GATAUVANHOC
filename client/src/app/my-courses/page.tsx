@@ -6,6 +6,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { Protected } from "@/components/Protected";
 import Link from "next/link";
 import { ErrorMessage } from "@/components/ui";
+import { SafeImage } from "@/components/SafeImage";
 
 export default function MyCoursesPage() {
   const { user } = useAuth();
@@ -56,10 +57,12 @@ export default function MyCoursesPage() {
               <div key={course.id} className="group bg-white rounded-[2rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <div className="relative aspect-[16/10] overflow-hidden">
                   {course.imageUrl ? (
-                    <img 
+                    <SafeImage 
                       src={course.imageUrl} 
                       alt={course.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                     />
                   ) : (
                     <div className="w-full h-full bg-stone-100 flex items-center justify-center">

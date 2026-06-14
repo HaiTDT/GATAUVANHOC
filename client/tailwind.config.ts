@@ -28,9 +28,9 @@ const config: Config = {
         full: "9999px"
       },
       fontFamily: {
-        headline: ["Lexend", "sans-serif"],
-        body: ["Nunito", "sans-serif"],
-        label: ["Nunito", "sans-serif"]
+        headline: ["var(--font-lexend)", "sans-serif"],
+        body: ["var(--font-nunito)", "sans-serif"],
+        label: ["var(--font-nunito)", "sans-serif"]
       }
     }
   },

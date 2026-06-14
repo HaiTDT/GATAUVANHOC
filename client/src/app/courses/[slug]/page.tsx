@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { api, type Course, type Assignment, type Submission, formatPrice } from "../../../lib/api";
 import { useAuth } from "../../../components/AuthProvider";
 import { ErrorMessage } from "../../../components/ui";
+import { SafeImage } from "../../../components/SafeImage";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -167,8 +168,8 @@ export default function CourseDetailPage() {
             </div>
           </div>
 
-          <div className="prose prose-stone max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: course.content || course.description || "Nội dung khóa học đang được cập nhật..." }} />
+          <div className="prose prose-stone max-w-none course-content">
+            <div dangerouslySetInnerHTML={{ __html: (course.content || course.description || "Nội dung khóa học đang được cập nhật...").replace(/&nbsp;|\u00A0/g, " ") }} />
           </div>
 
           {isPending && (
@@ -277,7 +278,13 @@ export default function CourseDetailPage() {
           <div className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-stone-200/50 border border-stone-50 sticky top-32">
             <div className="relative aspect-video rounded-3xl overflow-hidden mb-6">
               {course.imageUrl ? (
-                <img src={course.imageUrl} className="w-full h-full object-cover" alt={course.title} />
+                <SafeImage 
+                  src={course.imageUrl} 
+                  className="w-full h-full object-cover" 
+                  alt={course.title} 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               ) : (
                 <div className="w-full h-full bg-stone-100 flex items-center justify-center">
                   <span className="material-symbols-outlined text-5xl text-stone-200">image</span>

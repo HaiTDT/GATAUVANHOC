@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { SafeImage } from "@/components/SafeImage";
 import { api, type Blog, type Lesson, type Banner } from "@/lib/api";
 
 export default function Home() {
@@ -33,12 +34,17 @@ export default function Home() {
       <section className="mb-12 md:mb-24">
         <div className="relative rounded-xl overflow-hidden bg-surface-container-low min-h-[300px] md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
-            <img className="w-full h-full object-cover opacity-90"
+            <SafeImage 
+              className="object-cover opacity-90"
               alt="banner background"
-              src={activeBanner?.imageUrl || "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80"} />
-            <div className="absolute inset-0 bg-gradient-to-r from-pearl/90 via-pearl/40 to-transparent md:from-pearl/80"></div>
+              src={activeBanner?.imageUrl || "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80"} 
+              fill
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-pearl/90 via-pearl/40 to-transparent md:from-pearl/80 z-10"></div>
           </div>
-          <div className="relative z-10 w-full md:w-3/4 lg:w-1/2 p-6 md:p-12 lg:p-20">
+          <div className="relative z-20 w-full md:w-3/4 lg:w-1/2 p-6 md:p-12 lg:p-20">
             <span
               className="inline-block px-3 py-1 bg-brand-dark text-white text-[10px] md:text-xs font-bold tracking-widest uppercase mb-4 md:mb-6 rounded-full">
               HỌC TẬP CHỦ ĐỘNG
@@ -84,8 +90,13 @@ export default function Home() {
             lessons.map((lesson) => (
               <Link key={lesson.id} href={`/lessons/${lesson.id}`} className="group bg-surface-container-lowest rounded-xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-outline-variant/30">
                 <div className="block aspect-[4/3] overflow-hidden bg-surface-container-low relative">
-                  <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    alt={lesson.title} src={lesson.imageUrl || 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80'} />
+                  <SafeImage 
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    alt={lesson.title} 
+                    src={lesson.imageUrl || 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80'} 
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                  />
                 </div>
                 <div className="p-4 flex flex-col flex-1">
                   <span className="text-xs text-brand-dark opacity-70 mb-1 font-bold">{lesson.category?.name || "Bài học"}</span>
@@ -126,11 +137,13 @@ export default function Home() {
             blogs.map((blog) => (
               <Link key={blog.id} href={`/blogs/${blog.id}`} className="group cursor-pointer">
                 <article>
-                  <div className="aspect-[16/10] rounded-xl overflow-hidden mb-4 md:mb-6 bg-surface-container-low organic-shadow">
-                    <img 
+                  <div className="aspect-[16/10] rounded-xl overflow-hidden mb-4 md:mb-6 bg-surface-container-low organic-shadow relative">
+                    <SafeImage 
                       src={blog.imageUrl || "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80"} 
                       alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700" 
                     />
                   </div>
                   <div className="flex items-center gap-4 text-[10px] md:text-xs font-bold text-brand-dark opacity-60 mb-2 md:mb-3 uppercase tracking-wider">
@@ -142,7 +155,7 @@ export default function Home() {
                     {blog.title}
                   </h3>
                   <p className="text-slate-600 line-clamp-2 md:line-clamp-3 text-xs md:text-sm leading-relaxed">
-                    {blog.excerpt || blog.content.substring(0, 150) + "..."}
+                    {blog.excerpt || blog.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..."}
                   </p>
                 </article>
               </Link>

@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { type Lesson } from "@/lib/api";
+import { SafeImage } from "@/components/SafeImage";
 
 export function LessonCard({ lesson }: { lesson: Lesson }) {
   return (
     <Link href={`/lessons/${lesson.id}`} className="group relative flex flex-col bg-white rounded-xl overflow-hidden transition-all duration-300 organic-shadow hover:-translate-y-1 border border-stone-50 dark:border-stone-800">
       <div className="aspect-[4/3] w-full relative overflow-hidden bg-stone-50 dark:bg-stone-800">
-        <img
+        <SafeImage
           alt={lesson.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           src={lesson.imageUrl || 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80'}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
         />
         
         <div className="absolute top-2 left-2 md:top-4 md:left-4 flex flex-col gap-2">

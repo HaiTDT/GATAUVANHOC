@@ -276,8 +276,8 @@ function AssignmentDetailModal({ assignment, submission, onClose, onSave }: { as
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
            <div className="space-y-2">
               <h2 className="text-xl font-headline font-bold text-stone-900">{assignment.title}</h2>
-              <div className="prose prose-sm md:prose-base prose-stone max-w-none text-stone-600">
-                 <div dangerouslySetInnerHTML={{ __html: assignment.content }} />
+              <div className="prose prose-sm md:prose-base prose-stone max-w-none text-stone-600 assignment-content">
+                 <div dangerouslySetInnerHTML={{ __html: assignment.content.replace(/&nbsp;|\u00A0/g, " ") }} />
               </div>
            </div>
 

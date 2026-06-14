@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,6 +9,8 @@
 body {
   margin: 0;
   @apply bg-background text-on-surface font-body selection:bg-brand selection:text-brand-dark;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .material-symbols-outlined {
@@ -29,4 +28,154 @@ body {
 
 .organic-shadow {
   box-shadow: 0 32px 64px -12px rgba(139, 94, 60, 0.1);
+}
+
+/* Blog, Lesson, Course, and Assignment rich text content styles and responsive fixes */
+.blog-content,
+.lesson-content,
+.course-content,
+.assignment-content {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.blog-content *,
+.lesson-content *,
+.course-content *,
+.assignment-content * {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.blog-content p,
+.lesson-content p,
+.course-content p,
+.assignment-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.blog-content h2,
+.lesson-content h2,
+.course-content h2,
+.assignment-content h2 {
+  font-size: 1.875rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  font-weight: 800;
+  color: #8B5E3C;
+}
+
+.blog-content h3,
+.lesson-content h3,
+.course-content h3,
+.assignment-content h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #8B5E3C;
+}
+
+.blog-content img,
+.lesson-content img,
+.course-content img,
+.assignment-content img {
+  margin: 2.5rem 0;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.blog-content iframe,
+.lesson-content iframe,
+.course-content iframe,
+.assignment-content iframe {
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.5rem;
+  margin: 2.5rem 0;
+  display: block;
+}
+
+.blog-content table,
+.lesson-content table,
+.course-content table,
+.assignment-content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.blog-content th,
+.blog-content td,
+.lesson-content th,
+.lesson-content td,
+.course-content th,
+.course-content td,
+.assignment-content th,
+.assignment-content td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  min-width: 120px;
+}
+
+.blog-content th,
+.lesson-content th,
+.course-content th,
+.assignment-content th {
+  background-color: #f8fafc;
+  font-weight: 600;
+}
+
+.blog-content ul,
+.blog-content ol,
+.lesson-content ul,
+.lesson-content ol,
+.course-content ul,
+.course-content ol,
+.assignment-content ul,
+.assignment-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.blog-content li,
+.lesson-content li,
+.course-content li,
+.assignment-content li {
+  margin-bottom: 0.5rem;
+}
+
+.blog-content pre,
+.lesson-content pre,
+.course-content pre,
+.assignment-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: normal;
+  background: #f1f5f9;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.blog-content code,
+.lesson-content code,
+.course-content code,
+.assignment-content code {
+  background: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  word-break: normal;
 }

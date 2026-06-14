@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { SafeImage } from "@/components/SafeImage";
 import { api, type Blog } from "@/lib/api";
 
 export default function BlogsPage() {
@@ -26,10 +27,13 @@ export default function BlogsPage() {
     <main className="min-h-screen bg-stone-50 pb-24">
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden mb-16">
-        <img 
+        <SafeImage 
           src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=1600" 
           alt="Literature Blog"
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/40 to-transparent flex items-center">
           <div className="container mx-auto px-4">
@@ -97,12 +101,14 @@ export default function BlogsPage() {
               <Link key={blog.id} href={`/blogs/${blog.id}`} className="group">
                 <article className="flex flex-col h-full">
                   <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-surface-container-low organic-shadow relative">
-                    <img 
+                    <SafeImage 
                       src={blog.imageUrl || "https://images.unsplash.com/photo-1615397323214-729227520e5c?auto=format&fit=crop&q=80&w=800"} 
                       alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700" 
                     />
-                    <div className="absolute top-4 left-4">
+                    <div className="absolute top-4 left-4 z-10">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-primary text-[10px] font-bold uppercase tracking-wider rounded shadow-sm">
                         Làm đẹp
                       </span>
@@ -117,7 +123,7 @@ export default function BlogsPage() {
                     {blog.title}
                   </h3>
                   <p className="text-slate-600 line-clamp-3 text-sm leading-relaxed mb-6">
-                    {blog.excerpt || blog.content.substring(0, 150).replace(/<[^>]*>?/gm, '') + "..."}
+                    {blog.excerpt || blog.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..."}
                   </p>
                   <div className="mt-auto pt-4 flex items-center text-primary font-bold text-xs gap-2 group-hover:translate-x-2 transition-transform uppercase tracking-widest">
                     Đọc tiếp <span className="material-symbols-outlined text-sm">arrow_forward</span>

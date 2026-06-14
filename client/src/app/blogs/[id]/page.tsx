@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { SafeImage } from "@/components/SafeImage";
 import { api, type Blog, formatPrice } from "@/lib/api";
 
 export default function BlogDetailPage() {
@@ -50,10 +51,13 @@ export default function BlogDetailPage() {
     <main className="min-h-screen bg-surface-container-lowest pb-24">
       {/* Hero Section with Image */}
       <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden mb-12">
-        <img 
+        <SafeImage 
           src={blog.imageUrl || "https://images.unsplash.com/photo-1615397323214-729227520e5c?auto=format&fit=crop&q=80&w=1600"} 
           alt={blog.title}
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end">
           <div className="container mx-auto px-4 pb-16">
@@ -87,13 +91,13 @@ export default function BlogDetailPage() {
           <article className="lg:w-2/3">
             {blog.excerpt && (
               <p className="text-xl text-slate-600 font-medium italic mb-10 border-l-4 border-secondary pl-6 leading-relaxed">
-                {blog.excerpt}
+                {blog.excerpt.replace(/&nbsp;|\u00A0/g, " ")}
               </p>
             )}
             
             <div 
-              className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-primary prose-p:text-slate-700 prose-img:rounded-2xl prose-img:shadow-xl blog-content break-words overflow-hidden"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
+              className="prose prose-lg max-w-none prose-headings:font-headline prose-headings:text-primary prose-p:text-slate-700 prose-img:rounded-2xl prose-img:shadow-xl blog-content break-words"
+              dangerouslySetInnerHTML={{ __html: blog.content.replace(/&nbsp;|\u00A0/g, " ") }}
             />
 
             {/* Social Share & Tags */}
@@ -131,11 +135,13 @@ export default function BlogDetailPage() {
                 <div className="space-y-8">
                   {relatedBlogs.map(item => (
                     <Link key={item.id} href={`/blogs/${item.id}`} className="flex gap-4 group">
-                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-                        <img 
+                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container relative">
+                        <SafeImage 
                           src={item.imageUrl || "https://images.unsplash.com/photo-1615397323214-729227520e5c?auto=format&fit=crop&q=80&w=200"} 
                           alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          fill
+                          sizes="96px"
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       </div>
                       <div className="flex flex-col justify-center">
@@ -175,55 +181,6 @@ export default function BlogDetailPage() {
           </aside>
         </div>
       </div>
-      
-      <style jsx global>{`
-        .blog-content {
-          word-break: break-word;
-          overflow-wrap: break-word;
-        }
-        .blog-content p {
-          margin-bottom: 1.5rem;
-          line-height: 1.8;
-          color: #334155;
-        }
-        .blog-content h2 {
-          font-size: 1.875rem;
-          margin-top: 2.5rem;
-          margin-bottom: 1.25rem;
-          font-weight: 800;
-          color: #00373e;
-        }
-        .blog-content h3 {
-          font-size: 1.5rem;
-          margin-top: 2rem;
-          margin-bottom: 1rem;
-          font-weight: 700;
-          color: #00373e;
-        }
-        .blog-content img {
-          margin: 2.5rem 0;
-          max-width: 100%;
-          height: auto;
-          display: block;
-          border-radius: 1rem;
-          box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        .blog-content ul, .blog-content ol {
-          margin-bottom: 1.5rem;
-          padding-left: 1.5rem;
-        }
-        .blog-content li {
-          margin-bottom: 0.5rem;
-        }
-        /* Fix for large pre/code blocks */
-        .blog-content pre {
-          white-space: pre-wrap;
-          word-break: break-all;
-          background: #f1f5f9;
-          padding: 1rem;
-          border-radius: 0.5rem;
-        }
-      `}</style>
     </main>
   );
 }
