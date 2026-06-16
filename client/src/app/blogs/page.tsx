@@ -1,27 +1,21 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SafeImage } from "@/components/SafeImage";
-import { api, type Blog } from "@/lib/api";
+import { serverApi } from "@/lib/api-server";
 
-export default function BlogsPage() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+export default async function BlogsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const resolvedParams = await searchParams;
+  const page = Number(resolvedParams?.page) || 1;
 
-  useEffect(() => {
-    setLoading(true);
-    api.getBlogs({ isActive: true, page, limit: 9 })
-      .then((res) => {
-        setBlogs(res.data);
-        setTotalPages(res.meta?.totalPages || 1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [page]);
+  let blogs: any[] = [];
+  let totalPages = 1;
+
+  try {
+    const res = await serverApi.getBlogs({ isActive: true, page, limit: 9 });
+    blogs = res.data || [];
+    totalPages = res.meta?.totalPages || 1;
+  } catch (err) {
+    console.error("Failed to fetch blogs", err);
+  }
 
   return (
     <main className="min-h-screen bg-stone-50 pb-24">
@@ -77,19 +71,7 @@ export default function BlogsPage() {
         </div>
 
         {/* Blog Grid */}
-        {loading && blogs.length === 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[16/10] bg-surface-container rounded-2xl mb-6"></div>
-                <div className="h-4 bg-surface-container rounded w-1/4 mb-4"></div>
-                <div className="h-6 bg-surface-container rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-surface-container rounded w-full mb-2"></div>
-                <div className="h-4 bg-surface-container rounded w-2/3"></div>
-              </div>
-            ))}
-          </div>
-        ) : blogs.length === 0 ? (
+        {blogs.length === 0 ? (
           <div className="text-center py-20 bg-surface-container-low rounded-3xl border border-dashed border-surface-container-high">
             <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">article</span>
             <h3 className="text-xl font-bold text-primary mb-2">Chưa có bài viết nào</h3>
@@ -97,7 +79,7 @@ export default function BlogsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-            {blogs.map((blog) => (
+            {blogs.map((blog: any) => (
               <Link key={blog.id} href={`/blogs/${blog.id}`} className="group">
                 <article className="flex flex-col h-full">
                   <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-surface-container-low organic-shadow relative">
@@ -137,33 +119,31 @@ export default function BlogsPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-20 flex justify-center items-center gap-3">
-            <button 
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="w-12 h-12 rounded-full border border-surface-container flex items-center justify-center text-primary disabled:opacity-30 hover:bg-primary hover:text-white transition-all shadow-sm"
+            <Link 
+              href={page > 1 ? `?page=${page - 1}` : "#"}
+              className={`w-12 h-12 rounded-full border border-surface-container flex items-center justify-center text-primary transition-all shadow-sm ${page === 1 ? 'opacity-30 pointer-events-none' : 'hover:bg-primary hover:text-white'}`}
             >
               <span className="material-symbols-outlined">chevron_left</span>
-            </button>
+            </Link>
             
             <div className="flex gap-2">
               {Array.from({ length: totalPages }).map((_, i) => (
-                <button
+                <Link
                   key={i}
-                  onClick={() => setPage(i + 1)}
-                  className={`w-12 h-12 rounded-full font-bold text-sm transition-all ${page === i + 1 ? 'bg-primary text-white shadow-lg' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'}`}
+                  href={`?page=${i + 1}`}
+                  className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-sm transition-all ${page === i + 1 ? 'bg-primary text-white shadow-lg' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'}`}
                 >
                   {i + 1}
-                </button>
+                </Link>
               ))}
             </div>
 
-            <button 
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="w-12 h-12 rounded-full border border-surface-container flex items-center justify-center text-primary disabled:opacity-30 hover:bg-primary hover:text-white transition-all shadow-sm"
+            <Link 
+              href={page < totalPages ? `?page=${page + 1}` : "#"}
+              className={`w-12 h-12 rounded-full border border-surface-container flex items-center justify-center text-primary transition-all shadow-sm ${page === totalPages ? 'opacity-30 pointer-events-none' : 'hover:bg-primary hover:text-white'}`}
             >
               <span className="material-symbols-outlined">chevron_right</span>
-            </button>
+            </Link>
           </div>
         )}
       </div>

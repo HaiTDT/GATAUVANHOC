@@ -1,41 +1,21 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SafeImage } from "@/components/SafeImage";
-import { api, type Blog, formatPrice } from "@/lib/api";
+import { serverApi } from "@/lib/api-server";
 
-export default function BlogDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
+export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  let blog: any = null;
+  let relatedBlogs: any[] = [];
 
-  useEffect(() => {
-    if (!id) return;
-
-    setLoading(true);
-    Promise.all([
-      api.getBlog(id),
-      api.getBlogs({ isActive: true, limit: 4 })
-    ])
-      .then(([blogRes, relatedRes]) => {
-        setBlog(blogRes);
-        setRelatedBlogs(relatedRes.data.filter(b => b.id !== id).slice(0, 3));
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-20 text-center">
-        <div className="inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-slate-500 font-medium">Đang tải bài viết...</p>
-      </div>
-    );
+  try {
+    const [blogRes, relatedRes] = await Promise.all([
+      serverApi.getBlog(id),
+      serverApi.getBlogs({ isActive: true, limit: 4 })
+    ]);
+    blog = blogRes;
+    relatedBlogs = relatedRes.data.filter((b: any) => b.id !== id).slice(0, 3);
+  } catch (err) {
+    console.error("Failed to fetch blog details", err);
   }
 
   if (!blog) {
@@ -133,7 +113,7 @@ export default function BlogDetailPage() {
                   <div className="h-1 flex-1 bg-gradient-to-r from-secondary/50 to-transparent rounded-full"></div>
                 </h3>
                 <div className="space-y-8">
-                  {relatedBlogs.map(item => (
+                  {relatedBlogs.map((item: any) => (
                     <Link key={item.id} href={`/blogs/${item.id}`} className="flex gap-4 group">
                       <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container relative">
                         <SafeImage 

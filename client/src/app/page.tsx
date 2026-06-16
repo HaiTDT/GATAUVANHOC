@@ -1,30 +1,24 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { SafeImage } from "@/components/SafeImage";
-import { api, type Blog, type Lesson, type Banner } from "@/lib/api";
+import { serverApi } from "@/lib/api-server";
 
-export default function Home() {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function Home() {
+  let lessons: any[] = [];
+  let blogs: any[] = [];
+  let banners: any[] = [];
 
-  useEffect(() => {
-    Promise.all([
-      api.getBlogs({ isActive: true, limit: 3 }),
-      api.getLessons({ limit: 8 }),
-      api.getBanners()
-    ])
-      .then(([blogsRes, lessonsRes, bannersRes]) => {
-        setBlogs(blogsRes.data || []);
-        setLessons(lessonsRes.data || []);
-        setBanners(bannersRes || []);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+  try {
+    const [blogsRes, lessonsRes, bannersRes] = await Promise.all([
+      serverApi.getBlogs({ isActive: true, limit: 3 }),
+      serverApi.getLessons({ limit: 8 }),
+      serverApi.getBanners()
+    ]);
+    blogs = blogsRes.data || [];
+    lessons = lessonsRes.data || [];
+    banners = bannersRes || [];
+  } catch (err) {
+    console.error("Failed to fetch home page data", err);
+  }
 
   const activeBanner = banners.length > 0 ? banners[0] : null;
 
@@ -78,16 +72,12 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-          {loading ? (
-            Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="h-[300px] md:h-[350px] rounded-xl bg-surface-container-lowest/50 animate-pulse border border-outline-variant/30" />
-            ))
-          ) : lessons.length === 0 ? (
+          {lessons.length === 0 ? (
             <div className="col-span-2 md:col-span-3 lg:col-span-4 text-center py-12 text-on-surface-variant font-medium text-sm border border-dashed rounded-xl">
               Chưa có bài học nào.
             </div>
           ) : (
-            lessons.map((lesson) => (
+            lessons.map((lesson: any) => (
               <Link key={lesson.id} href={`/lessons/${lesson.id}`} className="group bg-surface-container-lowest rounded-xl overflow-hidden organic-shadow flex flex-col hover:-translate-y-2 transition-transform duration-300 cursor-pointer border border-outline-variant/30">
                 <div className="block aspect-[4/3] overflow-hidden bg-surface-container-low relative">
                   <SafeImage 
@@ -125,16 +115,12 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          {loading ? (
-             Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="h-[300px] md:h-[350px] rounded-xl bg-surface-container-low animate-pulse" />
-            ))
-          ) : blogs.length === 0 ? (
+          {blogs.length === 0 ? (
              <div className="col-span-1 sm:col-span-2 md:col-span-3 text-center py-12 text-slate-500 bg-surface-container-lowest rounded-xl border border-surface-container border-dashed text-sm">
                 Chưa có bài viết nào.
              </div>
           ) : (
-            blogs.map((blog) => (
+            blogs.map((blog: any) => (
               <Link key={blog.id} href={`/blogs/${blog.id}`} className="group cursor-pointer">
                 <article>
                   <div className="aspect-[16/10] rounded-xl overflow-hidden mb-4 md:mb-6 bg-surface-container-low organic-shadow relative">
