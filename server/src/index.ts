@@ -32,7 +32,13 @@ app.use(helmet());
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = [clientUrl, "http://localhost:3000", "https://mis-hasaki-client.vercel.app"];
+      const allowedOrigins = [
+        clientUrl, 
+        "http://localhost:3000", 
+        "https://mis-hasaki-client.vercel.app",
+        "https://gatauvanhoc.online",
+        "https://www.gatauvanhoc.online"
+      ];
       if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
         callback(null, true);
       } else {
