@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { ErrorMessage } from "../../../../../components/ui";
 import { api, type Category } from "../../../../../lib/api";
 import RichTextEditor from "../../../../../components/admin/RichTextEditor";
+import ImageUpload from "../../../../../components/admin/ImageUpload";
 
 const emptyLessonForm = {
   title: "",
@@ -162,12 +163,9 @@ export default function AdminEditLessonPage() {
 
             <div className="md:col-span-2">
               <label className="block text-sm font-bold text-stone-700 mb-2">Đường dẫn hình ảnh (URL)</label>
-              <input 
-                type="url" 
+              <ImageUpload
                 value={form.imageUrl}
-                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                className="w-full rounded-xl border border-stone-300 bg-stone-50 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 px-4 py-3 text-sm transition-all outline-none" 
-                placeholder="https://..."
+                onChange={(url) => setForm({ ...form, imageUrl: url })}
               />
             </div>
 

@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { ErrorMessage } from "../../../../../components/ui";
 import { api } from "../../../../../lib/api";
 import RichTextEditor from "../../../../../components/admin/RichTextEditor";
+import ImageUpload from "../../../../../components/admin/ImageUpload";
 
 const emptyBlogForm = {
   title: "",
@@ -104,12 +105,9 @@ export default function AdminEditBlogPage() {
 
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-on-surface mb-2">Đường dẫn hình ảnh (URL thumbnail)</label>
-              <input 
-                type="url" 
+              <ImageUpload
                 value={form.imageUrl}
-                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                className="w-full rounded-lg border-surface-variant bg-surface-container-low focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary px-4 py-3 text-sm transition-colors" 
-                placeholder="https://..."
+                onChange={(url) => setForm({ ...form, imageUrl: url })}
               />
             </div>
             
