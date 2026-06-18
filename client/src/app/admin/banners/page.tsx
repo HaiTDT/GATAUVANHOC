@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Protected } from "@/components/Protected";
 import { EmptyState, ErrorMessage } from "@/components/ui";
 import { api, type Banner } from "@/lib/api";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 const emptyForm = { 
   title: "", 
@@ -113,8 +114,8 @@ function AdminBannersContent() {
               <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(e) => setForm({ ...form, subtitle: e.target.value })} value={form.subtitle} placeholder="Nhập mô tả ngắn gọn..." />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-on-surface mb-1">URL Hình ảnh</label>
-              <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} required value={form.imageUrl} placeholder="https://images.unsplash.com/..." />
+              <label className="block text-sm font-semibold text-on-surface mb-1">Hình ảnh Banner</label>
+              <ImageUpload value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-1">Link liên kết (tùy chọn)</label>

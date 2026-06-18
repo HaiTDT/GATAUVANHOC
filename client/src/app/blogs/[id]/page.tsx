@@ -45,7 +45,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
               <nav className="flex items-center gap-2 text-white/70 text-xs font-bold uppercase tracking-widest mb-6">
                 <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
                 <span className="material-symbols-outlined text-[10px]">chevron_right</span>
-                <span className="text-secondary-fixed">Bí quyết làm đẹp</span>
+                <span className="text-secondary-fixed">Kiến thức văn học</span>
               </nav>
               <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-lg">
                 {blog.title}
@@ -57,7 +57,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-secondary text-lg">person</span>
-                  Hasaki Beauty
+                  Ga Tàu Văn Học
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
             {/* Social Share & Tags */}
             <div className="mt-16 pt-8 border-t border-surface-container flex flex-wrap justify-between items-center gap-6">
               <div className="flex gap-2">
-                {['Skincare', 'Beauty Tips', 'Hasaki'].map(tag => (
+                {['Nghị luận', 'Đọc hiểu', 'Văn học'].map(tag => (
                   <span key={tag} className="px-4 py-1.5 bg-surface-container text-on-surface-variant rounded-full text-xs font-bold uppercase tracking-wider">
                     #{tag}
                   </span>
@@ -143,8 +143,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="relative z-10">
                   <span className="material-symbols-outlined text-4xl text-secondary mb-4">mail</span>
-                  <h3 className="text-xl font-bold mb-4 leading-tight">Đăng ký nhận bản tin làm đẹp từ chuyên gia</h3>
-                  <p className="text-white/70 text-sm mb-6">Cập nhật xu hướng làm đẹp mới nhất và nhận voucher ưu đãi mỗi tuần.</p>
+                  <h3 className="text-xl font-bold mb-4 leading-tight">Đăng ký nhận bản tin từ Ga Tàu Văn Học</h3>
+                  <p className="text-white/70 text-sm mb-6">Cập nhật tài liệu văn học mới nhất và đề thi thử mỗi tuần.</p>
                   <div className="space-y-3">
                     <input 
                       type="email" 

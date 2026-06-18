@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ErrorMessage, EmptyState } from "@/components/ui";
 
 import { useAuth } from "@/components/AuthProvider";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type TabType = "dashboard" | "assignments" | "profile" | "favorites";
 
@@ -92,8 +93,12 @@ function LearningProgressContent() {
         <aside className="w-full lg:w-72 flex-shrink-0">
           <div className="bg-white rounded-[2.5rem] p-6 shadow-xl shadow-stone-200/50 border border-stone-50 sticky top-32">
             <div className="flex items-center gap-4 mb-8 p-2">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary border-2 border-white shadow-md">
-                <span className="material-symbols-outlined text-3xl">person</span>
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary border-2 border-white shadow-md overflow-hidden shrink-0">
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.fullName || ""} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="material-symbols-outlined text-3xl">person</span>
+                )}
               </div>
               <div className="min-w-0">
                 <p className="font-bold text-stone-900 truncate text-sm">{user.fullName || "Học sinh"}</p>
@@ -311,7 +316,8 @@ function ProfileSection({ user, onRefresh }: any) {
     fullName: user.fullName || "",
     phone: user.phone || "",
     birthday: user.birthday?.split('T')[0] || "",
-    gender: user.gender || "other"
+    gender: user.gender || "other",
+    avatar: user.avatar || ""
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -336,6 +342,13 @@ function ProfileSection({ user, onRefresh }: any) {
       <h2 className="text-2xl font-black text-stone-900 mb-8">Thông tin hồ sơ</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+        <div className="space-y-2">
+          <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest ml-1">Ảnh đại diện</label>
+          <ImageUpload 
+            value={formData.avatar} 
+            onChange={url => setFormData({...formData, avatar: url})} 
+          />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest ml-1">Họ và tên</label>

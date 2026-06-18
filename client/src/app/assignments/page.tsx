@@ -9,6 +9,7 @@ import { LessonCard } from "@/components/LessonCard";
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type Section = "assignments" | "profile" | "favorites";
 
@@ -491,6 +492,13 @@ function ProfileSection({ user, onUpdate }: { user: User | null, onUpdate: () =>
             Chỉnh sửa hồ sơ
           </h2>
           <form onSubmit={handleUpdateProfile} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-stone-500 uppercase ml-1">Ảnh đại diện</label>
+              <ImageUpload 
+                value={formData.avatar} 
+                onChange={url => setFormData({...formData, avatar: url})} 
+              />
+            </div>
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-stone-500 uppercase ml-1">Họ và tên</label>
               <input 

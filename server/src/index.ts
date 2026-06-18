@@ -35,7 +35,7 @@ app.use(
       const allowedOrigins = [
         clientUrl, 
         "http://localhost:3000", 
-        "https://mis-hasaki-client.vercel.app",
+        "https://mis-gatauvanhoc-client.vercel.app",
         "https://gatauvanhoc.online",
         "https://www.gatauvanhoc.online"
       ];

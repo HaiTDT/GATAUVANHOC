@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: mis-hasaki-server
+    name: mis-gatauvanhoc-server
     env: node
     rootDir: server
     buildCommand: npm install && npm run prisma:generate && npm run build
