@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../AuthProvider";
@@ -28,21 +29,29 @@ export function Header() {
       <div className="flex flex-col w-full max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between gap-4 md:gap-8 mb-3 md:mb-4">
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 lg:hidden text-brand-dark hover:bg-white/30 rounded-full transition-colors"
             >
               <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
             </button>
-            <Link href="/" className="text-xl md:text-2xl font-bold tracking-tight text-brand-dark font-headline">
-              Ga Tàu Văn Học
+            <Link href="/" className="flex items-center gap-2.5 text-xl md:text-2xl font-bold tracking-tight text-brand-dark font-headline">
+              <Image
+                src="/logo.png"
+                alt="Ga Tàu Văn Học Logo"
+                width={45}
+                height={45}
+                className="object-contain rounded-md"
+                priority
+              />
+              <span>Ga Tàu Văn Học</span>
             </Link>
           </div>
 
           <form onSubmit={handleSearch} className="hidden md:block flex-1 max-w-xl relative">
             <input
               className="w-full bg-white/50 border-none rounded-full px-4 py-2 text-sm focus:ring-1 focus:ring-brand-dark focus:bg-white transition-all"
-              placeholder="Tìm kiếm bài học..." 
+              placeholder="Tìm kiếm bài học..."
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -51,11 +60,11 @@ export function Header() {
           </form>
 
           <div className="flex items-center gap-2 md:gap-6">
-             <span className="hidden xl:block text-brand-dark font-medium text-sm">Hỗ trợ: 1900 1234</span>
+            <span className="hidden xl:block text-brand-dark font-medium text-sm">Hỗ trợ: 0325 831 185</span>
             <div className="flex items-center gap-1 md:gap-4">
               {user && (
-                <button 
-                  onClick={() => router.push("/my-courses")} 
+                <button
+                  onClick={() => router.push("/my-courses")}
                   className="p-2 text-brand-dark hover:bg-white/30 transition-all rounded-full relative"
                   title="Khóa học của tôi"
                 >
@@ -63,8 +72,8 @@ export function Header() {
                 </button>
               )}
               {user && (
-                <button 
-                  onClick={() => router.push("/learning-progress")} 
+                <button
+                  onClick={() => router.push("/learning-progress")}
                   className="p-2 text-brand-dark hover:bg-white/30 transition-all rounded-full relative"
                   title="Tiến độ học tập"
                 >
@@ -108,7 +117,7 @@ export function Header() {
         <form onSubmit={handleSearch} className="md:hidden relative mb-2">
           <input
             className="w-full bg-stone-100 dark:bg-stone-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-primary"
-            placeholder="Tìm kiếm bài học..." 
+            placeholder="Tìm kiếm bài học..."
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -155,7 +164,7 @@ export function Header() {
         {/* Mobile Menu Overlay */}
         <div className={`lg:hidden fixed inset-0 z-[100] transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
-          
+
           <div className={`absolute left-0 top-0 h-full w-[85%] max-w-[320px] bg-white dark:bg-stone-900 shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
             <div className="bg-primary p-6 flex items-center gap-4 text-white">
               <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
@@ -167,39 +176,39 @@ export function Header() {
             </div>
 
             <div className="flex flex-col py-2">
-              <MobileMenuItem 
-                icon="home" 
-                label="Trang chủ" 
-                href="/" 
+              <MobileMenuItem
+                icon="home"
+                label="Trang chủ"
+                href="/"
                 active={isHome}
-                onClick={() => setIsMenuOpen(false)} 
+                onClick={() => setIsMenuOpen(false)}
               />
-              <MobileMenuItem 
-                icon="menu_book" 
-                label="Bài học" 
-                href="/lessons" 
-                onClick={() => setIsMenuOpen(false)} 
+              <MobileMenuItem
+                icon="menu_book"
+                label="Bài học"
+                href="/lessons"
+                onClick={() => setIsMenuOpen(false)}
               />
-              <MobileMenuItem 
-                icon="school" 
-                label="Khóa học" 
-                href="/courses" 
-                onClick={() => setIsMenuOpen(false)} 
+              <MobileMenuItem
+                icon="school"
+                label="Khóa học"
+                href="/courses"
+                onClick={() => setIsMenuOpen(false)}
               />
               {user && (
-                <MobileMenuItem 
-                  icon="auto_stories" 
-                  label="Khóa học của tôi" 
-                  href="/my-courses" 
-                  onClick={() => setIsMenuOpen(false)} 
+                <MobileMenuItem
+                  icon="auto_stories"
+                  label="Khóa học của tôi"
+                  href="/my-courses"
+                  onClick={() => setIsMenuOpen(false)}
                   active={pathname === "/my-courses"}
                 />
               )}
-              <MobileMenuItem 
-                icon="article" 
-                label="Blog Kiến Thức" 
-                href="/blogs" 
-                onClick={() => setIsMenuOpen(false)} 
+              <MobileMenuItem
+                icon="article"
+                label="Blog Kiến Thức"
+                href="/blogs"
+                onClick={() => setIsMenuOpen(false)}
               />
             </div>
           </div>
@@ -211,8 +220,8 @@ export function Header() {
 
 function MobileMenuItem({ icon, label, href, onClick, active }: any) {
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       onClick={onClick}
       className={`flex items-center gap-4 px-6 py-3.5 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors ${active ? 'bg-pearl text-primary' : 'text-stone-700 dark:text-stone-300'}`}
     >
