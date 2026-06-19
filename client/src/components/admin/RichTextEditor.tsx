@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import "react-quill-new/dist/quill.snow.css";
 
 interface RichTextEditorProps {
@@ -11,24 +11,76 @@ interface RichTextEditorProps {
 }
 
 const RichTextEditor = ({ value, onChange, placeholder }: RichTextEditorProps) => {
-  // Dynamically import ReactQuill to avoid SSR issues
-  const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill-new"), { ssr: false, loading: () => <div className="h-[300px] w-full bg-slate-50 animate-pulse rounded-lg border border-slate-200" /> }),
-    []
-  );
+  const quillRef = useRef<any>(null);
 
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ color: [] }, { background: [] }],
-      ["blockquote", "code-block"],
-      [{ align: [] }],
-      ["link", "image"],
-      ["clean"],
-    ],
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Kích thước file quá lớn (Tối đa 5MB)");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+      if (!apiKey) {
+        alert("Chưa cấu hình NEXT_PUBLIC_IMGBB_API_KEY trong file .env.local");
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error?.message || "Lỗi khi tải ảnh lên ImgBB");
+        }
+
+        const quill = quillRef.current?.getEditor();
+        if (quill) {
+          const range = quill.getSelection();
+          if (range) {
+            quill.insertEmbed(range.index, "image", data.data.url);
+            quill.setSelection(range.index + 1);
+          }
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert(err instanceof Error ? err.message : "Đã xảy ra lỗi khi tải ảnh lên");
+      }
+    };
   };
+
+  const modules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ color: [] }, { background: [] }],
+        ["blockquote", "code-block"],
+        [{ align: [] }],
+        ["link", "image"],
+        ["clean"],
+      ],
+      handlers: {
+        image: imageHandler,
+      },
+    },
+  }), []);
 
   const formats = [
     "header",
@@ -47,9 +99,29 @@ const RichTextEditor = ({ value, onChange, placeholder }: RichTextEditorProps) =
     "align",
   ];
 
+  const ReactQuill = useMemo(
+    () =>
+      dynamic(
+        async () => {
+          const { default: RQ } = await import("react-quill-new");
+          const Component = ({ forwardedRef, ...props }: any) => <RQ ref={forwardedRef} {...props} />;
+          Component.displayName = "ReactQuillWithRef";
+          return Component;
+        },
+        {
+          ssr: false,
+          loading: () => (
+            <div className="h-[300px] w-full bg-slate-50 animate-pulse rounded-lg border border-slate-200" />
+          ),
+        }
+      ),
+    []
+  );
+
   return (
     <div className="bg-white rounded-lg overflow-hidden border border-surface-variant focus-within:border-primary transition-colors">
       <ReactQuill
+        forwardedRef={quillRef}
         theme="snow"
         value={value}
         onChange={onChange}
