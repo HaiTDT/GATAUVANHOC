@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SafeImage } from "@/components/SafeImage";
 import { serverApi } from "@/lib/api-server";
+import { InboxButton } from "@/components/InboxButton";
 
 export default async function Home() {
   let lessons: any[] = [];
@@ -54,6 +55,7 @@ export default async function Home() {
                 className="text-center bg-brand text-brand-dark px-8 py-3 md:py-4 rounded-full font-bold text-xs md:text-sm shadow-xl hover:scale-105 transition-transform inline-block border-2 border-brand-dark/10">
                 VÀO HỌC NGAY
               </Link>
+              <InboxButton />
             </div>
           </div>
         </div>
