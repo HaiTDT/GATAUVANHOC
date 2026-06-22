@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Protected } from "@/components/Protected";
 import { EmptyState, ErrorMessage } from "@/components/ui";
 import { api, type Category } from "@/lib/api";
+import { toSlug } from "@/lib/utils";
 
 const emptyForm = { name: "", slug: "", description: "" };
 
@@ -78,7 +79,10 @@ function AdminCategoriesContent() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-1">Tên danh mục</label>
-              <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(event) => setForm({ ...form, name: event.target.value })} required value={form.name} placeholder="Nhập tên danh mục..." />
+              <input className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" onChange={(event) => {
+                const val = event.target.value;
+                setForm({ ...form, name: val, slug: toSlug(val) });
+              }} required value={form.name} placeholder="Nhập tên danh mục..." />
             </div>
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-1">Đường dẫn (Slug)</label>

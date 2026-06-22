@@ -18,24 +18,34 @@ const toQueryString = (params: Record<string, string | number | boolean | undefi
 // Reusable fetch function for server components
 async function serverFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
-  // By default Next.js fetch API caches requests, we can provide default revalidation or no-store
+  
+  // Set a 15-second timeout for server-side fetches to avoid blocking Vercel builds
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   const defaultOptions: RequestInit = {
-    // Revalidate every 60 seconds to balance performance and freshness
     next: { revalidate: 60 },
+    signal: controller.signal,
     ...options,
   };
 
-  const response = await fetch(url, defaultOptions);
+  try {
+    const response = await fetch(url, defaultOptions);
+    clearTimeout(timeoutId);
 
-  if (response.status === 204) {
-    return undefined as T;
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}, status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}, status: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 export const serverApi = {

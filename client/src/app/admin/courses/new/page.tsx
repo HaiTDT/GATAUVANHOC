@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 import { ErrorMessage } from "@/components/ui";
 import { api } from "@/lib/api";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { toSlug } from "@/lib/utils";
 
 export default function AdminNewCoursePage() {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function AdminNewCoursePage() {
         </Link>
         <h2 className="font-bold font-headline text-2xl text-primary">Tạo Khóa học mới</h2>
       </header>
-
+  
       <section className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
         <ErrorMessage message={error} />
         
@@ -54,7 +55,10 @@ export default function AdminNewCoursePage() {
                 type="text" 
                 required 
                 value={form.title}
-                onChange={e => setForm({...form, title: e.target.value})}
+                onChange={e => {
+                  const val = e.target.value;
+                  setForm({...form, title: val, slug: toSlug(val)});
+                }}
                 className="w-full rounded-xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none"
                 placeholder="Ví dụ: Khóa học Luyện thi THPT Quốc gia môn Văn"
               />

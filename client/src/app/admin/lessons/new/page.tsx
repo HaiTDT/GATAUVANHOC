@@ -7,6 +7,7 @@ import { ErrorMessage } from "@/components/ui";
 import { api, type Category } from "@/lib/api";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ImageUpload from "@/components/admin/ImageUpload";
+import { toSlug } from "@/lib/utils";
 
 const emptyLessonForm = {
   title: "",
@@ -41,7 +42,7 @@ export default function AdminNewLessonPage() {
       const data = {
         ...form,
         grade: form.grade === "" ? null : Number(form.grade),
-        slug: form.slug || form.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
+        slug: form.slug || toSlug(form.title)
       };
 
       await api.createLesson(data);
@@ -71,7 +72,10 @@ export default function AdminNewLessonPage() {
               <input 
                 type="text" 
                 value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setForm({ ...form, title: val, slug: toSlug(val) });
+                }}
                 required 
                 className="w-full rounded-xl border border-stone-300 bg-stone-50 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 px-4 py-3 text-sm transition-all outline-none"
                 placeholder="Nhập tiêu đề..."

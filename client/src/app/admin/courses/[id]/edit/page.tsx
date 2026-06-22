@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { ErrorMessage } from "../../../../../components/ui";
 import { api } from "../../../../../lib/api";
 import RichTextEditor from "../../../../../components/admin/RichTextEditor";
+import { toSlug } from "../../../../../lib/utils";
 
 export default function AdminEditCoursePage() {
   const params = useParams();
@@ -79,7 +80,10 @@ export default function AdminEditCoursePage() {
                 type="text" 
                 required 
                 value={form.title}
-                onChange={e => setForm({...form, title: e.target.value})}
+                onChange={e => {
+                  const val = e.target.value;
+                  setForm({...form, title: val, slug: toSlug(val)});
+                }}
                 className="w-full rounded-xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm focus:ring-2 focus:ring-primary outline-none"
               />
             </div>
